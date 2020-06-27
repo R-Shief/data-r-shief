@@ -1,0 +1,7 @@
+div#languages-dropdown(class="dropdown")
+  button#dropdownMenuButton(class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") Filter languages
+  div(class="dropdown-menu" aria-labelledby="dropdownMenuButton")
+    for val, key in languages
+      div(class="dropdown-item form-check")
+        input(class="form-check-input" type="checkbox" value="" onclick="languageHandler.setLang(this.id)" id=key checked)
+        label(class="form-check-label" for=key)= val

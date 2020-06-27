@@ -1,0 +1,13 @@
+div#keyAdd
+  input#keyword-Add-Text(class="form-control",
+    type="text"
+    placeholder="Add Keywords"
+    aria-label="Search"
+    onkeyup="keySearch.showPossible(this.value)"
+  )
+  a#addButton(
+    href="#"
+    onclick="keywordsBoxHandler.addItem()"
+  )
+    span#addButtonBadge(class="badge badge-primary")
+    span(class="fa fa-plus")

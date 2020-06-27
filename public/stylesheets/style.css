@@ -1,0 +1,53 @@
+html, body {
+    overflow: hidden;
+}
+
+
+#main .list-group {
+    height: 89.5vh;
+    overflow-y: scroll;
+}
+
+.nav-tabs {
+    height: 6vh;
+    /*background-color: whitesmoke;*/
+}
+
+.nav-tabs li {
+    width: 50%;
+}
+
+/*
+.nav-tabs a:hover {
+    background-color: red;
+}
+
+.nav-tabs a:active {
+    background-color: aquamarine;
+}
+
+.nav-tabs a:focus {
+    background-color: aquamarine;
+}
+*/
+
+#keywords-region {
+    background-color: ghostwhite;
+    height: 15em;
+    margin-bottom: 1em;
+    overflow-y: scroll;
+}
+
+#languages-dropdown {
+    margin-top: 1em;
+}
+
+#keyAdd {
+    display: flex;
+}
+
+#addButtonBadge {
+    height: 100%;
+    display: flex;
+    padding-top: 1em;
+}
