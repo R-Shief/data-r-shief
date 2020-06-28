@@ -1,3 +1,7 @@
+html, body {
+    overflow: hidden;
+}
+
 #main .list-group {
     height: 89.5vh;
     overflow-y: scroll;
@@ -7,24 +11,6 @@
     height: 6vh;
     /*background-color: whitesmoke;*/
 }
-
-.nav-tabs li {
-    width: 50%;
-}
-
-/*
-.nav-tabs a:hover {
-    background-color: red;
-}
-
-.nav-tabs a:active {
-    background-color: aquamarine;
-}
-
-.nav-tabs a:focus {
-    background-color: aquamarine;
-}
-*/
 
 #keywords-region {
     background-color: ghostwhite;

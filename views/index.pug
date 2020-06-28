@@ -4,20 +4,21 @@ append stylesheets
   link(rel='stylesheet' href='stylesheets/index.css')
 
 block content
-  div(class="container text-center")
-    hgroup
-      h1 #{title}
-      h2 Empowering Activists With Data Analytics Since 2008
-  #GoodGlitch(class="container")
-    hgroup
-      h3 The Good Glitch
-      h4 A Visual Bibliography
-    div(style="float: left")
-      b This is a visualization of over 500 resources from publications spanning nearly a hundred years (1921 - 2019) that make up the bibliography of The Good Glitch: From Politics to Aesthetics.
-      p The Good Glitch: From Politics to Aesthetics is a study of social media and popular social movements in the early twenty-first century in the Middle East and North Africa, with a focus on Egypt. It defines the glitched machine as functioning the way it is pre-programmed; in other words, glitches are built into the system they disrupt. It narrates an experience of revolution and counterrevolution that reveals the indispensability, the promises, and the limits of digital communication across borders and languages. The Good Glitch employs a method of data analytics to analyze tweets, posts, and blogs to describe the political culture of social media. The narrative voice performs the results under the guise of the Arabic-speaking cyborg VJ Um Amel such that the work plays with multiple voices that span the divide of the virtual and the real. This praxis approach to knowledge production prioritizes building in order to think, rather than thinking about what to build. 
-      p Moreover, to strengthen these ideas, the cyborg has repeatedly built versions of a software application to gather, organize, and analyze social media from the first R-Shief beta prototype in 2009, R-Shief, R-Shief 2.0, 3.0, 4.0, and the latest 5.0 system in 2017. Each version ultimately broke its servers, and then the cyborg developed a new version R-Shief (v.i+1). Within the field of media theory and practice, this method is understood as an iterative design process.  Embedded within the monograph are data stories both online and in print that emerged from this approach to data analytics.
-    //canvas#bibViz(style="float: right; width: 100px;")
+  #content(class="row")
+    div(class="container text-center")
+      hgroup
+        h1 #{title}
+        h2 Empowering Activists With Data Analytics Since 2008
+    #GoodGlitch(class="container")
+      hgroup
+        h3 The Good Glitch
+        h4 A Visual Bibliography
+      div(style="float: left")
+        b This is a visualization of over 500 resources from publications spanning nearly a hundred years (1921 - 2019) that make up the bibliography of The Good Glitch: From Politics to Aesthetics.
+        p The Good Glitch: From Politics to Aesthetics is a study of social media and popular social movements in the early twenty-first century in the Middle East and North Africa, with a focus on Egypt. It defines the glitched machine as functioning the way it is pre-programmed; in other words, glitches are built into the system they disrupt. It narrates an experience of revolution and counterrevolution that reveals the indispensability, the promises, and the limits of digital communication across borders and languages. The Good Glitch employs a method of data analytics to analyze tweets, posts, and blogs to describe the political culture of social media. The narrative voice performs the results under the guise of the Arabic-speaking cyborg VJ Um Amel such that the work plays with multiple voices that span the divide of the virtual and the real. This praxis approach to knowledge production prioritizes building in order to think, rather than thinking about what to build. 
+        p Moreover, to strengthen these ideas, the cyborg has repeatedly built versions of a software application to gather, organize, and analyze social media from the first R-Shief beta prototype in 2009, R-Shief, R-Shief 2.0, 3.0, 4.0, and the latest 5.0 system in 2017. Each version ultimately broke its servers, and then the cyborg developed a new version R-Shief (v.i+1). Within the field of media theory and practice, this method is understood as an iterative design process.  Embedded within the monograph are data stories both online and in print that emerged from this approach to data analytics.
+      //canvas#bibViz(style="float: right; width: 100px;")
     
     
 prepend scripts
-  script(src="unpublishedModules/bibVizWeb/js/viz.js" type="module")
+  //script(src="unpublishedModules/bibVizWeb/js/viz.js" type="module")
