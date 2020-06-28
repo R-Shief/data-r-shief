@@ -197,9 +197,8 @@ var dbHandler = {
 
     loadViewer: function(filters) {
         // add filters to the url as a string
-        var url = "getResults";
-        var data = JSON.stringify(this.filters);
-        //console.log("sending", this.filters, url);
+        var url = "/archive/getResults";
+        console.log("sending", this.filters, url);
         // decide what to do once the xhttp request returns
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -215,7 +214,8 @@ var dbHandler = {
         };
         // shoot off the xhttp get request.
         xhttp.open("GET", url, true);
-        xhttp.send(data);
+        xhttp.setRequestHeader("content-type", "application/json;charset=UTF-8");
+        xhttp.send(JSON.stringify(this.filters));
     },
 
     buildListItem: function(row) {

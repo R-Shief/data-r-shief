@@ -3,7 +3,15 @@ var mysql = require('mysql');
 var queryBuilder = require('../queryBuilder.js');
 var router = express.Router();
 
+router.use(express.json());
+
 router.get('/', function(req, res, next) {
+  res.render('archive', { title: "RShief Archive Viewer", keywords: ['Express', 'foo', 'bar'], languages: {en: 'English', fr: 'French', es: 'Spanish', it: "Italian", de: "German", ar: "Arabic"} });
+})
+
+router.get('/getResults', function(req, res, next) {
+  console.log("whaaaaaa", req.params);
+
   var locals = {results: []};
 
   var connection = mysql.createConnection({
@@ -14,9 +22,7 @@ router.get('/', function(req, res, next) {
   })
 
   connection.connect(function(err, data){
-
     if (err) { next(err) }
-    console.log(req.body);
     var sql = queryBuilder.buildQuery(req.body);
 
     connection.query(sql, function(err, rows, fields) {

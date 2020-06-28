@@ -1,0 +1,22 @@
+extends layout
+
+append stylesheets
+  // archive stylesheet
+  link(rel='stylesheet', href='/stylesheets/archive.css')
+
+block content
+  div(class="col-3 order-2")
+    div(id="sidebar sticky-top")
+      div(class="sidebar-heading")
+        h3.sidebar-header Filters
+      ul#keywords-region(class="sidebar list-group")
+        include includes/searchBar
+        include includes/keywords
+      include includes/datePickers
+      include includes/languageDropdown
+  div#main(class="col")
+    div#dbResults(class="list-group")
+    include includes/paginator
+
+prepend scripts
+  script(src="javascripts/rshiefArchiveViewer.js")
