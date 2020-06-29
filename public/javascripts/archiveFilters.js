@@ -6,14 +6,14 @@ window.onload = function() {
 document.getElementById('keywords-region').onkeypress = function(){
     var pressed = event.key;
     if (pressed == "Enter") {
-        filtersHandler.addKey();
+        filterHandler.addKey();
     }
 }
 
 var filterHandler = {
   filters: {
       keywords: new Set([]),
-      limitOffset: 0,
+      page: 0,
       langList: new Set(['en']),
       between: {start: "1998-01-01", end: "2015-01-01"}
   },
@@ -57,7 +57,7 @@ var filterHandler = {
                       l.classList.add('list-group-item');
                       var a = document.createElement('a');
                           a.setAttribute('href', '#');
-                          a.setAttribute('onclick', 'filtersHandler.useSuggestion(this.innerHTML)');
+                          a.setAttribute('onclick', 'filterHandler.useSuggestion(this.innerHTML)');
                           a.innerHTML = this.hashTags[i];
                       l.appendChild(a);
                   u.appendChild(l);
@@ -72,7 +72,7 @@ var filterHandler = {
   },
 
     useSuggestion: function(str) {
-        document.getElementById('keyword-add-text').value = str;
+        document.getElementById('keyAdd-Text').value = str;
         this.addKey();
         this.kr.removeChild(document.getElementById('suggestions'));
     },
@@ -81,7 +81,7 @@ var filterHandler = {
     nextKeyID: 2,
 
     addKey: function() {
-        var textBarValue = document.getElementById("keyword-add-text");
+        var textBarValue = document.getElementById("keyAdd-Text");
         var adds = textBarValue.value.split(",");
         textBarValue.value = "";
 
@@ -92,11 +92,12 @@ var filterHandler = {
                 l.classList.add("active");
                 l.id = this.nextKeyID++;
                 l.setAttribute("data-toggle", "button");
-                l.setAttribute("onclick", 'filtersHandler.toggleKey(this.id)');
-                l.innerHTML = adds[i] + " <a href='#' onclick='filtersHandler.deleteKey(this.parentNode.id)'><span class='badge badge-danger'><span class='fa fa-times'></span></span></a>";
+                l.setAttribute("onclick", 'filterHandler.toggleKey(this.id)');
+                l.innerHTML = adds[i] + " <a href='#' onclick='filterHandler.deleteKey(this.parentNode.id)'><span class='badge badge-danger'><span class='fa fa-times'></span></span></a>";
                 this.kr.appendChild(l);
                 this.filters.keywords.add(adds[i]);
             }
+            filterHandler.updateView();
         }
     },
 
@@ -120,29 +121,28 @@ var filterHandler = {
     },
 
   // handles pagination
-  page: 0,
-  nResults: "2000",
+  nResults: 0,
 
   previousPage: function() {
-      if(this.page > 0){
-          this.page--;
+      if(this.filters.page > 0){
+          this.filters.page--;
           this.refreshPaginationInfo();
+          this.updateView(false);
       }
-      dbHandler.submitFilters();
   },
 
   nextPage: function() {
-      if(this.page*50+50 <= this.nResults){
-          this.page++;
-          this.refreshPaginationInfo();
+      if(this.nResults == 50){
+        this.filters.page++;
+        this.refreshPaginationInfo();
+        this.updateView(false);
       }
-      dbHandler.submitFilters();
   },
 
   refreshPaginationInfo: function() {
-      var pStart = this.page*50 + 1;
+      var pStart = this.filters.page*50 + 1;
       var pEnd = Math.min(pStart+49, this.nResults);
-      document.getElementById('pi').innerHTML = pStart + "-" + pEnd + " of " + this.nResults;
+      document.getElementById('pagination').innerHTML = pStart + "-" + pEnd;
   },
 
   // handles language filter
@@ -164,80 +164,47 @@ var filterHandler = {
           if(date == ''){ dbHandler.filters.between[0] = this.defaults[0]; } else {
               dbHandler.filters.between[0] = date;
           }
-          dbHandler.submitFilters(true);
+          this.updateView();
       },
       setEnd: function(date) {
           console.log("fooend", date);
           if(date == ''){ dbHandler.filters.between[1] = this.defaults[1]; } else {
               dbHandler.filters.between[1] = date;
           }
-          dbHandler.submitFilters(true);
+          this.updateView();
       }
   },
 
-  // handles sending php queries
-  submitFilters: function(resetPage=false) {
-      if(resetPage) {paginator.page = 0;}
-      this.filters.keywords = [];
-      var children = document.getElementById("keywords-region").children;
-      for (var i = 0; i < children.length; i++){
-          if(children[i].tagName == "LI" && children[i].classList.contains('active')) {
-              this.filters.keywords.push(encodeURIComponent(children[i].textContent));
-          }
-      }
-      this.filters.limitOffset = paginator.page*50;
-      this.updateViewer(this.filters);
-  },
-
-  updateView: function(filters) {
-      this.page = 0;
-      // add filters to the url as a string
-      var updateURL = "/archive/updateViewer";
+  // handles updating the database view
+  updateView: function(resetPage=true) {
+      var url = "/archive/viewer";
       console.log("sending", this.filters);
       // post filters
       var filterUpdateRequest = new XMLHttpRequest();
       filterUpdateRequest.onreadystatechange = function() {
         // get updated view
-        var getURL = "/archive/getUpdatedViewer"
         var updatedViewRequest = new XMLHttpRequest();
         updatedViewRequest.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200){
-                console.log(this.responseText);
+                //console.log(this.responseText);
                 var response = JSON.parse(this.responseText);
                 //console.log(response);
                 document.getElementById("dbResults").innerHTML = response.dbResults;
-                paginator.nResults = response.nResults;
-                paginator.refreshPaginationInfo();
+                filterHandler.nResults = response.nResults;
+                if(resetPage){
+                  filterHandler.filters.page = 0;
+                  filterHandler.refreshPaginationInfo();
+                }
             }
         };
-        // shoot off the xhttp get request.
-        updatedViewRequest.open("GET", getURL, true);
+        updatedViewRequest.open("GET", url, true);
         updatedViewRequest.setRequestHeader("content-type", "application/json;charset=UTF-8");
         updatedViewRequest.send();
       }
-      filterUpdateRequest.open("POST", updateURL, true);
+      filterUpdateRequest.open("POST", url, true);
       filterUpdateRequest.setRequestHeader("content-type", "application/json;charset=UTF-8");
       var filtersJSON = JSON.stringify(this.filters, (key, value) => value instanceof Set ? [...value] : value);
       filterUpdateRequest.send(filtersJSON);
-
-  },
-
-  buildListItem: function(row) {
-      var l = document.createElement('hgroup');
-          l.classList.add('list-group-item');
-          var u = document.createElement('h6');
-              u.classList.add('list-group-item-heading');
-              var a = document.createElement('a');
-                  a.setAttribute('href', '#');
-                  a.setAttribute('onclick', 'filterHandler.addUserFilter(this.innerHTML)');
-                  a.innerHTML = '@' + row.from_user;
-              u.appendChild(a);
-          l.appendChild(u);
-          var t = document.createElement('h6');
-              t.classList.add('list-group-item-heading');
-              t.innerHTML = row.text;
-          l.appendChild(t);
-      return l;
   },
 
   addUserFilter: function(user) {

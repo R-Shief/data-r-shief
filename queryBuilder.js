@@ -1,6 +1,7 @@
 module.exports = {
   buildQuery: function(filters) {
-    var select = "SELECT from_user, text FROM combined"
+    var select = "SELECT from_user, text FROM combined";
+    var count = "SELECT count(*) as nResults FROM combined";
 
     var [usernames, hashtags, alikes] = this.processKeywords(filters.keywords);
 
@@ -15,7 +16,7 @@ module.exports = {
 
     if (hashtags.length > 0){
       var hashtagQueries = [];
-      hashtags.forEach(hashtag => hashtagQueries.push("hashtag = '" + hashtag + "'"));
+      hashtags.forEach(hashtag => hashtagQueries.push("hashtags = '" + hashtag + "'"));
       hashtagQueries = hashtagQueries.join(" OR ");
       whereQueries.push(hashtagQueries);
     }
@@ -39,20 +40,22 @@ module.exports = {
 
     var whereQueries = whereQueries.join(" AND ");
 
-    var limit = "limit 50 offset " + filters.limitOffset
+    var limit = "limit 50 offset " + filters.page*50
 
-    var query = [select, whereQueries.length > 0 ? "where" : "", whereQueries, limit].join(" ") + ";";
-    return query;
+    var queryBody = (whereQueries.length > 0 ? "where " : "") + whereQueries;
+    var selectSQL = [select, queryBody, limit].join(" ") + ";";
+    var countSQL = [count, queryBody].join(" ") + ";";
+    return [selectSQL, countSQL];
   },
   processKeywords: function(keywords) {
     var usernames = [], hashtags = [], alikes = [];
     keywords.forEach(keyword => {
       switch(keyword.substring(0,1)) {
         case "#":
-          hashtags.push(keyword);
+          hashtags.push(keyword.slice(1));
           break;
         case "@":
-          usernames.push(keyword);
+          usernames.push(keyword.slice(1));
         default:
           alikes.push(keyword);
       }

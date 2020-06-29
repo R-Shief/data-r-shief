@@ -1,12 +1,12 @@
 nav(aria-label="DB entries page nav")
   ul#dbNav(class="pagination pagination-sm justify-content-end")
-    li#pi(class="page-item") 1-50 of 2000
+    li#pagination(class="page-item") 1-50
       span(style="color: white") f
     li(class="page-item")
-      a(class="page-link" href="#" onclick='paginator.previousPage()')
+      a(class="page-link" href="#" onclick='filterHandler.previousPage()')
         span(aria-hidden="true") &laquo;
         span(class="sr-only") Previous
     li(class="page-item")
-      a(class="page-link" href="#" onclick='paginator.nextPage()')
+      a(class="page-link" href="#" onclick='filterHandler.nextPage()')
         span(aria-hidden="true") &raquo;
         span(class="sr-only") Next
