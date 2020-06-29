@@ -1,4 +1,4 @@
 form#keyAdd(class="form-inline my-2 my-lg-0")
-  input#keyword-Add-Text(class="form-control mr-sm-2" type="search" placeholder="Add Keywords" aria-label="Add Keywords" onkeyup="keySearch.showPossible(this.value)")
-  button#addButton(class="btn btn-outline-primary my-2 my-sm-0" type="submit" onclick="keywordsBoxHandler.addItem()")
+  input#keyword-Add-Text(class="form-control mr-sm-2" type="search" placeholder="Add Keywords" aria-label="Add Keywords" onkeyup="filterHandler.showPossibleTags(this.value)")
+  button#addButton(class="btn btn-outline-primary my-2 my-sm-0" type="submit" onclick="keywordsBoxHandler.addKey()")
     span(class="fa fa-plus")

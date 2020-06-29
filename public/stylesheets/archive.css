@@ -25,6 +25,7 @@ html, body {
 
 #keyAdd {
     display: flex;
+    width: auto;
 }
 
 #addButtonBadge {
