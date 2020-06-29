@@ -19,7 +19,8 @@ html(lang="en")
       link(rel='stylesheet', href='/stylesheets/style.css')
   body
     div(class="container-fluid")
-      include includes/navbar
+      block nav
+        include includes/navbar
       block content
     block scripts
       //jQuery first, then Popper.js, then datepicker then Bootstrap JS

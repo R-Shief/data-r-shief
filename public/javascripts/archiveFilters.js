@@ -140,9 +140,9 @@ var filterHandler = {
   },
 
   refreshPaginationInfo: function() {
-      var pStart = this.filters.page*50 + 1;
-      var pEnd = Math.min(pStart+49, this.nResults);
-      document.getElementById('pagination').innerHTML = pStart + "-" + pEnd;
+      //var pStart = this.filters.page*50 + 1;
+      //var pEnd = Math.min(pStart+49, this.nResults);
+      document.getElementById('pagination').innerHTML = filterHandler.filters.page + 1;
   },
 
   // handles language filter
@@ -161,17 +161,17 @@ var filterHandler = {
       defaults: ["1998-01-01", "2015-01-01"],
       setStart: function(date) {
           console.log("foostart", date);
-          if(date == ''){ dbHandler.filters.between[0] = this.defaults[0]; } else {
-              dbHandler.filters.between[0] = date;
+          if(date == ''){ filterHandler.filters.between.start = this.defaults[0]; } else {
+              filterHandler.filters.between.start = date;
           }
-          this.updateView();
+          filterHandler.updateView();
       },
       setEnd: function(date) {
           console.log("fooend", date);
-          if(date == ''){ dbHandler.filters.between[1] = this.defaults[1]; } else {
-              dbHandler.filters.between[1] = date;
+          if(date == ''){ filterHandler.filters.between.end = this.defaults[1]; } else {
+              filterHandler.filters.between.end = date;
           }
-          this.updateView();
+          filterHandler.updateView();
       }
   },
 

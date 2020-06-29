@@ -2,8 +2,8 @@ html, body {
     overflow: hidden;
 }
 
-#main .list-group {
-    height: 89.5vh;
+#content .list-group {
+    height: 86vh;
     overflow-y: scroll;
 }
 
@@ -23,10 +23,10 @@ html, body {
     margin-top: 1em;
 }
 
-#keyAdd {
+/* #keyAdd {
     display: flex;
     width: auto;
-}
+} */
 
 #addButtonBadge {
     height: 100%;
