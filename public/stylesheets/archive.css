@@ -3,7 +3,7 @@ html, body {
 }
 
 #content .list-group {
-    height: 86vh;
+    height: 82vh;
     overflow-y: scroll;
 }
 

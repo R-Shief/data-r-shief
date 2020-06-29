@@ -6,10 +6,8 @@ append stylesheets
   
 block nav
   nav(class="navbar navbar-expand-lg navbar-light bg-light fixed-top")
-    a(class="navbar-brand" href="#") R-Shief
-    button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
-      span(class="navbar-toggler-icon")
-
+    a(class="navbar-brand" href="/") R-Shief
+      
     #navbarSupportedContent(class="collapse navbar-collapse")
       ul(class="navbar-nav mr-auto")
         li(class="nav-item active")
@@ -17,24 +15,26 @@ block nav
             span(class="sr-only") (current)
         li(class="nav-item active")
           a(class="nav-link" href="/archive") Archive
-      div(class="nav-item dropleft")
-        button(class="btn btn-primary justify-content-end" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
-          span(class="fa fa-filter")
           
-        #collapsibleFilters(class="dropdown-menu" aria-labelledby="filtersDropdown")
-          div(class="container")
-            //div(class="sidebar-heading")
-              h3.sidebar-header Filters 
-            ul#keywords-region(class="sidebar list-group")
-              include includes/keySubmit
-              include includes/keywords
-            include includes/datePickers
-            include includes/languageDropdown
+    div(class="nav-item dropleft")
+      button(class="btn btn-primary justify-content-end" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+        span(class="fa fa-filter")
+      #collapsibleFilters(class="dropdown-menu" aria-labelledby="filtersDropdown")
+        div(class="container")
+          //div(class="sidebar-heading")
+            h3.sidebar-header Filters 
+          ul#keywords-region(class="sidebar list-group")
+            include includes/keySubmit
+            include includes/keywords
+          include includes/datePickers
+          include includes/languageDropdown
+      button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
+        span(class="navbar-toggler-icon")
 
 block content
   #content
     div#dbResults(class="list-group")
-    nav(class="navbar navbar-light navbar-sm  " aria-label="DB entries page nav")
+    nav(class="navbar navbar-light navbar-sm fixed-bottom" aria-label="DB entries page nav")
       ul(class="nav nav-pills nav-pills-sm")
         li(class="nav-item")
           a(class="nav-link active" href="#"): span(class="fa fa-th-list")
