@@ -34,6 +34,11 @@ block nav
 block content
   #content
     div#dbResults(class="list-group")
+      for row in rows
+        hgroup(class="list-group-item")
+          h6.list-group-item-heading
+            a(href="#", onclick="dbHandler.addUserFilter(this.innerHTML)")= row.from_user
+          h6.list-group-item-heading= row.text
     nav(class="navbar navbar-light navbar-sm fixed-bottom" aria-label="DB entries page nav")
       ul(class="nav nav-pills nav-pills-sm")
         li(class="nav-item")
@@ -43,4 +48,4 @@ block content
       include includes/paginator
 
 prepend scripts
-  script(src="javascripts/archiveFilters.js")
+  script(src="/javascripts/archiveFilters.js")

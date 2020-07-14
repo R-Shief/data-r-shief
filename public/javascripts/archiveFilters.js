@@ -1,5 +1,5 @@
 window.onload = function() {
-    filterHandler.updateView();
+    //filterHandler.updateView();
     filterHandler.loadHashTags();
 }
 
@@ -25,7 +25,7 @@ var filterHandler = {
   hashTags: [],
 
   loadHashTags: function() {
-      var url = "data/hashTags.json";
+      var url = "/data/hashTags.json";
       var xhttp = new XMLHttpRequest();
       var scope = this;
       xhttp.onreadystatechange = function() {
@@ -206,13 +206,19 @@ var filterHandler = {
       // var filtersJSON = JSON.stringify(this.filters, (key, value) => value instanceof Set ? [...value] : value);
       // filterUpdateRequest.send(filtersJSON);
 
-      var url = ["/archive", [...this.filters.langList], this.filters.between.start, this.filters.between.end, "foo&bar", this.filters.page].join("/");//[...this.filters.keywords], this.filters.page].join("/");
+      var url = [
+        "/archive",
+        [...this.filters.langList],
+        this.filters.between.start,
+        this.filters.between.end,
+        this.filters.keywords.length > 0 ? [...this.filters.keywords].join("&") : "NoKeywords",
+        this.filters.page].join("/");
       var dbRequest = new XMLHttpRequest();
       dbRequest.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200){
-          var response = JSON.parse(this.responseText);
-          document.getElementById("dbResults").innerHTML = response.dbResults;
-          filterHandler.nResults = response.nResults;
+          var response = this.responseText;
+          document.getElementById("content").innerHTML = response;
+          filterHandler.nResults = 0;
           if(resetPage){
             filterHandler.filters.page = 0;
             filterHandler.refreshPaginationInfo();
@@ -222,7 +228,7 @@ var filterHandler = {
       dbRequest.open("GET", url, true);
       dbRequest.setRequestHeader("content-type", "application/json;charset=UTF-8");
       dbRequest.send();
-
+      window.history.pushState({}, "", url);
   },
 
   addUserFilter: function(user) {

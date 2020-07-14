@@ -50,18 +50,20 @@ module.exports = {
   },
   processKeywords: function(keywords) {
     var usernames = [], hashtags = [], alikes = [];
-    keywordsArray = keywords.split("&");
-    keywordsArray.forEach(keyword => {
-      switch(keyword.substring(0,1)) {
-        case "#":
-          hashtags.push(keyword.slice(1));
-          break;
-        case "@":
-          usernames.push(keyword.slice(1));
-        default:
-          alikes.push(keyword);
-      }
-    });
+    if(keywords!="NoKeywords"){
+      keywordsArray = keywords.split("&");
+      keywordsArray.forEach(keyword => {
+        switch(keyword.substring(0,1)) {
+          case "#":
+            hashtags.push(keyword.slice(1));
+            break;
+          case "@":
+            usernames.push(keyword.slice(1));
+          default:
+            alikes.push(keyword);
+        }
+      });
+    }
     return [usernames, hashtags, alikes];
   }
 }
