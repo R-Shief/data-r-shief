@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  #content
+    for post in posts
+      a(href="/blog/" + post.slice(0,-3))
+        !=post.slice(0,-3)
