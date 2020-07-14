@@ -2,3 +2,4 @@ node_modules/
 bibVizWeb/
 public/data/
 utility/
+logs/*

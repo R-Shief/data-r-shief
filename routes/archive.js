@@ -1,6 +1,7 @@
 var express = require('express');
 var mysql = require('mysql');
 var queryBuilder = require('../queryBuilder.js');
+var dbConf = require('../config/dbConf.json');
 var router = express.Router();
 var filters = {};
 
@@ -15,12 +16,7 @@ router.post('/viewer', function (req, res, next) {
   filters = req.body;
   var [selectSQL, countSQL] = queryBuilder.buildQuery(filters);
 
-  var connection = mysql.createConnection({
-    host: '169.231.235.135', // make this 10.1.3.66 on production side
-    user: 'rshiefuser',
-    password: 'lqHr2O#&yFZrg#sRc8WAeED%iy7bZMzh88t59Y0q',
-    database: 'rshiefArchViewer'
-  })
+  var connection = mysql.createConnection(dbConf);
 
   connection.connect(function(err, data){
     if (err) { next(err) }
@@ -34,7 +30,7 @@ router.post('/viewer', function (req, res, next) {
 router.get('/viewer', function(req, res, next) {
     res.render('dbResults', {rows: results}, function(err, html) {
         console.log("this");
-        res.json({dbResults: html, nResults: results.length});
+        res.send({dbResults: html, nResults: results.length});
         console.log("guy");
         connection.end();
     })
