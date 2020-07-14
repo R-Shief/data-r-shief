@@ -12,28 +12,34 @@ router.get('/', function(req, res, next) {
 })
 
 var results;
-router.post('/viewer', function (req, res, next) {
-  filters = req.body;
+router.get('/:langList/:start/:end/:keywords/:page', function (req, res, next) {
+  console.log("trying");
+  filters = req.params;
   var [selectSQL, countSQL] = queryBuilder.buildQuery(filters);
 
-  var connection = mysql.createConnection(dbConf);
+  console.log(selectSQL);
+
+  var connection = mysql.createConnection({
+    host: dbConf.host,
+    user: dbConf.user,
+    password: dbConf.password,
+    database: dbConf.database
+  });
 
   connection.connect(function(err, data){
     if (err) { next(err) }
     connection.query(selectSQL, function(err, rows, fields) {
       if (err) throw err
-      results = rows;
+      results = typeof(rows[0][0]) !== undefined ? rows : {from_user: "No Results", text: "Please try again."};
+
+      res.render('dbResults', {rows: results}, function(err, html) {
+          res.send({dbResults: html, nResults: results.length});
+          connection.end();
+      })
     })
   })
-});
 
-router.get('/viewer', function(req, res, next) {
-    res.render('dbResults', {rows: results}, function(err, html) {
-        console.log("this");
-        res.send({dbResults: html, nResults: results.length});
-        console.log("guy");
-        connection.end();
-    })
+
 });
 
 module.exports = router;

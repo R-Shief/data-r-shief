@@ -35,7 +35,7 @@ module.exports = {
       whereQueries.push(languageQueries);
     }
 
-    var dateQueries = "day > date('" + filters.between.start + "') AND day <= date('" + filters.between.end + "')";
+    var dateQueries = "day > date('" + filters.start + "') AND day <= date('" + filters.end + "')";
     whereQueries.push(dateQueries);
 
     var whereQueries = whereQueries.join(" AND ");
@@ -45,11 +45,13 @@ module.exports = {
     var queryBody = (whereQueries.length > 0 ? "where " : "") + whereQueries;
     var selectSQL = [select, queryBody, limit].join(" ") + ";";
     var countSQL = [count, queryBody].join(" ") + ";";
+
     return [selectSQL, countSQL];
   },
   processKeywords: function(keywords) {
     var usernames = [], hashtags = [], alikes = [];
-    keywords.forEach(keyword => {
+    keywordsArray = keywords.split("&");
+    keywordsArray.forEach(keyword => {
       switch(keyword.substring(0,1)) {
         case "#":
           hashtags.push(keyword.slice(1));

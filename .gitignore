@@ -1,5 +1,5 @@
 node_modules/
 bibVizWeb/
-public/data/
+public/data/_*
 utility/
 logs/*
