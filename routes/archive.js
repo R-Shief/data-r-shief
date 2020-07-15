@@ -4,6 +4,7 @@ var queryBuilder = require('../queryBuilder.js');
 var dbConf = require('../config/dbConf.json');
 var router = express.Router();
 var filters = {};
+
 var pool = mysql.createPool({
   connectionLimit: 10,
   host: dbConf.host,
@@ -15,7 +16,6 @@ var pool = mysql.createPool({
 router.use(express.json());
 
 router.get('/', function(req, res, next) {
-  console.log("foo: " + req.params[0]);
   results = [{from_user: "Please add at least one keyword filter.", text: ""}];
   res.render('archive', { title: "RShief Archive Viewer", keywords: [], languages: {en: 'English', fr: 'French', es: 'Spanish', it: "Italian", de: "German", ar: "Arabic"}, rows: results }, function(err, html) {
       res.send(html);

@@ -177,35 +177,6 @@ var filterHandler = {
 
   // handles updating the database view
   updateView: function(resetPage=true) {
-      // var url = "/archive/viewer";
-      // console.log("sending", this.filters);
-      // // post filters
-      // var filterUpdateRequest = new XMLHttpRequest();
-      // filterUpdateRequest.onreadystatechange = function() {
-      //   // get updated view
-      //   var updatedViewRequest = new XMLHttpRequest();
-      //   updatedViewRequest.onreadystatechange = function() {
-      //       if (this.readyState == 4 && this.status == 200){
-      //           //console.log(this.responseText);
-      //           var response = JSON.parse(this.responseText);
-      //           //console.log(response);
-      //           document.getElementById("dbResults").innerHTML = response.dbResults;
-      //           filterHandler.nResults = response.nResults;
-      //           if(resetPage){
-      //             filterHandler.filters.page = 0;
-      //             filterHandler.refreshPaginationInfo();
-      //           }
-      //       }
-      //   };
-      //   updatedViewRequest.open("GET", url, true);
-      //   updatedViewRequest.setRequestHeader("content-type", "application/json;charset=UTF-8");
-      //   updatedViewRequest.send();
-      // }
-      // filterUpdateRequest.open("POST", url, true);
-      // filterUpdateRequest.setRequestHeader("content-type", "application/json;charset=UTF-8");
-      // var filtersJSON = JSON.stringify(this.filters, (key, value) => value instanceof Set ? [...value] : value);
-      // filterUpdateRequest.send(filtersJSON);
-
       var url = [
         "/archive",
         [...this.filters.langList],

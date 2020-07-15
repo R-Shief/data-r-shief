@@ -35,4 +35,10 @@ router.get('/:article', function(req, res, next) {
   });
 });
 
+router.post('/submit', function(req, res, next) {
+  console.log("got here");
+  console.log(req.body);
+
+});
+
 module.exports = router;
