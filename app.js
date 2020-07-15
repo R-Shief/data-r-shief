@@ -19,12 +19,16 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/archive', archiveRouter);
 app.use('/blog', blogRouter);
+
+app.get('/userToUser', function(req, res, next) {
+  res.render('userTouser');
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
