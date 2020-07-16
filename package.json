@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "webpack && node ./bin/www"
+    "start": "webpack --mode=production && debug = nodeapp:* & node ./bin/www",
+    "start:dev": "npm-run-all --parallel watch:server watch:build",
+    "watch:build": "webpack --mode=development --watch",
+    "watch:server": "set debug = nodeapp:* & node ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -18,7 +21,12 @@
     "pug": "2.0.0-beta11"
   },
   "devDependencies": {
+    "@babel/core": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
+    "nodemon": "^2.0.4",
+    "npm-run-all": "^4.1.5",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12"
   }

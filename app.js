@@ -26,8 +26,8 @@ app.use('/users', usersRouter);
 app.use('/archive', archiveRouter);
 app.use('/blog', blogRouter);
 
-app.get('/userToUser', function(req, res, next) {
-  res.render('userTouser');
+app.get('/dashboard', function(req, res, next) {
+  res.render('dashboard');
 });
 
 // catch 404 and forward to error handler
