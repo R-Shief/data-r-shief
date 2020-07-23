@@ -32,6 +32,7 @@ var userPacking = function chart(data, width, height) {
 
   var node = svg.append("g")
     .selectAll("circle")
+    .call(drag)
     .data(root.descendants().slice(1))
     .join("circle")
       .attr("fill", d => d.children ? color(d.depth) : "white")
