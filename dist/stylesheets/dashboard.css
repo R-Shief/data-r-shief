@@ -2,6 +2,7 @@
     border: 1px solid black;
     position: absolute;
     display: inline-block;
+    overflow: hidden;
     top: 0;
     left: 0;
 }
