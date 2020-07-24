@@ -30,6 +30,10 @@ app.get('/dashboard', function(req, res, next) {
   res.render('dashboard');
 });
 
+app.get('/bibViz', function(req, res, next) {
+  res.render('bibViz');
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

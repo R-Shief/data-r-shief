@@ -24,9 +24,3 @@ d3.selectAll('.draggable')
   .each(function(d) {
     d3.select(this).call( drag() )
   });
-
-// d3.select('#userPacking')
-//   .call(drag());
-//
-// d3.select('#streamgraph')
-//   .call(drag());

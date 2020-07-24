@@ -6,7 +6,8 @@ module.exports = {
   entry: {
     archive: './src/javascripts/archiveClient.js',
     blog: './src/javascripts/blogClient.js',
-    dashboard: './src/javascripts/dashboard/dashboardClient.js'
+    dashboard: './src/javascripts/dashboard/dashboardClient.js',
+    bibViz: './src/javascripts/bibViz/bibVizClient.js'
   },
   plugins: [
     new CleanWebpackPlugin()
