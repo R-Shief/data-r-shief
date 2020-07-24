@@ -1,6 +1,6 @@
 let THREE = require('three');
-let vizTools = require('./vizTools.js');
 let Viz = require('./viz.js');
+let {map_range} = require('./vizTools.js');
 
 let vizGroup, vizBooks, vizYears, sliceGroup;
 let scene, camera, renderer;
@@ -122,11 +122,6 @@ function onMouseMove( event ) {
     mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
-}
-
-// utilities
-function map_range(value, low1, high1, low2, high2) {
-    return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
 }
 
 function render() {
