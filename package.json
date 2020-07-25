@@ -6,7 +6,7 @@
     "start": "webpack --mode=production && debug = nodeapp:* & node ./bin/www",
     "start:dev": "npm-run-all --parallel watch:server watch:build",
     "watch:build": "webpack --mode=development --watch",
-    "watch:server": "set debug = nodeapp:* & node ./bin/www"
+    "watch:server": "set debug = nodeapp:* & nodemon ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",

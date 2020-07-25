@@ -8,6 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var archiveRouter = require('./routes/archive');
 var blogRouter = require('./routes/blog');
+var dashRouter = require('./routes/dashboard');
 
 var app = express();
 
@@ -25,10 +26,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/archive', archiveRouter);
 app.use('/blog', blogRouter);
-
-app.get('/dashboard', function(req, res, next) {
-  res.render('dashboard');
-});
+app.use('/dashboard', dashRouter);
 
 app.get('/bibViz', function(req, res, next) {
   res.render('bibViz');
