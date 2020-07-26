@@ -1,7 +1,7 @@
 var express = require('express');
 var mysql = require('mysql');
 var queryBuilder = require('../queryBuilder.js');
-var dbConf = require('../config/dbConf.json');
+var dbConf = require('../config/dbConf.js');
 var router = express.Router();
 var filters = {};
 
