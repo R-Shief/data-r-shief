@@ -13,10 +13,10 @@ router.get('/', function(req, res, next) {
 })
 
 router.put('/:langList/:startDate/:endDate/:keywords/:page', function (req, res, next) {
-  database.populateSession(req.sessionID, req.params)
-  .then((success, failure) => {
-    return res.send("yay");
-  });
+  Promise.resolve( () => { if (req.params.page == 0) return database.dePopulateSession(req.sessionID) } )
+  .then(_ => database.populateSession(req.sessionID, req.params))
+  .then(success => res.send(success))
+  .catch(failure => res.send(failure));
 });
 
 router.get('/:langList/:startDate/:endDate/:keywords/:page/:fetch', function (req, res, next) {

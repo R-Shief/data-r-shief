@@ -2,10 +2,10 @@
 
 d3 = require('d3');
 
-var resolution = 200;
+var resolution = 400;
 var width = 1000;
 var height = 1000;
-var r = 200;
+var r = 400;
 
 function round(p, n) {
   return p % n < n / 2 ? p - (p % n) : p + n - (p % n);
