@@ -16,7 +16,7 @@ module.exports = {
   sessionStore: new MySQLStore(dbConf, this.pool),
   session: session,
   sess: function() {
-      sessionConf.store = this.sessionStore;
+      Object.assign(sessionConf, {store: this.sessionStore});
       return sessionConf;
   },
   dePopulateSession: function(sessionID) {
