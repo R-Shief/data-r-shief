@@ -24,6 +24,7 @@ module.exports = {
       this.pool.getConnection((err, connection) => {
         var deleteSQL = `DELETE FROM sessionTweet WHERE sessionTweet.session_id='${sessionID}'`;
         connection.query(deleteSQL, (error, results, fields) => {
+          if (error) throw error;
           connection.release();
         });
       });

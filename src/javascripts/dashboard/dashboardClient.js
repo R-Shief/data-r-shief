@@ -14,7 +14,9 @@ let filters = {
     return `${window.location.href}/${this.langList}/${this.startDate}/${this.endDate}/${this.keywords}/${this.page}`;
   },
   populateSession: function() {
-    return fetch(this.getURLWithFilters(), {method: 'PUT'});
+    let url = this.getURLWithFilters();
+    // window.history.pushState({}, "", url);
+    return fetch(url, {method: 'PUT'});
   },
   populateNext: function() {
     this.page++;
