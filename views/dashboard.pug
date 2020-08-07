@@ -1,12 +1,29 @@
 doctype html
 html
   head
+    // Necessary metadata for Bootstrap
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
     block stylesheets
+      link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css", integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk", crossorigin="anonymous")
       link(href="/stylesheets/dashboard.css", rel="stylesheet")
   body
     block content
-      #dash(style="position: absolute; display: inline-block; top: 0; left: 0;" class="flex")
-        #userPacking(class="viz draggable")
-        #streamgraph(class="viz draggable")
+      #filterBar.navbar.navbar-light.bg-light
+        p.navbar-brand Filters
+        form.form-inline
+          input.form-control.mr-sm-2(type="search" placeholder="Search" aria-label="Search")
+          button.btn.btn-outline-success.my-2.my-sm-0(type="submit") Search
+      #dash.container.d-flex.justify-content-center
+        div.card
+          div.card-img-top
+            #userPacking.viz
+          div.card-body
+            h5.card-title User Packing
+        div.card
+          div.card-img-top
+            #streamgraph.viz
+          div.card-body
+            h5.card-title Streamgraph
     block scripts
     script(src='/javascripts/dashboard.bundle.js')

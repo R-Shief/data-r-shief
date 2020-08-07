@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var database = require('./database.js');
+// var database = require('./database.js');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -24,11 +24,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'dist')));
 
-if (app.get('env') === 'production') {
-  app.set('trust proxy', 1) // trust first proxy
-  database.sess().cookie.secure = true // serve secure cookies
-}
-app.use(database.session(database.sess()));
+// if (app.get('env') === 'production') {
+//   app.set('trust proxy', 1) // trust first proxy
+//   database.sess().cookie.secure = true // serve secure cookies
+// }
+// app.use(database.session(database.sess()));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
