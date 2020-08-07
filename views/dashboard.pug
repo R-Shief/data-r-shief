@@ -12,11 +12,17 @@ html
       #filterBar.navbar.navbar-light.bg-light
         hgroup.navbar-brand
           p.mb-0 Tweet Databoard 
-          small Over 45 million tweets captured between 2008-2013
+          small Over 45 million tweets
         form.form-inline
           div.form-group.mr-sm-2
             label.mr-1(for="keywordsTextArea") Keywords 
-            input#keywordsText.form-control(type="text")
+            input#keywordsText.form-control(type="text" size="12")
+          div.form-group.mr-sm-2
+            label.mr-1(for="keywordsTextArea") Start Date 
+            input#startText.form-control(type="text" size="5")
+          div.form-group.mr-sm-2
+            label.mr-1(for="keywordsTextArea") End Date 
+            input#endText.form-control(type="text" size="5")
           div.dropdown.mr-sm-2
             button.btn.btn-outline-secondary.dropdown-toggle(type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") Languages
             div.dropdown-menu(aria-labelledby="dropdownMenuButton")
@@ -29,12 +35,6 @@ html
               div.form-check.dropdown-item
                 input.form-check-input(type="checkbox" id="inlineCheckbox4" value="option4")
                 label.form-check-label(for="inlineCheckbox4") 4
-          div.form-group.mr-sm-2
-            label.mr-1(for="keywordsTextArea") Start Date 
-            input#startText.form-control(type="text" size="10")
-          div.form-group.mr-sm-2
-            label.mr-1(for="keywordsTextArea") End Date 
-            input#endText.form-control(type="text" size="10")
       #dash.container.d-flex.justify-content-center
         div.card
           div.card-img-top
