@@ -1,43 +1,47 @@
 #filterBar.navbar.navbar-light.bg-light.rounded
   hgroup.navbar-brand
-    p.mb-0 Tweet Databoard 
-    small Over 45 million tweets
-  form.form-inline
-    div.input-group
-      div.input-group-prepend
-        span.input-group-text Keywords
-      input#keywordsText.form-control(type="search" size="10")
-      div.input-group.input-daterange(data-date-format="M d, yyyy")
-        div.input-group-prepend
-          span.input-group-text from
-        input.form-control(type="text" value="Oct 2, 2009" size="8")
-        div.input-group-prepend.input-group-append
-          span.input-group-text to
-        input.form-control(type="text" value="Oct 5, 2013" size="8")
+    div.d-flex.align-items-center
+      img(src="icons/Twitter-Logos/Twitter_Logo_Blue/Twitter_Logo_Blue.svg" width="50px")
+      //- p.mb-0 Tweet Archive
+  div.mx-auto
+    form.form-inline
       div.input-group
-        div.input-group-append
-          button.btn.btn-outline-secondary.dropdown-toggle(type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") languages
-          div.dropdown-menu(aria-labelledby="dropdownMenuButton")
-            form
-              div.form-check.d-flex.justify-content-start.pl-3
-                input.form-check-input(type="checkbox" id="inlineCheckbox2" value="option2")
-                label.form-check-label(for="inlineCheckbox2") English
-              div.form-check.d-flex.justify-content-start.pl-3
-                input.form-check-input(type="checkbox" id="inlineCheckbox3" value="option3")
-                label.form-check-label(for="inlineCheckbox3") French
-              div.form-check.d-flex.justify-content-start.pl-3
-                input.form-check-input(type="checkbox" id="inlineCheckbox4" value="option4")
-                label.form-check-label(for="inlineCheckbox4") Arabic
-        div.input-group-append
-          button.btn.btn-outline-secondary.dropdown-toggle(type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") countries
-          div.dropdown-menu(aria-labelledby="dropdownMenuButton")
-            form
-              div.form-check.d-flex.justify-content-start.pl-3
-                input.form-check-input(type="checkbox" id="inlineCheckbox2" value="option2")
-                label.form-check-label(for="inlineCheckbox2") Egypt
-              div.form-check.d-flex.justify-content-start.pl-3
-                input.form-check-input(type="checkbox" id="inlineCheckbox3" value="option3")
-                label.form-check-label(for="inlineCheckbox3") Bahrain
-              div.form-check.d-flex.justify-content-start.pl-3
-                input.form-check-input(type="checkbox" id="inlineCheckbox4" value="option4")
-                label.form-check-label(for="inlineCheckbox4") Saudi Arabia
+        div.input-group-prepend
+          span.input-group-text Keywords
+        input#keywordsText.form-control(type="search" size="10")
+        div.input-group.input-daterange(data-date-format="M d, yyyy")
+          div.input-group-prepend.input-group-append
+            span.input-group-text from
+          input.form-control(type="text" value="Oct 2, 2009" size="8")
+          div.input-group-prepend.input-group-append
+            span.input-group-text to
+          input.form-control(type="text" value="Oct 5, 2013" size="8")
+        div.input-group
+          div.input-group-append
+            button.btn.btn-outline-secondary.dropdown-toggle(type="button" id="languageMenuDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") languages
+            div.dropdown-menu(aria-labelledby="languageMenuDropdown")
+              form
+                div.form-check.d-flex.justify-content-start.pl-3
+                  input.form-check-input(type="checkbox" id="inlineCheckbox2" value="option2")
+                  label.form-check-label(for="inlineCheckbox2") English
+                div.form-check.d-flex.justify-content-start.pl-3
+                  input.form-check-input(type="checkbox" id="inlineCheckbox3" value="option3")
+                  label.form-check-label(for="inlineCheckbox3") French
+                div.form-check.d-flex.justify-content-start.pl-3
+                  input.form-check-input(type="checkbox" id="inlineCheckbox4" value="option4")
+                  label.form-check-label(for="inlineCheckbox4") Arabic
+          div.input-group-append
+            button.btn.btn-outline-secondary.dropdown-toggle(type="button" id="countryMenuDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") countries
+            div.dropdown-menu(aria-labelledby="countryMenuDropdown")
+              form
+                div.form-check.d-flex.justify-content-start.pl-3
+                  input.form-check-input(type="checkbox" id="inlineCheckbox2" value="option2")
+                  label.form-check-label(for="inlineCheckbox2") Egypt
+                div.form-check.d-flex.justify-content-start.pl-3
+                  input.form-check-input(type="checkbox" id="inlineCheckbox3" value="option3")
+                  label.form-check-label(for="inlineCheckbox3") Bahrain
+                div.form-check.d-flex.justify-content-start.pl-3
+                  input.form-check-input(type="checkbox" id="inlineCheckbox4" value="option4")
+                  label.form-check-label(for="inlineCheckbox4") Saudi Arabia
+          div.input-group-append
+            button#filterGoButton.btn.btn-primary(type="button") Go
