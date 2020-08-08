@@ -51,6 +51,7 @@ fetch('/data/flare-2.json')
   .then(data => {
     var packingDiv = document.getElementById("userPacking");
     var boundingClientRect = packingDiv.getBoundingClientRect();
+    packingDiv.innerHTML = '';
     packingDiv.appendChild(userPacking(data, boundingClientRect.width, boundingClientRect.height));
   });
 
