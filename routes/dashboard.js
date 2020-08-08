@@ -7,6 +7,7 @@ router.use(express.json());
 
 router.get('/', function(req, res, next) {
   res.render('dashboard', { title: "R-Shief Dashboard" }, function(err, html) {
+      console.log(err);
       res.send(html);
   })
 

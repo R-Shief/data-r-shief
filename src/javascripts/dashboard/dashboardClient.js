@@ -3,6 +3,12 @@ let userPacking = require('./userPacking.js');
 let Streamgraph = require('./streamgraph.js');
 let drag = require('./drag.js');
 
+$('.input-daterange').datepicker();
+
+$('.input-daterange input').each(function() {
+    // $(this).datepicker();
+});
+
 // Default filters values
 let filters = {
   langList: ["ar","en","fr"],
