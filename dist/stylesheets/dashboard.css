@@ -12,8 +12,3 @@
   height: 300px;
   overflow: hidden;
 }
-
-#dash {
-  height: 600px;
-  overflow-y: scroll;
-}
