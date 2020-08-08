@@ -1,3 +1,7 @@
+html * {
+  font-family: Helvetica, Arial, sans-serif;
+}
+
 .draggable {
     border: 1px solid black;
     position: absolute;
