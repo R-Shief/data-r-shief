@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "webpack --mode=production && debug = nodeapp:* & node ./bin/www",
+    "start": "node ./bin/www",
+    "build": "webpack --mode=production"
     "start:dev": "npm-run-all --parallel watch:server watch:build",
     "watch:build": "webpack --mode=development --watch",
     "watch:server": "set debug = nodeapp:* & nodemon ./bin/www"
