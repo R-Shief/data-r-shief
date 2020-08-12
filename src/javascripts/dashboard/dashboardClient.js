@@ -2,12 +2,9 @@ let d3 = require('d3');
 let userPacking = require('./userPacking.js');
 let Streamgraph = require('./streamgraph.js');
 let drag = require('./drag.js');
+let resizer = require('./resize.js');
 
 $('.input-daterange').datepicker();
-
-$('.input-daterange input').each(function() {
-    // $(this).datepicker();
-});
 
 // Default filters values
 let filters = {
@@ -75,6 +72,14 @@ d3.selectAll('.draggable')
   .each(function(d) {
     d3.select(this).call( drag() )
   });
+
+resizer.getResizeHandle().addEventListener("mousedown", function(evt) {
+  resizer.startResize(evt);
+  document.body.addEventListener("mousemove", resizer.resize);
+  document.body.addEventListener("mouseup", function() {
+    resizer.getResizeHandle().body.removeEventListener("mousemove", resizer.resize);
+  });
+});
 
 function p(whatever) {
   console.log(whatever);
