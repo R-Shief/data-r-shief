@@ -1,10 +1,14 @@
+let ClipboardJS = require('clipboard');
 let d3 = require('d3');
 let userPacking = require('./userPacking.js');
 let Streamgraph = require('./streamgraph.js');
 let drag = require('./drag.js');
 let resizer = require('./resize.js');
 
-$('.input-daterange').datepicker();
+$( document ).ready(() => {
+  $('.input-daterange').datepicker();
+  let clipboard = new ClipboardJS('.clippable');
+});
 
 // Default filters values
 let filters = {
