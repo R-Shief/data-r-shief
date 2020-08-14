@@ -22,18 +22,18 @@ function init() {
 
   document.body.appendChild( renderer.domElement );
 
-  sliceGroup = viz.getSliceGroup();
-  sliceGroup.position.x += 0.8;
-  sliceGroup.position.y -= 0.8;
-  scene.add(sliceGroup);
+  // sliceGroup = viz.getSliceGroup();
+  // sliceGroup.position.x += 0.8;
+  // sliceGroup.position.y -= 0.8;
+  // scene.add(sliceGroup);
 
   // position the structure
   vizGroup = viz.getVizGroup();
-  vizGroup.position.z -= 800;
+  vizGroup.position.z -= 500;
   vizGroup.rotation.x -= 90 * (Math.PI/180);
   vizGroup.rotation.y -= 90 * (Math.PI/180);
-  vizGroup.position.x -= 360;
-  vizGroup.position.y += 270;
+  vizGroup.position.x -= 500;
+  vizGroup.position.y += 0;
   scene.add(vizGroup);
 
   control.bind({ref: vizGroup.rotation, key: 'z', axis: 'y', range_low: Math.PI*2, range_high: 0, min: 0, max: Math.PI*2});
