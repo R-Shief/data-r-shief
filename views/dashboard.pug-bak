@@ -12,13 +12,35 @@ html
     block content
       include includes/filterBar
       include includes/optionsPanel.pug
-      main#dash.container-fluid.tab-content.mt-4(role="main")
-        #userPacking.viz.tab-pane.fade.show.active(role="tabpanel" aria-labelledby="user-packing-tab")
-          div.spinner-border(role="status")
-            span.sr-only Loading...
-        #streamgraph.viz.tab-pane.fade(role="tabpanel" aria-labelledby="user-packing-tab")
-          div.spinner-border(role="status")
-            span.sr-only Loading...
+      main#dash.container-fluid.mt-4.d-flex.justify-content-start.flex-wrap(role="main")
+        div.card
+          div.card-header
+            h5 User Packing
+          div.card-img-top
+            #userPacking.viz
+              div.spinner-border(role="status")
+                span.sr-only Loading...
+        div.card
+          div.card-header
+            h5 Streamgraph
+          div.card-img-top
+            #streamgraph.viz.d-flex.justify-content-center.align-items-center
+              div.spinner-border(role="status")
+                span.sr-only Loading...
+        div.card
+          div.card-header
+            h5 Map
+          div.card-img-top
+            #map.viz.d-flex.justify-content-center.align-items-center
+              div.spinner-border(role="status")
+                span.sr-only Loading...
+        div.card
+          div.card-header
+            h5 Multiline
+          div.card-img-top
+            #multiline.viz.d-flex.justify-content-center.align-items-center
+              div.spinner-border(role="status")
+                span.sr-only Loading...
       //- footer#resizable.footer
       //-   div.container.d-flex.justify-content-center
       //-     #resize-handle bar

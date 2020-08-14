@@ -16,9 +16,14 @@ body {
 }
 
 .viz {
-  width: 300px;
-  height: 300px;
+  width: 100%;
+  height: 90vh;
   overflow: hidden;
+}
+
+#vizToggles li a {
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 
 .footer {
