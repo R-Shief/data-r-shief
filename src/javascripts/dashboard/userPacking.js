@@ -1,90 +1,98 @@
 // Functions here largely copied from Mike Bostock's https://observablehq.com/@d3/zoomable-circle-packing
 
 d3 = require('d3');
+Viz = require('./viz.js');
 
-var color = d3.scaleLinear()
-    .domain([0, 5])
-    .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])
-    .interpolate(d3.interpolateHcl)
+class UserPacking extends Viz {
 
-var format = d3.format(",d")
+  constructor(w, h) {
+    super(w, h);
 
-var userPacking = function chart(data, width, height) {
+    this.color = d3.scaleLinear()
+        .domain([0, 5])
+        .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])
+        .interpolate(d3.interpolateHcl)
 
-  var pack = data => d3.pack()
-      .size([width, height])
-      .padding(3)
-    (d3.hierarchy(data)
-      .sum(d => d.value)
-      .sort((a,b) => b.value - a.value))
+    this.format = d3.format(",d")
+  }
 
-  var root = pack(data);
-  var focus = root;
-  var view;
+  setData(data) {
+    let scope = this;
 
-  var svg = d3.create("svg")
-      .attr("viewBox", `-${width / 2} -${height / 2} ${width} ${height}`)
-      .style("display", "block")
-      .style("margin", "0 -14px")
-      .style("background", color(0))
-      .style("cursor", "pointer")
-      .on("click", () => zoom(root));
+    let pack = data => d3.pack()
+        .size([scope.width, scope.height])
+        .padding(3)
+      (d3.hierarchy(data)
+        .sum(d => d.value)
+        .sort((a,b) => b.value - a.value))
 
-  var node = svg.append("g")
-    .selectAll("circle")
-    .call(drag)
-    .data(root.descendants().slice(1))
-    .join("circle")
-      .attr("fill", d => d.children ? color(d.depth) : "white")
-      .attr("pointer-events", d => !d.children ? "none" : null)
-      .on("mouseover", function() { d3.select(this).attr("stroke", "#000"); })
-      .on("mouseout", function() { d3.select(this).attr("stroke", null); })
-      .on("click", d => focus !== d && (zoom(d), d3.event.stopPropagation()));
+    this.root = pack(data);
+    this.focus = root;
+    this.view;
 
-  var label = svg.append("g")
-      .style("font", "10px sans-serif")
-      .attr("pointer-events", "none")
-      .attr("text-anchor", "middle")
-    .selectAll("text")
-    .data(root.descendants())
-    .join("text")
-      .style("fill-opacity", d => d.parent === root ? 1 : 0)
-      .style("display", d => d.parent === root ? "inline" : "none")
-      .text(d => d.data.name);
+    this.svg = d3.create("svg")
+        .attr("viewBox", `-${scope.width / 2} -${scope.height / 2} ${scope.width} ${scope.height}`)
+        .style("display", "block")
+        .style("margin", "0 -14px")
+        .style("background", color(0))
+        .style("cursor", "pointer")
+        .on("click", () => scope.zoom(scope.root));
 
-  function zoomTo(v) {
-    const k = width / v[2];
+    this.node = this.svg.append("g")
+      .selectAll("circle")
+      .call(drag)
+      .data(scope.root.descendants().slice(1))
+      .join("circle")
+        .attr("fill", d => d.children ? scope.color(d.depth) : "white")
+        .attr("pointer-events", d => !d.children ? "none" : null)
+        .on("mouseover", function() { d3.select(this).attr("stroke", "#000"); })
+        .on("mouseout", function() { d3.select(this).attr("stroke", null); })
+        .on("click", d => scope.focus !== d && (scope.zoom(d), d3.event.stopPropagation()));
+
+    this.label = this.svg.append("g")
+        .style("font", "10px sans-serif")
+        .attr("pointer-events", "none")
+        .attr("text-anchor", "middle")
+      .selectAll("text")
+      .data(scope.root.descendants())
+      .join("text")
+        .style("fill-opacity", d => d.parent === scope.root ? 1 : 0)
+        .style("display", d => d.parent === scope.root ? "inline" : "none")
+        .text(d => d.data.name);
+
+    this.zoomTo([scope.root.x, scope.root.y, scope.root.r * 2]);
+  }
+
+  zoomTo(v) {
+    const k = this.width / v[2];
 
     view = v;
 
-    label.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
-    node.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
-    node.attr("r", d => d.r * k);
+    this.label.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
+    this.node.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
+    this.node.attr("r", d => d.r * k);
   }
 
-  function zoom(d) {
-    const focus0 = focus;
+  zoom(d) {
+    let scope = this;
+    const focus0 = scope.focus;
 
-    focus = d;
+    scope.focus = d;
 
-    const transition = svg.transition()
+    const transition = this.svg.transition()
         .duration(d3.event.altKey ? 7500 : 750)
         .tween("zoom", d => {
-          const i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2]);
+          const i = d3.interpolateZoom(scope.view, [scope.focus.x, scope.focus.y, scope.focus.r * 2]);
           return t => zoomTo(i(t));
         });
 
-    label
-      .filter(function(d) { return d.parent === focus || this.style.display === "inline"; })
+    this.label
+      .filter(function(d) { return d.parent === scope.focus || this.style.display === "inline"; })
       .transition(transition)
-        .style("fill-opacity", d => d.parent === focus ? 1 : 0)
-        .on("start", function(d) { if (d.parent === focus) this.style.display = "inline"; })
-        .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
+        .style("fill-opacity", d => d.parent === scope.focus ? 1 : 0)
+        .on("start", function(d) { if (d.parent === scope.focus) this.style.display = "inline"; })
+        .on("end", function(d) { if (d.parent !== scope.focus) this.style.display = "none"; });
   }
-
-  zoomTo([root.x, root.y, root.r * 2]);
-
-  return svg.node();
 };
 
-module.exports = userPacking;
+module.exports = UserPacking;

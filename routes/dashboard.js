@@ -1,5 +1,5 @@
 var express = require('express');
-//var database = require('../database.js');
+var database = require('../database.js');
 var router = express.Router();
 var filters = {};
 
