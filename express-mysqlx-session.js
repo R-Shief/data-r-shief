@@ -71,7 +71,7 @@ module.exports = function(session) {
 		connectionLimit: 1,
 		// Whether or not to end the database connection when the store is closed:
 		endConnectionOnClose: true,
-		charset: 'utf8mb4_bin',
+		charset: 'utf8mb4',
 		schema: {
 			tableName: 'sessions',
 			columnNames: {
@@ -120,7 +120,7 @@ module.exports = function(session) {
 				return cb && cb(error);
 			}
 
-			sql = sql.replace(/`[^`]+`/g, '??');
+			sql = sql.replace(/`[^`]+`/g, '?');
 
 			var params = [
 				this.options.schema.tableName,
@@ -149,7 +149,7 @@ module.exports = function(session) {
 		debug.log('Getting session:', session_id);
 
 		// LIMIT not needed here because the WHERE clause is searching by the table's primary key.
-		var sql = 'SELECT ?? AS data, ?? as expires FROM ?? WHERE ?? = ?';
+		var sql = 'SELECT ? AS data, ? as expires FROM ? WHERE ? = ?';
 
 		var params = [
 			this.options.schema.columnNames.data,
@@ -158,6 +158,8 @@ module.exports = function(session) {
 			this.options.schema.columnNames.session_id,
 			session_id
 		];
+
+		console.log("trying to get session");
 
 		this.query(sql, params, function(error, rows) {
 
@@ -193,6 +195,8 @@ module.exports = function(session) {
 
 	MySQLStore.prototype.set = function(session_id, data, cb) {
 
+		console.log("trying to set session");
+
 		debug.log('Setting session:', session_id);
 
 		var expires;
@@ -218,7 +222,7 @@ module.exports = function(session) {
 
 		data = JSON.stringify(data);
 
-		var sql = 'INSERT INTO ?? (??, ??, ??) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE ?? = VALUES(??), ?? = VALUES(??)';
+		var sql = 'INSERT INTO ? (?, ?, ?) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE ? = VALUES(?), ? = VALUES(?)';
 
 		var params = [
 			this.options.schema.tableName,
@@ -272,7 +276,7 @@ module.exports = function(session) {
 		expires = Math.round(expires.getTime() / 1000);
 
 		// LIMIT not needed here because the WHERE clause is searching by the table's primary key.
-		var sql = 'UPDATE ?? SET ?? = ? WHERE ?? = ?';
+		var sql = 'UPDATE ? SET ? = ? WHERE ? = ?';
 
 		var params = [
 			this.options.schema.tableName,
@@ -299,7 +303,7 @@ module.exports = function(session) {
 		debug.log('Destroying session:', session_id);
 
 		// LIMIT not needed here because the WHERE clause is searching by the table's primary key.
-		var sql = 'DELETE FROM ?? WHERE ?? = ?';
+		var sql = 'DELETE FROM ? WHERE ? = ?';
 
 		var params = [
 			this.options.schema.tableName,
@@ -323,7 +327,7 @@ module.exports = function(session) {
 
 		debug.log('Getting number of sessions');
 
-		var sql = 'SELECT COUNT(*) FROM ?? WHERE ?? >= ?';
+		var sql = 'SELECT COUNT(*) FROM ? WHERE ? >= ?';
 
 		var params = [
 			this.options.schema.tableName,
@@ -349,7 +353,7 @@ module.exports = function(session) {
 
 		debug.log('Getting all sessions');
 
-		var sql = 'SELECT * FROM ?? WHERE ?? >= ?';
+		var sql = 'SELECT * FROM ? WHERE ? >= ?';
 
 		var params = [
 			this.options.schema.tableName,
@@ -384,7 +388,7 @@ module.exports = function(session) {
 
 		debug.log('Clearing all sessions');
 
-		var sql = 'DELETE FROM ??';
+		var sql = 'DELETE FROM ?';
 
 		var params = [
 			this.options.schema.tableName
@@ -406,7 +410,7 @@ module.exports = function(session) {
 
 		debug.log('Clearing expired sessions');
 
-		var sql = 'DELETE FROM ?? WHERE ?? < ?';
+		var sql = 'DELETE FROM ? WHERE ? < ?';
 
 		var params = [
 			this.options.schema.tableName,
@@ -430,16 +434,26 @@ module.exports = function(session) {
 
 		var done = _.once(cb);
 		// var promise = this.connection.executeSql(sql, params, done);
+
+		var v = params.values();
+		sql = sql.replace(/\?/g, x => {
+			return `\`${v.next().value}\``;
+		});
 		console.log(sql);
-    var promise = this.connection.executeSql(sql, params).execute();
+    var promise = this.connection.sql(sql).execute();
+
+		// promise.then(result => console.log("foo" + result)).catch(err => console.log("foo-err: " + err));
 
 		if (promise && _.isFunction(promise.then) && _.isFunction(promise.catch)) {
+			console.log("probably a promise");
 			// Probably a promise.
 			promise.then(function(result) {
+				console.log("did shit: " + result);
 				var rows = result[0];
 				var fields = result[1];
 				done(null, rows, fields);
 			}).catch(function(error) {
+				console.log(error);
 				done(error);
 			});
 		}

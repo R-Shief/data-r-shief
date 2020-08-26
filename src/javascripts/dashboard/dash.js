@@ -16,7 +16,7 @@ let dash = {
       // window.history.pushState({}, "", url);
       fetch(url, {method: 'PUT'});
     })
-    .then(_ => dash.vizs.foreach(pair =>
+    .then(_ => dash.vizs.foreach(pair => {
       new Promise(_ => {
         // get element bounds
         let bounds = pair.elem.getBoundingClientRect();
@@ -31,7 +31,7 @@ let dash = {
         pair.elem.innerHTML = '';
         pair.elem.appendChild(viz.getView())};
       })
-    ))
+    }))
     .then(_ => { // now up the page count once and do it all again, this time with 'build' set to false
       this.filters.page++;
       this.populate(false);
