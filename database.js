@@ -1,7 +1,7 @@
 let mysqlx = require('@mysql/xdevapi');
 let session = require('express-session');
-// let MySQLxStore = require('./express-mysqlx-session')(session);
-let MySQLStore = require('express-mysql-session')(session);
+let MySQLxStore = require('./express-mysqlx-session')(session);
+// let MySQLStore = require('express-mysql-session')(session);
 let dbConf = require('./config/dbConf.js');
 let sessionConf = require('./config/sessionConf.js');
 
@@ -71,4 +71,4 @@ class Database {
   }
 };
 
-module.exports = new Database({client: mysqlx, session: session, storeClass: MySQLStore, dbConf: dbConf, sessionConf: sessionConf});
+module.exports = new Database({client: mysqlx, session: session, storeClass: MySQLxStore, dbConf: dbConf, sessionConf: sessionConf});
