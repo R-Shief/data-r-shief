@@ -72,7 +72,7 @@
     <script>
 
       $( "div.tab-pane iframe" ).each(i => {
-        console.log(this.src);
+        console.log(this[0]);
         $( this ).on("unload", () => {
           console.log("doing shit");
           let scope = this;
