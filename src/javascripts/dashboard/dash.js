@@ -3,6 +3,8 @@ let dash = {
     langList: ["ar","en","fr"],
     startDate: "2011-12-12",
     endDate: "2013-12-12",
+    hashtags: "egypt",
+    usernames: "*",
     keywords: "*",
     page: 0
   },
@@ -10,10 +12,10 @@ let dash = {
   vizs: [], // filled with objects of type { elem: {some elem}, class: Streamgraph }
 
   populate: function(build=true) {
-    // update the session data with more entries
     new Promise(_ => {
       let url = dash.getURLWithFilters();
       // window.history.pushState({}, "", url);
+      console.log("hello");
       fetch(url, {method: 'PUT'});
     })
     .then(_ => dash.vizs.foreach(pair => {
@@ -21,6 +23,7 @@ let dash = {
         // get element bounds
         let bounds = pair.elem.getBoundingClientRect();
         // get the data from the server
+        console.log(pair);
         let data = fetch(`${dash.getURLWithFilters()}/${pair.uriExtension}`, {method: 'GET'}).then(response => response.json());
         // and associate these to this dash object's representation of the viz
         Object.assign(pair, {bounds: bounds, data: data})
@@ -40,7 +43,7 @@ let dash = {
   },
 
   getURLWithFilters: function() {
-    return `${window.location.href}/${this.filters.langList}/${this.filters.startDate}/${this.filters.endDate}/${this.filters.keywords}/${this.filters.page}`;
+    return `${window.location.href}/${this.filters.langList}/${this.filters.startDate}/${this.filters.endDate}/${this.filters.hashtags}/${this.filters.usernames}/${this.filters.keywords}/${this.filters.page}`;
   }
 };
 

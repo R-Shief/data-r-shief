@@ -24,14 +24,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'dist')));
 
-database.sessionConf.then(sessionConf => {
-  if (app.get('env') === 'production') {
-    app.set('trust proxy', 1) // trust first proxy
-    sessionConf.cookie.secure = true // serve secure cookies
-  }
-  return sessionConf;
-})
-.then(sessionConf => app.use(database.session(sessionConf)));
+if (app.get('env') === 'production') {
+  app.set('trust proxy', 1) // trust first proxy
+  database.sessionConf.cookie.secure = true // serve secure cookies
+}
+app.use(database.session(database.sessionConf));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

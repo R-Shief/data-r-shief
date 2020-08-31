@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
 
 })
 
-router.put('/:langList/:startDate/:endDate/:keywords/:page', function (req, res, next) {
+router.put('/:langList/:startDate/:endDate/:hashtags/:usernames/:keywords/:page', function (req, res, next) {
   console.log("session id is: " + req.sessionID);
   Promise.resolve( () => { if (req.params.page == 0) return database.dePopulateSession(req.sessionID) } )
   .then(_ => database.populateSession(req.sessionID, req.params))
@@ -21,7 +21,7 @@ router.put('/:langList/:startDate/:endDate/:keywords/:page', function (req, res,
   .catch(failure => res.send(failure));
 });
 
-router.get('/:langList/:startDate/:endDate/:keywords/:page/:fetch', function (req, res, next) {
+router.get('/:langList/:startDate/:endDate/:hashtags/:usernames/:keywords/:page/:fetch', function (req, res, next) {
 
   res.setHeader('Content-Type', 'application/json');
 

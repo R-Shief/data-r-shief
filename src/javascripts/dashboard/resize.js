@@ -1,6 +1,7 @@
 // resizable module inspired by answer by Andrew Willems answer at https://stackoverflow.com/questions/35702705/is-there-a-way-to-change-the-css-resize-corners-position
 
-module.exports = {
+let resizer = {
+
   getResizable: function() {
     if (!this._resizable) {
       this._resizable = document.querySelector("#resizable");
@@ -31,3 +32,14 @@ module.exports = {
   }
 
 };
+
+// activate the resizer
+resizer.getResizeHandle().addEventListener("mousedown", function(evt) {
+  resizer.startResize(evt);
+  document.body.addEventListener("mousemove", resizer.resize);
+  document.body.addEventListener("mouseup", function() {
+    resizer.getResizeHandle().body.removeEventListener("mousemove", resizer.resize);
+  });
+});
+
+module.exports = resizer;

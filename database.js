@@ -1,7 +1,5 @@
 let mysqlx = require('@mysql/xdevapi');
 let session = require('express-session');
-let MySQLxStore = require('./express-mysqlx-session')(session);
-// let MySQLStore = require('express-mysql-session')(session);
 let dbConf = require('./config/dbConf.js');
 let sessionConf = require('./config/sessionConf.js');
 
@@ -16,12 +14,8 @@ class Database {
 
   constructor(args) {
     this.pool = args.client.getClient(...args.dbConf.mysqlx);
-    this.sessionStore = this.pool.getSession()
-      .then(connection => new args.storeClass(args.dbConf.mysqlstore, connection) )
-      .catch(err => console.log(err));
     this.session = args.session;
-    this.sessionConf = this.sessionStore
-      .then(store => Object.assign(args.sessionConf, {store: store}));
+    this.sessionConf = args.sessionConf;
   }
 
   dePopulateSession(sessionID) {
@@ -41,10 +35,11 @@ class Database {
     return new Promise((resolve, reject) => {
       if (filters.page * populateStride >= maxLimit) reject("Past max limit.")
       else {
-        this.pool.getSession().then(s => {
-          let sessionPopulateSQL = `CALL sessionFilter('${sessionID}','${filters.langList + ", "}','${filters.keywords}','${filters.startDate}','${filters.endDate}',${filters.page*populateStride},${populateStride});`;
-          s.sql(sessionPopulateSQL).execute( results => {
-            if (error) throw error;
+        this.pool.getSession().then(connection => {
+          let sessionPopulateSQL = `CALL sessionFilter('${sessionID}','${filters.langList + ", "}','${filters.hashtags}','${filters.usernames}','${filters.keywords}','${filters.startDate}','${filters.endDate}',${filters.page*populateStride},${populateStride});`;
+          console.log(sessionPopulateSQL);
+          connection.sql(sessionPopulateSQL).execute()
+          .then( results => {
             console.log("results are: " + results);
             resolve("Success!");
             connection.close();
@@ -71,4 +66,4 @@ class Database {
   }
 };
 
-module.exports = new Database({client: mysqlx, session: session, storeClass: MySQLxStore, dbConf: dbConf, sessionConf: sessionConf});
+module.exports = new Database({client: mysqlx, session: session, dbConf: dbConf, sessionConf: sessionConf});
