@@ -7,6 +7,8 @@ class Streamgraph extends Viz {
 
   constructor(w, h, b=20) {
 
+    console.log(w, h);
+
     super(w, h);
     this.margin = {top: 0, right: 20, bottom: 30, left: 20};
     this.numBins = b;
@@ -14,8 +16,18 @@ class Streamgraph extends Viz {
   }
 
   setData(data) {
+
+    // console.log(data);
+
     // parse JSON and throw away metadata
-    data = JSON.parse(data)[0];
+    data = JSON.parse(data);
+
+    // console.log(data);
+
+    // reformat
+    data = data.map(entry => ({occurrence: entry[0], hashtag: entry[1]}));
+
+    // console.log(data);
 
     // parse MYSQL DATETIMEs as javascript date objects.
     const parseDate = d3.timeParse("%Y-%m-%dT%H:%M:%S.%LZ");
@@ -53,6 +65,8 @@ class Streamgraph extends Viz {
       return ret;
     });
 
+    console.log();
+
     // create a stacked (streamgraph-y) time series data structure out of the data
     this.series = d3.stack()
     .keys(this.uniqueHashtags)
@@ -78,7 +92,10 @@ class Streamgraph extends Viz {
 
     // create an area object
     this.area = d3.area()
-        .x(d => this.x(d.data.date))
+        .x(d => {
+          console.log(d.data.date);
+          return this.x(d.data.date);
+        })
         .y0(d => this.y(d[0]))
         .y1(d => this.y(d[1]))
 
@@ -96,7 +113,11 @@ class Streamgraph extends Viz {
       .data(this.series)
       .join("path")
         .attr("fill", ({key}) => this.color(key))
-        .attr("d", this.area)
+        .attr("d", (d) => {
+          // console.log(d);
+          // console.log(this.area(d));
+          return this.area(d);
+        })
       .append("title")
         .text(({key}) => key);
 

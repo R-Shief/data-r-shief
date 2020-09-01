@@ -1,7 +1,8 @@
-module.exports = function Dash(options) {
+module.exports = function Dash(options, vizClasses) {
   this.dataPage = 0;
   this.options = options;
   this.vizs = this.options.vizs; // filled with objects of type { elem: {some elem}, class: Streamgraph }
+  this.vizClasses = vizClasses;
 
   // add event listeners for filter options
   let scope = this;
@@ -36,37 +37,48 @@ module.exports = function Dash(options) {
   })
 
   // add event listener to reset data populating upon clicking the enabled button
+  if (this.options.filterBar.hasOwnProperty('clippable')) { $(this.options.filterBar.clippable.id).val(this.options.filterBar.clippable.default); }
   $(this.options.filterBar.goButton.id).click(function () {
     if (!$(this).prop("disabled")) {
       scope.dataPage = 0;
       scope.populate(false);
       $(this).attr("disabled", true);
+
+      if (scope.options.filterBar.hasOwnProperty('clippable')) {
+        $(scope.options.filterBar.clippable.id).val(scope.getURLWithFilters());
+      }
     }
   })
 
   this.populate = function(build=true) {
-    new Promise(_ => {
-      let url = this.getURLWithFilters();
-      // window.history.pushState({}, "", url);
-      fetch(url, {method: 'PUT'});
-    })
-    .then(_ => this.vizs.foreach(pair => {
-      new Promise(_ => {
-        // get element bounds
-        let bounds = pair.elem.getBoundingClientRect();
-        // get the data from the server
-        console.log(pair);
-        let data = fetch(`${this.getURLWithFilters()}/${pair.uriExtension}`, {method: 'GET'}).then(response => response.json());
-        // and associate these to this dash object's representation of the viz
-        Object.assign(pair, {bounds: bounds, data: data})
+
+    let vizGets = () => this.vizs.map(pair => new Promise(_ => {
+      // let bounds = $(pair.id)[0].getBoundingClientRect();
+      let bounds = {width: 947, height: 450};
+      console.log(bounds);
+      Promise.resolve()
+      .then(_ => {
+        return fetch(`${this.getURLWithFilters()}/${pair.uriExtension}`, {method: 'GET'});
+      }) // get the data from the server
+      .then(response => response.json())
+      .then(data => {
+        return Object.assign(pair, {bounds: bounds, data: data});
       })
-      .then(_ => Object.assign(pair, {viz: new pair.class(pair.bounds.width, pair.bounds.height)})) // get a viz object of the class provided
+      .then(_ => Object.assign(pair, {viz: new this.vizClasses[pair.classKey](pair.bounds.width, pair.bounds.height)})) // get a viz object of the class provided
       .then(_ => pair.viz.setData(pair.data)) // set the viz object's data, which implicitly refreshes the view
       .then(_ => {if (build) { // if this is our first time doing this, then clear the div and put in the view instead
-        pair.elem.innerHTML = '';
-        pair.elem.appendChild(viz.getView())};
+        $(pair.id)[0].innerHTML = '';
+        $(pair.id)[0].appendChild(pair.viz.getView().node())};
       })
-    }))
+      .catch(err => console.log(err))
+
+    }));
+
+    Promise.resolve()
+    .then(_ => this.getURLWithFilters())
+    .then(url => {console.log(url); return url})
+    .then(url => fetch(url, {method: 'PUT'}))
+    .then(_ => Promise.all(vizGets()))
     .then(_ => { // now up the page count once and do it all again, this time with 'build' set to false
       this.dataPage++;
       this.populate(false);
