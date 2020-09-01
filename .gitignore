@@ -4,5 +4,5 @@ public/data/_*
 utility/
 logs/*
 R-Shief-Utilities
-*.bundle.js
+#*.bundle.js
 *conf.*
