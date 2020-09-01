@@ -1,4 +1,4 @@
-#filterBar.navbar.navbar-light
+#filterBar.navbar.navbar-light.pb-1
   div.mx-1.px-0.d-flex
     form.form-inline
       div.input-group.input-group-sm
@@ -12,50 +12,47 @@
         div.input-group.input-group-sm.input-daterange(data-date-format="M d, yyyy")
           div.input-group-prepend.input-group-append
             span.input-group-text from
-          input.form-control(type="text" value="Oct 2, 2009" size="10")
+          input#from.form-control(type="text" value="Oct 2, 2009" size="10")
           div.input-group-prepend.input-group-append
             span.input-group-text to
-          input.form-control(type="text" value="Oct 5, 2013" size="10")
+          input#to.form-control(type="text" value="Oct 5, 2013" size="10")
         div.input-group.input-group-sm
           div.input-group-append
             button.btn.btn-outline-secondary.dropdown-toggle(type="button" id="languageMenuDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") languages
-            div.dropdown-menu(aria-labelledby="languageMenuDropdown")
-              form
-                div.form-check.d-flex.justify-content-start.pl-3
-                  input.form-check-input(type="checkbox" id="inlineCheckbox2" value="option2")
-                  label.form-check-label(for="inlineCheckbox2") English
-                div.form-check.d-flex.justify-content-start.pl-3
-                  input.form-check-input(type="checkbox" id="inlineCheckbox3" value="option3")
-                  label.form-check-label(for="inlineCheckbox3") French
-                div.form-check.d-flex.justify-content-start.pl-3
-                  input.form-check-input(type="checkbox" id="inlineCheckbox4" value="option4")
-                  label.form-check-label(for="inlineCheckbox4") Arabic
+            div#language.dropdown-menu(aria-labelledby="languageMenuDropdown")
+              div.form-check.d-flex.justify-content-start.pl-3
+                input.form-check-input(type="checkbox" id="inlineCheckbox2" value="en")
+                label.form-check-label(for="inlineCheckbox2") English
+              div.form-check.d-flex.justify-content-start.pl-3
+                input.form-check-input(type="checkbox" id="inlineCheckbox3" value="fr")
+                label.form-check-label(for="inlineCheckbox3") French
+              div.form-check.d-flex.justify-content-start.pl-3
+                input.form-check-input(type="checkbox" id="inlineCheckbox4" value="ar")
+                label.form-check-label(for="inlineCheckbox4") Arabic
           div.input-group-append
             button.btn.btn-outline-secondary.dropdown-toggle(type="button" id="countryMenuDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") countries
-            div.dropdown-menu(aria-labelledby="countryMenuDropdown")
-              form
-                div.form-check.d-flex.justify-content-start.pl-3
-                  input.form-check-input(type="checkbox" id="inlineCheckbox2" value="option2")
-                  label.form-check-label(for="inlineCheckbox2") Egypt
-                div.form-check.d-flex.justify-content-start.pl-3
-                  input.form-check-input(type="checkbox" id="inlineCheckbox3" value="option3")
-                  label.form-check-label(for="inlineCheckbox3") Bahrain
-                div.form-check.d-flex.justify-content-start.pl-3
-                  input.form-check-input(type="checkbox" id="inlineCheckbox4" value="option4")
-                  label.form-check-label(for="inlineCheckbox4") Saudi Arabia
+            div#country.dropdown-menu(aria-labelledby="countryMenuDropdown")
+              div.form-check.d-flex.justify-content-start.pl-3
+                input.form-check-input(type="checkbox" id="inlineCheckbox2" value="eg")
+                label.form-check-label(for="inlineCheckbox2") Egypt
+              div.form-check.d-flex.justify-content-start.pl-3
+                input.form-check-input(type="checkbox" id="inlineCheckbox3" value="bh")
+                label.form-check-label(for="inlineCheckbox3") Bahrain
+              div.form-check.d-flex.justify-content-start.pl-3
+                input.form-check-input(type="checkbox" id="inlineCheckbox4" value="sa")
+                label.form-check-label(for="inlineCheckbox4") Saudi Arabia
           div.input-group-append
             button.btn.btn-outline-secondary.dropdown-toggle(type="button" id="countryMenuDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") origins
-            div.dropdown-menu(aria-labelledby="countryMenuDropdown")
-              form
-                div.form-check.d-flex.justify-content-start.pl-3
-                  input.form-check-input(type="checkbox" id="inlineCheckbox2" value="option2")
-                  label.form-check-label(for="inlineCheckbox2") Tweetdeck
-                div.form-check.d-flex.justify-content-start.pl-3
-                  input.form-check-input(type="checkbox" id="inlineCheckbox3" value="option3")
-                  label.form-check-label(for="inlineCheckbox3") Hootsuite
-                div.form-check.d-flex.justify-content-start.pl-3
-                  input.form-check-input(type="checkbox" id="inlineCheckbox4" value="option4")
-                  label.form-check-label(for="inlineCheckbox4") Twitter for iPhone
+            div#source.dropdown-menu(aria-labelledby="countryMenuDropdown")
+              div.form-check.d-flex.justify-content-start.pl-3
+                input.form-check-input(type="checkbox" id="inlineCheckbox2" value="131")
+                label.form-check-label(for="inlineCheckbox2") Tweetdeck
+              div.form-check.d-flex.justify-content-start.pl-3
+                input.form-check-input(type="checkbox" id="inlineCheckbox3" value="262")
+                label.form-check-label(for="inlineCheckbox3") Hootsuite
+              div.form-check.d-flex.justify-content-start.pl-3
+                input.form-check-input(type="checkbox" id="inlineCheckbox4" value="011")
+                label.form-check-label(for="inlineCheckbox4") Twitter for iPhone
           div.input-group-append
-            button#filterGoButton.btn.btn-outline-secondary(type="button")
+            button#filterGoButton.btn.btn-primary(type="button" disabled)
               img(src="/icons/bootstrap-icons-1.0.0-alpha5/search.svg")

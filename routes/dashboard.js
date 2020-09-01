@@ -13,15 +13,15 @@ router.get('/', function(req, res, next) {
 
 })
 
-router.put('/:langList/:startDate/:endDate/:hashtags/:usernames/:keywords/:page', function (req, res, next) {
+router.put('/:langList/:countryList/:sourceList/:startDate/:endDate/:hashtags/:usernames/:keywords/:page', function (req, res, next) {
   console.log("session id is: " + req.sessionID);
   Promise.resolve( () => { if (req.params.page == 0) return database.dePopulateSession(req.sessionID) } )
   .then(_ => database.populateSession(req.sessionID, req.params))
-  .then(success => res.send(success))
+  .then(success => {console.log("foo: " + success); return res.send(success);})
   .catch(failure => res.send(failure));
 });
 
-router.get('/:langList/:startDate/:endDate/:hashtags/:usernames/:keywords/:page/:fetch', function (req, res, next) {
+router.get('/:langList/:countryList/:sourceList/:startDate/:endDate/:hashtags/:usernames/:keywords/:page/:fetch', function (req, res, next) {
 
   res.setHeader('Content-Type', 'application/json');
 
