@@ -37,7 +37,7 @@ module.exports = function Dash(options, vizClasses) {
   })
 
   // add event listener to reset data populating upon clicking the enabled button
-  if (this.options.filterBar.hasOwnProperty('clippable')) { $(this.options.filterBar.clippable.id).val(window.location.href + this.options.filterBar.clippable.default); }
+  if (this.options.filterBar.hasOwnProperty('clippable')) { $(this.options.filterBar.clippable.id).val(window.location.hostname + "/dashboard" + this.options.filterBar.clippable.default); }
   $(this.options.filterBar.goButton.id).click(function () {
     if (!$(this).prop("disabled")) {
       scope.dataPage = 0;
@@ -88,6 +88,6 @@ module.exports = function Dash(options, vizClasses) {
 
   this.getURLWithFilters = function() {
     // return `${window.location.href}/${this.filters.langList}/${this.filters.startDate}/${this.filters.endDate}/${this.filters.hashtags}/${this.filters.usernames}/${this.filters.keywords}/${this.dataPage}`;
-    return [window.location.href, ...Object.values(this.filters), this.dataPage].join("/");
+    return [window.location.hostname, "dashboard", ...Object.values(this.filters), this.dataPage].join("/");
   }.bind(this)
 };
