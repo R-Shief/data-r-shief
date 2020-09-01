@@ -22,7 +22,7 @@ router.get('/', function(req, res, next) {
       filterBar: {
         id: "#filterBar",
         goButton: {id: "#filterGoButton", default: "disabled"},
-        clippable: {id: "#sharelink", default: req.hostname + req.originalUrl}
+        clippable: {id: "#sharelink", default: req.originalUrl}
       },
       vizs: [
         {id: "#userPacking", classKey: "UserPacking", uriExtension: 'uCirclePacking'},
