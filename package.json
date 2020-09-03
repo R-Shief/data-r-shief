@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "pm2-runtime ./bin/www",
     "build": "webpack --mode=production",
     "start:dev": "npm-run-all --parallel watch:server watch:build",
     "watch:build": "webpack --mode=development --watch",

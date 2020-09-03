@@ -5,9 +5,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: build
+      target: dev
     ports:
       - 3000:3000
+    volumes:
+      - .:/app
+    command: [ "npm", "run-script", "start:dev" ]
     restart: unless-stopped
     networks:
       - app-network

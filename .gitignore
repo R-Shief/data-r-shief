@@ -1,8 +1,6 @@
 node_modules/
 bibVizWeb/
 public/data/_*
-utility/
 logs/*
-R-Shief-Utilities
 #*.bundle.js
 *conf.*

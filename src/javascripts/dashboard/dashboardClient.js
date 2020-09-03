@@ -13,6 +13,8 @@ $( document ).ready(() => {
 
   p(dashOptions);
 
+  p("testing everything");
+
   Promise.resolve()
   .then(_ => new Dash(dashOptions, {UserPacking: UserPacking, Streamgraph: Streamgraph}))
   .then(dash => dash.populate());

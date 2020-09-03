@@ -12,6 +12,10 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin()
   ],
+  watchOptions: {
+    aggregateTimeout: 300,
+    poll: 1000
+  },
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist/javascripts'),
