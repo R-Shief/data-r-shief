@@ -37,7 +37,7 @@ module.exports = function Dash(options, vizClasses) {
   })
 
   // add event listener to reset data populating upon clicking the enabled button
-  if (this.options.filterBar.hasOwnProperty('clippable')) { $(this.options.filterBar.clippable.id).val(document.location.href + this.options.filterBar.clippable.default); }
+  if (this.options.filterBar.hasOwnProperty('clippable')) { $(this.options.filterBar.clippable.id).val(document.location.href + this.options.filterBar.clippable.default); } // if there is a clippable, set its default value
   $(this.options.filterBar.goButton.id).click(function () {
     if (!$(this).prop("disabled")) {
       scope.dataPage = 0;
