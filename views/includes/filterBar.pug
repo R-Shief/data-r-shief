@@ -19,28 +19,18 @@
         div.input-group.input-group-sm
           div.input-group-append
             button.btn.btn-outline-secondary.dropdown-toggle(type="button" id="languageMenuDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") languages
-            div#language.dropdown-menu(aria-labelledby="languageMenuDropdown")
-              div.form-check.d-flex.justify-content-start.pl-3
-                input.form-check-input(type="checkbox" id="chk-en" value="en")
-                label.form-check-label(for="chk-en") English
-              div.form-check.d-flex.justify-content-start.pl-3
-                input.form-check-input(type="checkbox" id="chk-fr" value="fr")
-                label.form-check-label(for="chk-fr") French
-              div.form-check.d-flex.justify-content-start.pl-3
-                input.form-check-input(type="checkbox" id="chk-ar" value="ar")
-                label.form-check-label(for="chk-ar") Arabic
+            div#language.dropdown-menu(aria-labelledby="languageMenuDropdown" style="height: 22rem; overflow-y: scroll;")
+              each language in languages
+                div.form-check.d-flex.justify-content-start.align-items-start.pl-3
+                  input.form-check-input(type="checkbox" id= "chk-" + language["639-1"] value= language["639-1"])
+                  label.form-check-label(for= "chk-" + language["639-1"])= language["ISO language name"]
           div.input-group-append
             button.btn.btn-outline-secondary.dropdown-toggle(type="button" id="countryMenuDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") countries
-            div#country.dropdown-menu(aria-labelledby="countryMenuDropdown")
-              div.form-check.d-flex.justify-content-start.pl-3
-                input.form-check-input(type="checkbox" id="chk-eg" value="eg")
-                label.form-check-label(for="chk-eg") Egypt
-              div.form-check.d-flex.justify-content-start.pl-3
-                input.form-check-input(type="checkbox" id="chk-bh" value="bh")
-                label.form-check-label(for="chk-bh") Bahrain
-              div.form-check.d-flex.justify-content-start.pl-3
-                input.form-check-input(type="checkbox" id="chk-sa" value="sa")
-                label.form-check-label(for="chk-sa") Saudi Arabia
+            div#country.dropdown-menu(aria-labelledby="countryMenuDropdown" style="height: 22rem; overflow-y: scroll;")
+              each country in countries
+                div.form-check.d-flex.justify-content-start.align-items-start.pl-3
+                  input.form-check-input(type="checkbox" id= "chk-" + country["Alpha-2 code"] value= country["Alpha-2 code"])
+                  label.form-check-label(for= "chk-" + country["Alpha-2 code"])= country["Country name"]
           div.input-group-append
             button.btn.btn-outline-secondary.dropdown-toggle(type="button" id="countryMenuDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") origins
             div#source.dropdown-menu(aria-labelledby="countryMenuDropdown")

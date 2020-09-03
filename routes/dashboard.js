@@ -1,34 +1,20 @@
 var express = require('express');
 var database = require('../database.js');
+var dashDefaults = require('../config/dashDefaults.js');
+var languages = require('../dist/data/languages.js');
+var iso_3166 = require('../dist/data/iso-3166.js');
 var router = express.Router();
 var filters = {};
 
 router.use(express.json());
 
 router.get('/', function(req, res, next) {
+  dashDefaults.filterBar.clippable.default = req.originalurl;
   res.render('dashboard', {
     title: "R-Shief Dashboard",
-    dashOpts: {
-      filters: [
-        {id: "#language", type: "checkbox", fkey: "langList", default: ["ar", "en", "fr"]},
-        {id: "#country", type: "checkbox", fkey: "countries", default: ["af", "be", "mz"]},
-        {id: "#source", type: "checkbox", fkey: "sources", default: ["023", "622", "131"]},
-        {id: "#from", type: "datebox", fkey: "startDate", default: "2011-12-12"},
-        {id: "#to", type: "textbox", fkey: "endDate", default: "2013-12-12"},
-        {id: "#hashtagsText", type: "textbox", fkey: "hashtags", default: "*"},
-        {id: "#usernamesText", type: "textbox", fkey: "usernames", default: "*"},
-        {id: "#keywordsText", type: "textbox", fkey: "keywords", default: "*"}
-      ],
-      filterBar: {
-        id: "#filterBar",
-        goButton: {id: "#filterGoButton", default: "disabled"},
-        clippable: {id: "#sharelink", default: req.originalUrl}
-      },
-      vizs: [
-        {id: "#userPacking", classKey: "UserPacking", uriExtension: 'uCirclePacking'},
-        {id: "#streamgraph", classKey: "Streamgraph", uriExtension: 'htStreamgraph'}
-      ]
-    }
+    dashOpts: dashDefaults,
+    languages: languages,
+    countries: iso_3166
   }, function(err, html) {
       console.log(err);
       res.send(html);
@@ -39,27 +25,9 @@ router.get('/', function(req, res, next) {
 router.get('/:langList/:countryList/:sourceList/:startDate/:endDate/:hashtags/:usernames/:keywords/:page', function(req, res, next) {
   res.render('dashboard', {
     title: "R-Shief Dashboard",
-    dashOpts: {
-      filters: [
-        {id: "#language", type: "checkbox", fkey: "langList", default: ["ar", "en", "fr"]},
-        {id: "#country", type: "checkbox", fkey: "countries", default: ["af", "be", "mz"]},
-        {id: "#source", type: "checkbox", fkey: "sources", default: ["023", "622", "131"]},
-        {id: "#from", type: "datebox", fkey: "startDate", default: "2011-12-12"},
-        {id: "#to", type: "textbox", fkey: "endDate", default: "2013-12-12"},
-        {id: "#hashtagsText", type: "textbox", fkey: "hashtags", default: "*"},
-        {id: "#usernamesText", type: "textbox", fkey: "usernames", default: "*"},
-        {id: "#keywordsText", type: "textbox", fkey: "keywords", default: "*"}
-      ],
-      filterBar: {
-        id: "#filterBar",
-        goButton: {id: "#filterGoButton", default: "disabled"},
-        clippable: {id: "#sharelink", default: req.originalUrl}
-      },
-      vizs: [
-        {id: "#userPacking", classKey: "UserPacking", uriExtension: 'uCirclePacking'},
-        {id: "#streamgraph", classKey: "Streamgraph", uriExtension: 'htStreamgraph'}
-      ]
-    }
+    dashOpts: dashDefaults,
+    languages: languages,
+    countries: iso_3166
   }, function(err, html) {
       console.log(err);
       res.send(html);

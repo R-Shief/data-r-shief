@@ -52,10 +52,9 @@ module.exports = function Dash(options, vizClasses) {
 
   this.populate = function(build=true) {
 
-    let vizGets = () => this.vizs.map(pair => new Promise(_ => {
+    let vizGets = () => this.vizs.map((pair, idx) => new Promise(_ => {
       // let bounds = $(pair.id)[0].getBoundingClientRect();
       let bounds = {width: 947, height: 450};
-      console.log(bounds);
       Promise.resolve()
       .then(_ => {
         return fetch(`${this.getURLWithFilters()}/${pair.uriExtension}`, {method: 'GET'});
@@ -64,11 +63,17 @@ module.exports = function Dash(options, vizClasses) {
       .then(data => {
         return Object.assign(pair, {bounds: bounds, data: data});
       })
-      .then(_ => Object.assign(pair, {viz: new this.vizClasses[pair.classKey](pair.bounds.width, pair.bounds.height)})) // get a viz object of the class provided
+      .then(_ => {
+        if (build) {
+          Object.assign(pair, {viz: new this.vizClasses[pair.classKey](pair.bounds.width, pair.bounds.height)})
+        }
+      }) // get a viz object of the class provided
       .then(_ => pair.viz.setData(pair.data)) // set the viz object's data, which implicitly refreshes the view
-      .then(_ => {if (build) { // if this is our first time doing this, then clear the div and put in the view instead
-        $(pair.id)[0].innerHTML = '';
-        $(pair.id)[0].appendChild(pair.viz.getView().node())};
+      .then(_ => {
+        if (build) { // if this is our first time doing this, then clear the div and put in the view instead
+          $(pair.id)[0].innerHTML = '';
+          $(pair.id)[0].appendChild(pair.viz.getView().node())
+        };
       })
       .catch(err => console.log(err))
 

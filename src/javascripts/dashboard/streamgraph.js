@@ -7,8 +7,6 @@ class Streamgraph extends Viz {
 
   constructor(w, h, b=20) {
 
-    console.log(w, h);
-
     super(w, h);
     this.margin = {top: 0, right: 20, bottom: 30, left: 20};
     this.numBins = b;
@@ -60,12 +58,13 @@ class Streamgraph extends Viz {
 
     // for every bin, add an item to data that has the bin's date and the count of each hashtag at that date. E.g. {egypt: 23, bahrain: 11, date: {some date}}
     data = binned.map((bin, idx) => {
-      let ret = {date: ticksAsDates[idx]};
+      let ret = {date: typeof ticksAsDates[idx] == "undefined" ? new Date().setTime(ticksAsDates[idx-1].getTime() + (ticksAsDates[idx-1].getTime() - ticksAsDates[idx-2].getTime())) : ticksAsDates[idx]}
+      // let ret = {date: ticksAsDates[idx]};
       this.uniqueHashtags.map( ht => ({[ht]: bin.filter(occurrence => occurrence.hashtag === ht).length}) ).forEach(d => Object.assign(ret, d));
       return ret;
     });
 
-    console.log();
+    // console.log(data);
 
     // create a stacked (streamgraph-y) time series data structure out of the data
     this.series = d3.stack()
@@ -87,13 +86,13 @@ class Streamgraph extends Viz {
     // create the bottom axis object and position it appropriately
     this.xAxis = g => g
       .attr("transform", `translate(0,${this.height - this.margin.bottom})`)
-      .call(d3.axisBottom(this.x).ticks(this.width / 80).tickSizeOuter(0))
+      .call(d3.axisBottom(this.x).ticks(this.width / 80).tickSizeOuter(0).tickFormat(x => `${x.getMonth()}/${x.getDate()}/${x.getFullYear()}`))
       .call(g => g.select(".domain").remove())
 
     // create an area object
     this.area = d3.area()
         .x(d => {
-          console.log(d.data.date);
+          // console.log(d.data.date);
           return this.x(d.data.date);
         })
         .y0(d => this.y(d[0]))

@@ -23,6 +23,7 @@ class Database {
     return new Promise((resolve, reject) => {
       this.pool.getSession().then(connection => {
         var deleteSQL = `DELETE FROM sessionTweet WHERE sessionTweet.session_id='${sessionID}'`;
+        console.log(deleteSQL);
         connection.sql(deleteSQL).execute()
         .then( results => {
           console.log(results.fetchAll());
@@ -43,7 +44,7 @@ class Database {
             `EXISTS (
               SELECT hashtag_id
               FROM hashtag as h
-              WHERE MATCH(h.hashtag_name) AGAINST ('${filters.hashtags}' IN NATURAL LANGUAGE MODE)
+              WHERE MATCH(h.hashtag_name) AGAINST ('+${filters.hashtags}' IN BOOLEAN MODE) > 8
             )`;
 
           let orBit = [filters.hashtags, filters.usernames].some(x => x == "*") ? "" : "OR"
@@ -69,9 +70,12 @@ class Database {
               WHERE
                 t.lang_code IN ( ${filters.langList.split(",").map(l => `'${l}'`)} )
               ${conditionals}
+              AND t.created_at BETWEEN '${filters.startDate}' AND '${filters.endDate}'
               LIMIT ${filters.page*populateStride}, ${populateStride}
               ON DUPLICATE KEY UPDATE sessionTweet.session_id=sessionTweet.session_id;
           `;
+
+          console.log(sessionPopulateSQL);
           connection.sql(sessionPopulateSQL).execute()
           .then( results => {
             console.log("results are: " + results);
