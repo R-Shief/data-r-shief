@@ -4,7 +4,7 @@ module.exports = {
     {id: "#country", type: "checkbox", fkey: "countries", default: ["af", "be", "mz"]},
     {id: "#source", type: "checkbox", fkey: "sources", default: ["023", "622", "131"]},
     {id: "#from", type: "datebox", fkey: "startDate", default: "2011-12-12"},
-    {id: "#to", type: "textbox", fkey: "endDate", default: "2013-12-12"},
+    {id: "#to", type: "datebox", fkey: "endDate", default: "2013-12-12"},
     {id: "#hashtagsText", type: "textbox", fkey: "hashtags", default: "*"},
     {id: "#usernamesText", type: "textbox", fkey: "usernames", default: "*"},
     {id: "#keywordsText", type: "textbox", fkey: "keywords", default: "*"}

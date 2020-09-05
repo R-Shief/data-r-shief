@@ -25,6 +25,7 @@ module.exports = function Dash(options, vizClasses) {
         break;
       case "datebox":
         $(pair.id).change(function() {
+          console.log($(this).first("input").val());
           scope.filters[pair.fkey] = new Date($(this).first("input").val()).toISOString().substring(0, 10);
         })
     }
@@ -41,7 +42,7 @@ module.exports = function Dash(options, vizClasses) {
   $(this.options.filterBar.goButton.id).click(function () {
     if (!$(this).prop("disabled")) {
       scope.dataPage = 0;
-      scope.populate(false);
+      scope.populate();
       $(this).attr("disabled", true);
 
       if (scope.options.filterBar.hasOwnProperty('clippable')) {
@@ -50,45 +51,55 @@ module.exports = function Dash(options, vizClasses) {
     }
   })
 
-  this.populate = function(build=true) {
-
-    let vizGets = () => this.vizs.map((pair, idx) => new Promise(_ => {
-      // let bounds = $(pair.id)[0].getBoundingClientRect();
-      let bounds = {width: 947, height: 450};
-      Promise.resolve()
-      .then(_ => {
-        return fetch(`${this.getURLWithFilters()}/${pair.uriExtension}`, {method: 'GET'});
-      }) // get the data from the server
-      .then(response => response.json())
-      .then(data => {
-        return Object.assign(pair, {bounds: bounds, data: data});
-      })
-      .then(_ => {
-        if (build) {
-          Object.assign(pair, {viz: new this.vizClasses[pair.classKey](pair.bounds.width, pair.bounds.height)})
-        }
-      }) // get a viz object of the class provided
-      .then(_ => pair.viz.setData(pair.data)) // set the viz object's data, which implicitly refreshes the view
-      .then(_ => {
-        if (build) { // if this is our first time doing this, then clear the div and put in the view instead
+  this.getViz = function(pair) {
+    let bounds = {width: 947, height: 450};
+    if (!pair.viz) {
+      return new Promise((resolve, reject) => {
+        Promise.resolve()
+        .then(_ => Object.assign(pair, {bounds: bounds}))
+        .then(_ => Object.assign(pair, {viz: new this.vizClasses[pair.classKey](pair.bounds.width, pair.bounds.height)}))
+        .then(_ => pair.viz.setData(pair.data)) // set the viz object's data, which implicitly refreshes the view
+        .then(_ => {
           $(pair.id)[0].innerHTML = '';
-          $(pair.id)[0].appendChild(pair.viz.getView().node())
-        };
-      })
-      .catch(err => console.log(err))
+          $(pair.id)[0].appendChild(pair.viz.getView().node());
+        })
+        .then(_ => resolve(pair.viz));
+      });
+    } else {
+      return new Promise((resolve, reject) => {
+        Promise.resolve()
+        .then(_ => pair.viz.setData(pair.data)) // set the viz object's data, which implicitly refreshes the view
+        .then(_ => resolve(pair.viz));
+      });
+    }
+  }.bind(this)
 
-    }));
-
+  let vizGets = () => this.vizs.map((pair, idx) => new Promise((resolve, reject) => {
+    // let bounds = $(pair.id)[0].getBoundingClientRect();
     Promise.resolve()
+    .then(_ => {
+      return fetch(`${this.getURLWithFilters()}/${pair.uriExtension}`, {method: 'GET'});
+    }) // get the data from the server
+    .then(response => response.json())
+    .then(data => {
+      return Object.assign(pair, {data: data});
+    })
+    .then(_ => resolve(this.getViz(pair)))
+    .catch(err => console.log(err))
+
+  }));
+
+  this.populate = function() {
+    return new Promise(_ => Promise.resolve()
     .then(_ => this.getURLWithFilters())
     .then(url => {console.log(url); return url})
     .then(url => fetch(url, {method: 'PUT'}))
     .then(_ => Promise.all(vizGets()))
     .then(_ => { // now up the page count once and do it all again, this time with 'build' set to false
       this.dataPage++;
-      this.populate(false);
+      this.populate();
     })
-    .catch(failure => console.log(failure));
+    .catch(failure => console.log(failure)));
   }.bind(this)
 
   this.getURLWithFilters = function() {

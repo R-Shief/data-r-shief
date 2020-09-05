@@ -5,8 +5,8 @@ let sessionConf = require('./config/sessionConf.js');
 
 // Tweak Zone
 
-let maxLimit = 10000;
-let populateStride = 1000;
+let maxLimit = 1000000;
+let populateStride = 10000;
 
 // End Tweak Zone
 
@@ -64,9 +64,6 @@ class Database {
               FROM tweet AS t
                 INNER JOIN tweetHashtag AS th ON t.twitter_id = th.twitter_id
                 INNER JOIN hashtag AS h ON h.hashtag_id = th.hashtag_id
-                INNER JOIN tweetUrl AS tu ON tu.twitter_id = t.twitter_id
-                INNER JOIN url AS u ON u.url_id = tu.url_id
-                INNER JOIN language AS l ON l.\`639_1\` = t.lang_code
               WHERE
                 t.lang_code IN ( ${filters.langList.split(",").map(l => `'${l}'`)} )
               ${conditionals}

@@ -11,15 +11,7 @@ $( document ).ready(() => {
   // activate the clipboard utility
   let clipboard = new ClipboardJS('.clippable');
 
-  p(dashOptions);
-
-  p("testing everything");
-
   Promise.resolve()
   .then(_ => new Dash(dashOptions, {UserPacking: UserPacking, Streamgraph: Streamgraph}))
   .then(dash => dash.populate());
 });
-
-function p(whatever) {
-  console.log(whatever);
-}
