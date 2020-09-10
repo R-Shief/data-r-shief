@@ -6,43 +6,49 @@
           span.input-group-text
             //- img(src="icons/Twitter-Logos/Twitter_Logo_Blue/Twitter_Logo_Blue.svg" height="20px")
             img(src="/icons/Twitter-Logos/Twitter_Logo_Rshiefcolor.svg" height="20px")
-        input#hashtagsText.form-control(type="search" placeholder="Hashtags" size="11")
-        input#usernamesText.form-control(type="search" placeholder="Usernames" size="11")
-        input#keywordsText.form-control(type="search" placeholder="Keywords" size="11")
+        input#hashtagsText.form-control(type="search" placeholder="Hashtags" size="15")
+        input#usernamesText.form-control(type="search" placeholder="Usernames" size="15")
+        //- input#keywordsText.form-control(type="search" placeholder="Keywords" size="11")
         div.input-group.input-group-sm.input-daterange(data-date-format="M d, yyyy")
+          - var months = ['Jan', 'Feb', 'Mar', 'Apr', "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
           div.input-group-prepend.input-group-append
             span.input-group-text from
-          input#from.form-control(type="text" value="Oct 2, 2009" size="10")
+          - var def = new Date(dashOpts.filters.filter(obj => obj.id == "#from")[0].default);
+          - var d = `${months[def.getMonth()]}, ${def.getDate()} ${def.getFullYear()}`;
+          input#from.form-control(type="text" value= d size="11")
           div.input-group-prepend.input-group-append
             span.input-group-text to
-          input#to.form-control(type="text" value="Oct 5, 2013" size="10")
+          - var def = new Date(dashOpts.filters.filter(obj => obj.id == "#to")[0].default);
+          - var d = `${months[def.getMonth()]}, ${def.getDate()} ${def.getFullYear()}`;
+          input#to.form-control(type="text" value= d size="11")
         div.input-group.input-group-sm
           div.input-group-append
             button.btn.btn-outline-secondary.dropdown-toggle(type="button" id="languageMenuDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") languages
             div#language.dropdown-menu(aria-labelledby="languageMenuDropdown" style="height: 22rem; overflow-y: scroll;")
               each language in languages
+                - var checked = dashOpts.filters.filter(obj => obj.id == "#language")[0].default.includes(language["639-1"])
                 div.form-check.d-flex.justify-content-start.align-items-start.pl-3
-                  input.form-check-input(type="checkbox" id= "chk-" + language["639-1"] value= language["639-1"])
+                  input.form-check-input(type="checkbox" id= "chk-" + language["639-1"] value= language["639-1"] checked= checked)
                   label.form-check-label(for= "chk-" + language["639-1"])= language["ISO language name"]
-          div.input-group-append
-            button.btn.btn-outline-secondary.dropdown-toggle(type="button" id="countryMenuDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") countries
-            div#country.dropdown-menu(aria-labelledby="countryMenuDropdown" style="height: 22rem; overflow-y: scroll;")
-              each country in countries
-                div.form-check.d-flex.justify-content-start.align-items-start.pl-3
-                  input.form-check-input(type="checkbox" id= "chk-" + country["Alpha-2 code"] value= country["Alpha-2 code"])
-                  label.form-check-label(for= "chk-" + country["Alpha-2 code"])= country["Country name"]
-          div.input-group-append
-            button.btn.btn-outline-secondary.dropdown-toggle(type="button" id="countryMenuDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") origins
-            div#source.dropdown-menu(aria-labelledby="countryMenuDropdown")
-              div.form-check.d-flex.justify-content-start.pl-3
-                input.form-check-input(type="checkbox" id="inlineCheckbox2" value="131")
-                label.form-check-label(for="inlineCheckbox2") Tweetdeck
-              div.form-check.d-flex.justify-content-start.pl-3
-                input.form-check-input(type="checkbox" id="inlineCheckbox3" value="262")
-                label.form-check-label(for="inlineCheckbox3") Hootsuite
-              div.form-check.d-flex.justify-content-start.pl-3
-                input.form-check-input(type="checkbox" id="inlineCheckbox4" value="011")
-                label.form-check-label(for="inlineCheckbox4") Twitter for iPhone
+          //- div.input-group-append
+          //-   button.btn.btn-outline-secondary.dropdown-toggle(type="button" id="countryMenuDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") countries
+          //-   div#country.dropdown-menu(aria-labelledby="countryMenuDropdown" style="height: 22rem; overflow-y: scroll;")
+          //-     each country in countries
+          //-       div.form-check.d-flex.justify-content-start.align-items-start.pl-3
+          //-         input.form-check-input(type="checkbox" id= "chk-" + country["Alpha-2 code"] value= country["Alpha-2 code"])
+          //-         label.form-check-label(for= "chk-" + country["Alpha-2 code"])= country["Country name"]
+          //- div.input-group-append
+          //-   button.btn.btn-outline-secondary.dropdown-toggle(type="button" id="countryMenuDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") origins
+          //-   div#source.dropdown-menu(aria-labelledby="countryMenuDropdown")
+          //-     div.form-check.d-flex.justify-content-start.pl-3
+          //-       input.form-check-input(type="checkbox" id="inlineCheckbox2" value="131")
+          //-       label.form-check-label(for="inlineCheckbox2") Tweetdeck
+          //-     div.form-check.d-flex.justify-content-start.pl-3
+          //-       input.form-check-input(type="checkbox" id="inlineCheckbox3" value="262")
+          //-       label.form-check-label(for="inlineCheckbox3") Hootsuite
+          //-     div.form-check.d-flex.justify-content-start.pl-3
+          //-       input.form-check-input(type="checkbox" id="inlineCheckbox4" value="011")
+          //-       label.form-check-label(for="inlineCheckbox4") Twitter for iPhone
           div.input-group-append
             button#filterGoButton.btn.btn-secondary(type="button" disabled)
               img(src="/icons/bootstrap-icons-1.0.0-alpha5/search.svg")

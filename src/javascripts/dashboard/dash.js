@@ -18,6 +18,7 @@ module.exports = function Dash(options, vizClasses) {
         });
         break;
       case "textbox":
+        $(pair.id).val(pair.default == "*" ? "" : pair.default);
         $(pair.id).change(function() {
           let val = $(this).first("input").val()
           scope.filters[pair.fkey] = val != "" ? val : "*";

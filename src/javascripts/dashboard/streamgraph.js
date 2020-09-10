@@ -22,9 +22,10 @@ class Streamgraph extends Viz {
     data = data.map(entry => ({occurrence: entry[0], hashtag: entry[1]}));
 
     // parse MYSQL DATETIMEs as javascript date objects.
-    const parseDate = d3.timeParse("%Y-%m-%dT%H:%M:%S.%LZ");
+    // const parseDate = d3.timeParse("%Y-%m-%dT%H:%M:%S.%LZ");
     data.forEach(entry => {
-      entry.occurrence = parseDate(entry.occurrence);
+      entry.occurrence = new Date(entry.occurrence);
+      // entry.occurrence = parseDate(entry.occurrence);
     });
 
     // get a list of unique hashtags
@@ -38,11 +39,17 @@ class Streamgraph extends Viz {
     // get the date extent of hashtag occurrences in the data
     this.dateExtent = d3.extent(data, d => d.occurrence );
 
+    // get the numbins based on the number of data points
+    this.numBins = 10 * Math.log(data.length);
+    console.log(this.numBins);
+
     // create a ticks object to determine the number of bins
     const ticks = d3.ticks(this.dateExtent[0], this.dateExtent[1], this.numBins);
 
     // convert the ticks into date ticks
     const ticksAsDates = ticks.map(d => new Date(d));
+    // console.log(ticksAsDates);
+
 
     // make a histogram data structure using hashtag occurrences and the date ticks
     const binned = d3.histogram()
@@ -107,7 +114,7 @@ class Streamgraph extends Viz {
       .append("title")
         .text(({key}) => key);
 
-    svg.append("g")
+    this.bottomAxis = svg.append("g")
         .call(this.xAxis);
 
     return svg;
@@ -118,10 +125,14 @@ class Streamgraph extends Viz {
     this.svg.selectAll('path')
       .data(this.series)
       .transition()
-        .delay(1000)
-        .duration(1500)
+        .delay(0)
+        .duration(2000)
         .attr("fill", ({key}) => this.color(key))
         .attr("d", this.area);
+
+    this.bottomAxis
+      .transition().delay(0).duration(2000)
+      .call(this.xAxis);
   }
 };
 

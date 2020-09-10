@@ -1,69 +1,59 @@
 module.exports = {
-  buildQuery: function(filters) {
-    var select = "SELECT from_user, text FROM combined";
-    var count = "SELECT count(*) as nResults FROM combined";
+  buildQuery: function(sessionID, filters, options) {
 
-    var [usernames, hashtags, alikes] = this.processKeywords(filters.keywords);
+    let randomStrategy = (sessionID, filters, options) => {
+      return `
+        INSERT INTO sessionTweet (session_id, twitter_id)
+          SELECT '${sessionID}', t.twitter_id
+          FROM (
+            SELECT twitter_id
+            FROM randomKey
+            order by rkid
+            LIMIT ${filters.page*options.populateStride}, ${options.populateStride}
+          ) AS rk
+          INNER JOIN tweet AS t ON t.twitter_id = rk.twitter_id
+          WHERE
+            t.lang_code IN ( ${filters.langList.split(",").map(l => `'${l}'`)} )
+          AND t.created_at BETWEEN '${filters.startDate}' AND '${filters.endDate}'
+        ON DUPLICATE KEY UPDATE sessionTweet.session_id=sessionTweet.session_id;
+      `;
+    };
 
-    var whereQueries = [];
+    let scrambleStrategy = (sessionID, filters, options) => {
+      let conditionals = [];
+      if (filters.hashtags != "*") { conditionals.push(`MATCH(h.hashtag_name) AGAINST ('${filters.hashtags}' IN BOOLEAN MODE)`) };
+      if (filters.usernames != "*") { conditionals.push(`u.username LIKE '${filters.usernames}%'`) };
+      conditionals = conditionals.length > 1 ? conditionals.join(" OR ") : conditionals[0];
 
-    if (usernames.length > 0){
-      var usernameQueries = [];
-      usernames.forEach(username => usernameQueries.push("from_user = '" + username + "'"));
-      usernameQueries = usernameQueries.join(" OR ");
-      whereQueries.push(usernameQueries);
+      return `
+        INSERT INTO sessionTweet (session_id, twitter_id)
+          SELECT '${sessionID}', tt.twitter_id
+          FROM (
+            SELECT t.twitter_id
+            FROM tweet AS t
+            INNER JOIN tweetHashtag as th ON th.twitter_id = t.twitter_id
+            INNER JOIN hashtag as h ON th.hashtag_id = h.hashtag_id
+            INNER JOIN user as u ON t.from_user_id = u.user_id
+            WHERE t.lang_code IN ( ${filters.langList.split(",").map(l => `'${l}'`)} )
+            AND t.created_at BETWEEN '${filters.startDate}' AND '${filters.endDate}'
+            AND ${conditionals}
+            LIMIT ${filters.page*options.populateStride*10}, ${options.populateStride*10}
+          ) AS tt
+          INNER JOIN randomKey AS rk ON rk.twitter_id = tt.twitter_id
+          ORDER BY rk.rkid
+        ON DUPLICATE KEY UPDATE sessionTweet.session_id=sessionTweet.session_id;
+      `;
+    };
+
+    let buildStrategy;
+    if ( [filters.hashtags, filters.usernames].some(x => x != "*") ) { // if any of the conditions that require joins are required, then use this strategy
+      buildStrategy = scrambleStrategy;
+    }
+    else {
+      buildStrategy = randomStrategy;
     }
 
-    if (hashtags.length > 0){
-      var hashtagQueries = [];
-      hashtags.forEach(hashtag => hashtagQueries.push("hashtags = '" + hashtag + "'"));
-      hashtagQueries = hashtagQueries.join(" OR ");
-      whereQueries.push(hashtagQueries);
-    }
-
-    if (alikes.length > 0){
-      var alikeQueries = [];
-      alikes.forEach(alike => alikeQueries.push("text like '%" + alike + "%'"));
-      alikeQueries = alikeQueries.join(" OR ");
-      whereQueries.push(alikeQueries);
-    }
-
-    if (filters.langList > 0){
-      var languageQueries = [];
-      filters.langList.forEach(language => languageQueries.push("language = '" + language + "'"));
-      languageQueries = languageQueries.join(" OR ");
-      whereQueries.push(languageQueries);
-    }
-
-    var dateQueries = "day > date('" + filters.start + "') AND day <= date('" + filters.end + "')";
-    whereQueries.push(dateQueries);
-
-    var whereQueries = whereQueries.join(" AND ");
-
-    var limit = "limit 50 offset " + filters.page*50
-
-    var queryBody = (whereQueries.length > 0 ? "where " : "") + whereQueries;
-    var selectSQL = [select, queryBody, limit].join(" ") + ";";
-    var countSQL = [count, queryBody].join(" ") + ";";
-
-    return [selectSQL, countSQL];
-  },
-  processKeywords: function(keywords) {
-    var usernames = [], hashtags = [], alikes = [];
-    if(keywords!="NoKeywords"){
-      keywordsArray = keywords.split("&");
-      keywordsArray.forEach(keyword => {
-        switch(keyword.substring(0,1)) {
-          case "#":
-            hashtags.push(keyword.slice(1));
-            break;
-          case "@":
-            usernames.push(keyword.slice(1));
-          default:
-            alikes.push(keyword);
-        }
-      });
-    }
-    return [usernames, hashtags, alikes];
+    let ret = buildStrategy(sessionID, filters, options);
+    return ret;
   }
 }
