@@ -1,8 +1,0 @@
-nav#vizNav.navbar.navbar-expand-md.pt-0
-  div.ml-1.pl-0
-    #vizToggles.collapse.navbar-collapse.show
-      ul#pills-tab.navbar-nav.nav.nav-pills(role="tablist")
-        each viz, idx in dashOpts.vizs
-          - var classes = idx == 0 ? "nav-link active" : "nav-link";
-          li.nav-item
-            a(class= classes href= viz.id data-toggle="pill")= viz.name

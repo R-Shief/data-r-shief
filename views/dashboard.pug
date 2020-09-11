@@ -11,11 +11,19 @@ html
   body
     block content
       include includes/filterBar
-      include includes/optionsPanel.pug
       main#dash.container-fluid.tab-content(role="main")
         each viz, idx in dashOpts.vizs
-          - var classes = idx == 0 ? "viz tab-pane fade show active" : "viz tab-pane fade"
-          div(class= classes id= viz.id.substring(1) role="tabpanel" aria-labelledby= viz.id.substring(1) + "-tab")
+          - var classes = idx == 0 ? "viz tab-pane fade border border-top-0 rounded show active" : "viz tab-pane fade border border-top-0 rounded"
+          div(class= classes id= viz.id.substring(1) + "-tab" role="tabpanel" aria-labelledby= viz.id.substring(1) + "-tab")
+            nav#vizNav.navbar.navbar-expand-md.bg-light.pl-1
+              div.ml-1.pl-0
+                #vizToggles.collapse.navbar-collapse.show
+                  ul#pills-tab.navbar-nav.nav.nav-pills(role="tablist")
+                    each option, idx in viz.options
+                      - var classes = idx == 0 ? "nav-link active" : "nav-link";
+                      li.nav-item
+                        a(class= classes href= "")= option.name
+            div(id = viz.id.substring(1))
             div.h-100.d-flex.justify-content-center.align-items-center
               div.spinner-border(role="status")
                 span.sr-only Loading...

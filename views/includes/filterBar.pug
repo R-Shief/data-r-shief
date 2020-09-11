@@ -1,4 +1,4 @@
-#filterBar.navbar.navbar-light.pb-1
+nav#filterBar.navbar.navbar-light.pb-1
   div.mx-1.px-0.d-flex
     form.form-inline
       div.input-group.input-group-sm
@@ -13,12 +13,12 @@
           - var months = ['Jan', 'Feb', 'Mar', 'Apr', "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
           div.input-group-prepend.input-group-append
             span.input-group-text from
-          - var def = new Date(dashOpts.filters.filter(obj => obj.id == "#from")[0].default);
+          - var def = new Date(dashOpts.filterBar.filters.filter(obj => obj.id == "#from")[0].default);
           - var d = `${months[def.getMonth()]}, ${def.getDate()} ${def.getFullYear()}`;
           input#from.form-control(type="text" value= d size="11")
           div.input-group-prepend.input-group-append
             span.input-group-text to
-          - var def = new Date(dashOpts.filters.filter(obj => obj.id == "#to")[0].default);
+          - var def = new Date(dashOpts.filterBar.filters.filter(obj => obj.id == "#to")[0].default);
           - var d = `${months[def.getMonth()]}, ${def.getDate()} ${def.getFullYear()}`;
           input#to.form-control(type="text" value= d size="11")
         div.input-group.input-group-sm
@@ -26,7 +26,7 @@
             button.btn.btn-outline-secondary.dropdown-toggle(type="button" id="languageMenuDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") languages
             div#language.dropdown-menu(aria-labelledby="languageMenuDropdown" style="height: 22rem; overflow-y: scroll;")
               each language in languages
-                - var checked = dashOpts.filters.filter(obj => obj.id == "#language")[0].default.includes(language["639-1"])
+                - var checked = dashOpts.filterBar.filters.filter(obj => obj.id == "#language")[0].default.includes(language["639-1"])
                 div.form-check.d-flex.justify-content-start.align-items-start.pl-3
                   input.form-check-input(type="checkbox" id= "chk-" + language["639-1"] value= language["639-1"] checked= checked)
                   label.form-check-label(for= "chk-" + language["639-1"])= language["ISO language name"]
@@ -52,3 +52,11 @@
           div.input-group-append
             button#filterGoButton.btn.btn-secondary(type="button" disabled)
               img(src="/icons/bootstrap-icons-1.0.0-alpha5/search.svg")
+nav#vizNav.navbar.navbar-expand-md.py-0
+  div.ml-1.pl-0
+    #vizToggles.collapse.navbar-collapse.show
+      ul#pills-tab.navbar-nav.nav.nav-tabs(role="tablist")
+        each viz, idx in dashOpts.vizs
+          - var classes = idx == 0 ? "nav-link active" : "nav-link";
+          li.nav-item
+            a(class= classes href= viz.id + "-tab" data-toggle="pill")= viz.name

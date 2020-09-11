@@ -1,8 +1,5 @@
 let ClipboardJS = require('clipboard');
-let UserPacking = require('./userPacking.js');
-let Streamgraph = require('./streamgraph.js');
 let Dash = require('./dash.js');
-
 
 $( document ).ready(() => {
   // activate the datepicker
@@ -11,7 +8,6 @@ $( document ).ready(() => {
   // activate the clipboard utility
   let clipboard = new ClipboardJS('.clippable');
 
-  Promise.resolve()
-  .then(_ => new Dash(dashOptions, {UserPacking: UserPacking, Streamgraph: Streamgraph}))
+  (new Dash(dashOptions))
   .then(dash => dash.populate());
 });

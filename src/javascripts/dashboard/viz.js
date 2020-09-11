@@ -1,17 +1,15 @@
 class Viz {
 
-  constructor(w, h) {
-    this.svg;
-    this.width = w;
-    this.height = h;
+  constructor() {
+    this.id;
   }
 
-  setData(data) {
+  refresh() {
 
   }
 
   getView() {
-    return this.svg;
+
   }
 
 }
