@@ -1,10 +1,7 @@
 // This code is loosely inspired by Mike Bostock's https://observablehq.com/@d3/streamgraph
 
 d3 = require('d3');
-
 // d3 = require('./streamgraphDependencies.js');
-
-console.log(d3);
 
 Viz = require('./viz.js');
 
