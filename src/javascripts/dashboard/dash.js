@@ -4,7 +4,7 @@ let Streamgraph = require('./streamgraph.js');
 module.exports = function Dash(options) {
   this.vizClasses = [Streamgraph];
   this.options = options;
-  let bounds = {width: 947, height: 500};
+  let bounds = {width: 947, height: 600};
 
   let vizGets = () => this.vizs.map(viz => viz.refresh());
 
