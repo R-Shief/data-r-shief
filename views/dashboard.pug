@@ -12,17 +12,17 @@ html
     block content
       include includes/filterBar
       main#dash.container-fluid.tab-content(role="main")
-        each viz, idx in dashOpts.vizs
+        each viz, idx in dashOpts.vizBar.vizs
           - var classes = idx == 0 ? "viz tab-pane fade border border-top-0 rounded show active" : "viz tab-pane fade border border-top-0 rounded"
           div(class= classes id= viz.id.substring(1) + "-tab" role="tabpanel" aria-labelledby= viz.id.substring(1) + "-tab")
-            nav#vizNav.navbar.navbar-expand-md.bg-light.pl-1
+            nav.navbar.navbar-expand-md.bg-light.pl-1(id= dashOpts.vizBar.id + "-" + viz.id)
               div.ml-1.pl-0
                 #vizToggles.collapse.navbar-collapse.show
-                  ul#pills-tab.navbar-nav.nav.nav-pills(role="tablist")
+                  ul#pills-tab.navbar-nav.nav.nav-pills
                     each option, idx in viz.options
                       - var classes = idx == 0 ? "nav-link active" : "nav-link";
                       li.nav-item
-                        a(class= classes href= "")= option.name
+                        a(class= classes id= option.id)= option.name
             div(id = viz.id.substring(1))
             div.h-100.d-flex.justify-content-center.align-items-center
               div.spinner-border(role="status")

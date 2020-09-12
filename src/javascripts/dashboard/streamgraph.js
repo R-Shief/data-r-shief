@@ -1,6 +1,11 @@
 // This code is loosely inspired by Mike Bostock's https://observablehq.com/@d3/streamgraph
 
 d3 = require('d3');
+
+// d3 = require('./streamgraphDependencies.js');
+
+console.log(d3);
+
 Viz = require('./viz.js');
 
 class Streamgraph extends Viz {
@@ -8,22 +13,50 @@ class Streamgraph extends Viz {
   constructor(options) {
 
     super(options);
-    this.width = options.width;
-    this.height = options.height;
+
+    this.strategyFamilies = {
+      hashtag: {
+        uriExtension: 'htStreamgraph'
+      },
+      language: {
+        uriExtension: 'lgStreamgraph'
+      }
+    };
+
+    let defaultOptions = {
+      strategyFamily: "hashtag"
+    };
+
+    this.options = Object.assign(defaultOptions, options);
+
+    this.width = this.options.width;
+    this.height = this.options.height;
     this.margin = {top: 0, right: 20, bottom: 30, left: 20};
     this.numBins;
     this.svg;
     this.filterManager = options.filterManager;
     this.id = "#streamgraph";
-    this.uriExtension = 'htStreamgraph';
+    this.uriExtension = () => this.strategyFamilies[this.options.strategyFamily].uriExtension;
 
+  }
+
+  static getViewOptions() {
+    return {
+      id: "#streamgraph",
+      name: "Streamgraph",
+      options: [
+        {id: "#hashtagsStreamgraph", name: "By Hashtag"},
+        {id: "#languagesStreamgraph", name: "By Language"}
+      ]
+    }
   }
 
   refresh() {
     return new Promise((resolve, reject) => {
       Promise.resolve()
       .then(_ => {
-        return fetch(`${this.filterManager.getURLWithFilters()}/${this.uriExtension}`, {method: 'GET'});
+        console.log(`${this.filterManager.getURLWithFilters()}/${this.uriExtension()}`);
+        return fetch(`${this.filterManager.getURLWithFilters()}/${this.uriExtension()}`, {method: 'GET'});
       }) // get the data from the server
       .then(response => response.json())
       .then(data => {
@@ -109,49 +142,88 @@ class Streamgraph extends Viz {
             .y1(d => this.y(d[1]))
 
         // if the svg doesn't exist, create it for the first time, otherwise, just re-build the graph components (x and y scales, x axis and area objects)
-        if (typeof this.svg == "undefined") {this.svg = this.buildSVG();} else { this.transition(); }
+
+        let shouldBuild = typeof this.svg == "undefined";
+        this.updateSVG(shouldBuild);
+
         resolve(this);
       })
     })
   }
 
-  buildSVG() {
+  updateSVG(build=false) {
 
-    svg = d3.create("svg")
-        .attr("viewBox", [0, 0, this.width, this.height]);
+    if (build) {
+      this.svg = d3.create("svg")
+          .attr("viewBox", [0, 0, this.width, this.height]);
 
-    svg.append("g")
-      .selectAll("path")
+      this.g = this.svg.append("g");
+
+      this.t = this.svg.transition()
+        .duration(2000);
+
+      this.bottomAxis = this.svg.append("g")
+          .call(this.xAxis);
+    }
+
+    this.g.selectAll("path")
       .data(this.series)
-      .join("path")
-        .attr("fill", ({key}) => this.color(key))
-        .attr("d", (d) => this.area(d))
-      .append("title")
-        .text(({key}) => key);
+      .join(
+        enter => enter.append("path")
+          .attr("fill", ({key}) => this.color(key))
+          .attr("d", (d) => this.area(d))
+          .append("title")
+            .text(({key}) => key),
+        update => update.transition(this.t)
+          .attr("fill", ({key}) => this.color(key))
+          .attr("d", (d) => this.area(d)),
+        exit => exit.remove().selectAll("title").remove()
+      );
 
-    this.bottomAxis = svg.append("g")
-        .call(this.xAxis);
-
-    return svg;
+    this.bottomAxis
+      .transition(this.t)
+      .call(this.xAxis);
   }
 
   getView() {
     return this.svg.node();
   }
 
-  transition() {
-    console.log("Trying to refresh streamgraph.");
-    this.svg.selectAll('path')
-      .data(this.series)
-      .transition()
-        .delay(0)
-        .duration(2000)
-        .attr("fill", ({key}) => this.color(key))
-        .attr("d", this.area);
+  setOption(option, value) {
+    this.options[option] = value;
+  }
 
-    this.bottomAxis
-      .transition().delay(0).duration(2000)
-      .call(this.xAxis);
+  update() {
+
+
+    console.log("Trying to refresh streamgraph.");
+
+    // let paths = this.svg.selectAll('path')
+    //
+    // paths
+    //   .data(this.series)
+    //   .enter()
+    //     .append("path")
+    //       .attr("fill", ({key}) => this.color(key))
+    //       .attr("d", (d) => this.area(d))
+    //     .append("title")
+    //       .text(({key}) => key)
+    //   .transition().duration(2000);
+    //
+    // paths.data(this.series).exit().transition().duration(2000).remove();
+    //
+    // paths
+    //   .data(this.series)
+    //   .transition()
+    //     .delay(0)
+    //     .duration(2000)
+    //     .attr("fill", ({key}) => this.color(key))
+    //     .attr("d", this.area)
+    //     .text(({key}) => key);
+    //
+    // this.bottomAxis
+    //   .transition().delay(0).duration(2000)
+    //   .call(this.xAxis);
   }
 };
 

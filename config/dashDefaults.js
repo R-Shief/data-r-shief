@@ -14,22 +14,25 @@ module.exports = {
       {id: "#keywordsText", type: "textbox", fkey: "keywords", default: "*"}
     ]
   },
-  vizs: [
-    {
-      id: "#streamgraph",
-      name: "Streamgraph",
-      options: [
-        {id: "#hashtagsStreamgraph", name: "By Hashtag"},
-        {id: "#languagesStreamgraph", name: "By Language"}
-      ]
-    },
-    {
-      id: "#rankings",
-      name: "Rankings",
-      options: [
-        {id: "#hashtagRanking", name: "Top Hashtags"},
-        {id: "#urlRanking", name: "Top URLs"}
-      ]
-    }
-  ]
+  vizBar: {
+    id: "#vizBar",
+    vizs: [
+      {
+        id: "#streamgraph",
+        name: "Streamgraph",
+        options: [
+          {id: "#hashtagsStreamgraph", name: "By Hashtag", strategyFamily: "hashtag"},
+          {id: "#languagesStreamgraph", name: "By Language", strategyFamily: "language"}
+        ]
+      },
+      {
+        id: "#rankings",
+        name: "Rankings",
+        options: [
+          {id: "#hashtagRanking", name: "Top Hashtags"},
+          {id: "#urlRanking", name: "Top URLs"}
+        ]
+      }
+    ]
+  }
 };

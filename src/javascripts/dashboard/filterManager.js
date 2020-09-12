@@ -51,6 +51,19 @@ module.exports = function FilterManager(dash, options) {
     }
   })
 
+  // add event listeners for per viz options
+  this.options.vizBar.vizs.forEach(viz => {
+    viz.options.forEach(vizOption => {
+      $(document.getElementById(vizOption.id)).click(function() {
+        viz.options.map(vizOption => vizOption.id).forEach(voi => {
+          document.getElementById(voi).classList.remove("active");
+        });
+        $(this).addClass("active");
+        dash.vizs.find(targetViz => targetViz.id == viz.id).setOption("strategyFamily", vizOption.strategyFamily);
+      })
+    })
+  })
+
   this.getURLWithFilters = function() {
     // return `${window.location.href}/${this.filters.langList}/${this.filters.startDate}/${this.filters.endDate}/${this.filters.hashtags}/${this.filters.usernames}/${this.filters.keywords}/${this.dataPage}`;
     return [window.location.href, ...Object.values(this.filters), this.dataPage].join("/");

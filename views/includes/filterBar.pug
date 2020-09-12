@@ -1,5 +1,5 @@
 nav#filterBar.navbar.navbar-light.pb-1
-  div.mx-1.px-0.d-flex
+  div.mx-0.px-0.d-flex
     form.form-inline
       div.input-group.input-group-sm
         div.input-group-prepend
@@ -51,12 +51,10 @@ nav#filterBar.navbar.navbar-light.pb-1
           //-       label.form-check-label(for="inlineCheckbox4") Twitter for iPhone
           div.input-group-append
             button#filterGoButton.btn.btn-secondary(type="button" disabled)
-              img(src="/icons/bootstrap-icons-1.0.0-alpha5/search.svg")
-nav#vizNav.navbar.navbar-expand-md.py-0
-  div.ml-1.pl-0
-    #vizToggles.collapse.navbar-collapse.show
-      ul#pills-tab.navbar-nav.nav.nav-tabs(role="tablist")
-        each viz, idx in dashOpts.vizs
-          - var classes = idx == 0 ? "nav-link active" : "nav-link";
-          li.nav-item
-            a(class= classes href= viz.id + "-tab" data-toggle="pill")= viz.name
+              img(src="/icons/bootstrap-icons-1.0.0-alpha5/search.svg")      
+div.container-fluid
+  ul#pills-tab.nav.nav-tabs.nav-fill.py-0(role="tablist")
+    each viz, idx in dashOpts.vizBar.vizs
+      - var classes = idx == 0 ? "nav-link active" : "nav-link";
+      li.nav-item
+        a(class= classes href= viz.id + "-tab" data-toggle="pill")= viz.name

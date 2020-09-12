@@ -59,6 +59,9 @@ router.get('/:langList/:countryList/:sourceList/:startDate/:endDate/:hashtags/:u
       case 'htStreamgraph':
         proc = 'hashtagOccurrences';
         break;
+      case 'lgStreamgraph':
+        proc = 'languageOccurrences';
+        break;
       default:
         throw new Error('Invalid URL filter fetch parameter.');
     };

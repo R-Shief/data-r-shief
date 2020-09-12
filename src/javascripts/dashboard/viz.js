@@ -2,6 +2,11 @@ class Viz {
 
   constructor() {
     this.id;
+    this.options;
+  }
+
+  static getViewOptions() {
+
   }
 
   refresh() {
@@ -9,6 +14,10 @@ class Viz {
   }
 
   getView() {
+
+  }
+
+  setOption(option, value) {
 
   }
 
