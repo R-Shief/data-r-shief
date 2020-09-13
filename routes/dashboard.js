@@ -9,7 +9,6 @@ var filters = {};
 router.use(express.json());
 
 router.get('/', function(req, res, next) {
-  dashDefaults.filterBar.clippable.default = req.originalurl;
   res.render('dashboard', {
     title: "R-Shief Dashboard",
     dashOpts: dashDefaults,
@@ -35,7 +34,6 @@ router.get('/:langList/:countryList/:sourceList/:startDate/:endDate/:hashtags/:u
 })
 
 router.put('/:langList/:countryList/:sourceList/:startDate/:endDate/:hashtags/:usernames/:keywords/:page', function (req, res, next) {
-  console.log("session id is: " + req.sessionID);
   var result = Promise.resolve()
   .then(_ => { if (req.params.page == 0) return database.dePopulateSession(req.sessionID) })
   .then(_ => database.populateSession(req.sessionID, req.params))
@@ -44,7 +42,6 @@ router.put('/:langList/:countryList/:sourceList/:startDate/:endDate/:hashtags/:u
 });
 
 router.get('/:langList/:countryList/:sourceList/:startDate/:endDate/:hashtags/:usernames/:keywords/:page/:fetch', function (req, res, next) {
-  console.log("got the request");
   res.setHeader('Content-Type', 'application/json');
 
   (new Promise( (resolve, reject) => {
@@ -61,6 +58,12 @@ router.get('/:langList/:countryList/:sourceList/:startDate/:endDate/:hashtags/:u
         break;
       case 'lgStreamgraph':
         proc = 'languageOccurrences';
+        break;
+      case 'htRanking':
+        proc = 'hashtagCounts';
+        break;
+      case 'urlRanking':
+        proc = 'urlCounts';
         break;
       default:
         throw new Error('Invalid URL filter fetch parameter.');

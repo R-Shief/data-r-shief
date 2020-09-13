@@ -11,6 +11,7 @@ module.exports = function FilterManager(dash, options) {
 
     switch (pair.type) {
       case "checkbox":
+        $(pair.id).find("input").filter( function() {return pair.default.includes($(this).val())} ).each(function(idx) { $(this).val(pair.default[idx]) });
         $(pair.id).change(function() {
           scope.filters[pair.fkey] = $(this).find("input:checked").toArray().map(elem => elem.value);
           if(scope.filters[pair.fkey].length < 1) { scope.filters[pair.fkey] = ["*"] }
@@ -59,7 +60,36 @@ module.exports = function FilterManager(dash, options) {
           document.getElementById(voi).classList.remove("active");
         });
         $(this).addClass("active");
-        dash.vizs.find(targetViz => targetViz.id == viz.id).setOption("strategyFamily", vizOption.strategyFamily);
+
+        let loadingOverlayFactory = () => {
+          let loadingOverlay = document.createElement("div");
+          loadingOverlay.id = viz.id.substring(1) + "-spinner";
+          loadingOverlay.className = "d-flex justify-content-center align-items-center"
+          loadingOverlay.style.position = "absolute";
+          loadingOverlay.style.top = 0;
+          loadingOverlay.style.left = 0;
+          loadingOverlay.style.width = "100%";
+          loadingOverlay.style.height = "100%";
+          loadingOverlay.style.background = "white";
+          loadingOverlay.style.opacity = 0.8;
+            let spinner = document.createElement("div");
+            spinner.className = "spinner-border";
+            spinner.setAttribute("role", "status");
+              let srSpan = document.createElement("span");
+              srSpan.className = "sr-only";
+              srSpan.textContent = "Loading...";
+            spinner.appendChild(srSpan);
+          loadingOverlay.appendChild(spinner)
+          return loadingOverlay
+        };
+
+        let loadingOverlay = loadingOverlayFactory();
+
+        vizElem = document.getElementById(viz.id.substring(1));
+        vizElem.parentNode.insertBefore(loadingOverlay, vizElem);
+        dash.vizs.find(targetViz => targetViz.id == viz.id).setOption("strategyFamily", vizOption.strategyFamily)
+        .then(() => document.getElementById(viz.id.substring(1) + "-spinner").remove());
+
       })
     })
   })

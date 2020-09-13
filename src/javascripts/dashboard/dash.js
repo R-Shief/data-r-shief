@@ -1,8 +1,9 @@
 let FilterManager = require('./filterManager.js');
 let Streamgraph = require('./streamgraph.js');
+let Rankings = require('./rankings.js');
 
 module.exports = function Dash(options) {
-  this.vizClasses = [Streamgraph];
+  this.vizClasses = [Streamgraph, Rankings];
   this.options = options;
   let bounds = {width: 947, height: 440};
 

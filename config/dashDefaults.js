@@ -4,7 +4,7 @@ module.exports = {
     goButton: {id: "#filterGoButton", default: "disabled"},
     clippable: {id: "#sharelink", default: ""},
     filters: [
-      {id: "#language", type: "checkbox", fkey: "langList", default: ["en"]},
+      {id: "#language", type: "checkbox", fkey: "langList", default: ["en", "ar"]},
       {id: "#country", type: "checkbox", fkey: "countries", default: ["af", "be", "mz"]},
       {id: "#source", type: "checkbox", fkey: "sources", default: ["023", "622", "131"]},
       {id: "#from", type: "datebox", fkey: "startDate", default: "2009-04-12"},
@@ -29,8 +29,8 @@ module.exports = {
         id: "#rankings",
         name: "Rankings",
         options: [
-          {id: "#hashtagRanking", name: "Top Hashtags"},
-          {id: "#urlRanking", name: "Top URLs"}
+          {id: "#hashtagRanking", name: "Top Hashtags", strategyFamily: "hashtag"},
+          {id: "#urlRanking", name: "Top URLs", strategyFamily: "url"}
         ]
       }
     ]

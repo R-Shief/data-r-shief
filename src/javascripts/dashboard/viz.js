@@ -18,7 +18,7 @@ class Viz {
   }
 
   setOption(option, value) {
-
+    this.options[option] = value;
   }
 
 }

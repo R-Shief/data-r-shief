@@ -13,7 +13,7 @@ html
       include includes/filterBar
       main#dash.container-fluid.tab-content(role="main")
         each viz, idx in dashOpts.vizBar.vizs
-          - var classes = idx == 0 ? "viz tab-pane fade border border-top-0 rounded show active" : "viz tab-pane fade border border-top-0 rounded"
+          - var classes = idx == 0 ? "viz tab-pane fade border border-top-0 rounded-bottom show active" : "viz tab-pane fade border border-top-0 rounded"
           div(class= classes id= viz.id.substring(1) + "-tab" role="tabpanel" aria-labelledby= viz.id.substring(1) + "-tab")
             nav.navbar.navbar-expand-md.bg-light.pl-1(id= dashOpts.vizBar.id + "-" + viz.id)
               div.ml-1.pl-0

@@ -50,11 +50,7 @@ class Streamgraph extends Viz {
 
   refresh() {
     return new Promise((resolve, reject) => {
-      Promise.resolve()
-      .then(_ => {
-        console.log(`${this.filterManager.getURLWithFilters()}/${this.uriExtension()}`);
-        return fetch(`${this.filterManager.getURLWithFilters()}/${this.uriExtension()}`, {method: 'GET'});
-      }) // get the data from the server
+      fetch(`${this.filterManager.getURLWithFilters()}/${this.uriExtension()}`, {method: 'GET'})
       .then(response => response.json())
       .then(data => {
         // parse JSON and throw away metadata
@@ -83,7 +79,6 @@ class Streamgraph extends Viz {
 
         // get the numbins based on the number of data points
         this.numBins = 10 * Math.log(data.length);
-        console.log(this.numBins);
 
         // create a ticks object to determine the number of bins
         const ticks = d3.ticks(this.dateExtent[0], this.dateExtent[1], this.numBins);
@@ -149,79 +144,58 @@ class Streamgraph extends Viz {
   }
 
   updateSVG(build=false) {
+    return new Promise((resolve, reject) => {
+      if (build) {
+        this.svg = d3.create("svg")
+            .attr("viewBox", [0, 0, this.width, this.height]);
 
-    if (build) {
-      this.svg = d3.create("svg")
-          .attr("viewBox", [0, 0, this.width, this.height]);
+        this.g = this.svg.append("g");
 
-      this.g = this.svg.append("g");
+        this.t = this.svg.transition()
+          .duration(2000);
 
-      this.t = this.svg.transition()
-        .duration(2000);
+        this.bottomAxis = this.svg.append("g")
+            .call(this.xAxis);
+      }
 
-      this.bottomAxis = this.svg.append("g")
-          .call(this.xAxis);
-    }
+      this.g.selectAll("path")
+        .data(this.series)
+        .join(
+          enter => enter.append("path")
+            .attr("fill", ({key}) => this.color(key))
+            .attr("d", (d) => this.area(d))
+            .append("title")
+              .text(({key}) => key),
+          update => update.transition(this.t)
+            .attr("fill", ({key}) => this.color(key))
+            .attr("d", (d) => this.area(d)),
+          exit => exit.remove().selectAll("title").remove()
+        );
 
-    this.g.selectAll("path")
-      .data(this.series)
-      .join(
-        enter => enter.append("path")
-          .attr("fill", ({key}) => this.color(key))
-          .attr("d", (d) => this.area(d))
-          .append("title")
-            .text(({key}) => key),
-        update => update.transition(this.t)
-          .attr("fill", ({key}) => this.color(key))
-          .attr("d", (d) => this.area(d)),
-        exit => exit.remove().selectAll("title").remove()
-      );
+      this.bottomAxis
+        .transition(this.t)
+        .call(this.xAxis);
 
-    this.bottomAxis
-      .transition(this.t)
-      .call(this.xAxis);
+      resolve();
+    });
+  }
+
+  setOption(option, value) {
+    super.setOption(option, value);
+    this.series = [];
+    return this.updateSVG(true)
+    .then(() => this.refresh()
+      .then(() => {
+        let elem = document.getElementById(this.id.substring(1));
+        elem.removeChild(elem.firstChild);
+        elem.append(this.getView());
+      })
+    );
   }
 
   getView() {
     return this.svg.node();
   }
-
-  setOption(option, value) {
-    this.options[option] = value;
-  }
-
-  update() {
-
-
-    console.log("Trying to refresh streamgraph.");
-
-    // let paths = this.svg.selectAll('path')
-    //
-    // paths
-    //   .data(this.series)
-    //   .enter()
-    //     .append("path")
-    //       .attr("fill", ({key}) => this.color(key))
-    //       .attr("d", (d) => this.area(d))
-    //     .append("title")
-    //       .text(({key}) => key)
-    //   .transition().duration(2000);
-    //
-    // paths.data(this.series).exit().transition().duration(2000).remove();
-    //
-    // paths
-    //   .data(this.series)
-    //   .transition()
-    //     .delay(0)
-    //     .duration(2000)
-    //     .attr("fill", ({key}) => this.color(key))
-    //     .attr("d", this.area)
-    //     .text(({key}) => key);
-    //
-    // this.bottomAxis
-    //   .transition().delay(0).duration(2000)
-    //   .call(this.xAxis);
-  }
-};
+}
 
 module.exports = Streamgraph;
