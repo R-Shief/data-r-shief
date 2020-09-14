@@ -23,7 +23,7 @@ module.exports = {
       let conditionals = [];
       if (filters.hashtags != "*") { conditionals.push(`MATCH(h.hashtag_name) AGAINST ('${filters.hashtags}' IN BOOLEAN MODE)`) };
       if (filters.usernames != "*") { conditionals.push(`u.username LIKE '${filters.usernames}%'`) };
-      conditionals = conditionals.length > 1 ? conditionals.join(" OR ") : conditionals[0];
+      if (conditionals.length > 0) conditionals = conditionals.length > 1 ? "AND " + conditionals.join(" OR ") : "AND " + conditionals[0];
 
       return `
         INSERT INTO sessionTweet (session_id, twitter_id)
@@ -36,7 +36,7 @@ module.exports = {
             INNER JOIN user as u ON t.from_user_id = u.user_id
             WHERE t.lang_code IN ( ${filters.langList.split(",").map(l => `'${l}'`)} )
             AND t.created_at BETWEEN '${filters.startDate}' AND '${filters.endDate}'
-            AND ${conditionals}
+            ${conditionals}
             LIMIT ${filters.page*options.populateStride*10}, ${options.populateStride*10}
           ) AS tt
           INNER JOIN randomKey AS rk ON rk.twitter_id = tt.twitter_id
@@ -45,14 +45,16 @@ module.exports = {
       `;
     };
 
+    let dateDiff = (date1, date2) => Math.ceil(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
+
     let buildStrategy;
-    if ( [filters.hashtags, filters.usernames].some(x => x != "*") ) { // if any of the conditions that require joins are required, then use this strategy
+    if ( [filters.hashtags, filters.usernames].some(x => x != "*") || dateDiff(new Date(filters.startDate), new Date(filters.endDate)) < 21) { // if any of the conditions that require joins are required, then use this strategy
       buildStrategy = scrambleStrategy;
     }
     else {
       buildStrategy = randomStrategy;
     }
-
+    
     let ret = buildStrategy(sessionID, filters, options);
     return ret;
   }

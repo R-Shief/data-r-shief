@@ -110,6 +110,7 @@ class Rankings extends Viz {
           } else {
             document.getElementById("rankingsTableWrapper").remove();
           }
+
           this.view.appendChild(tableResponsiveDiv);
 
           resolve(this);
@@ -118,17 +119,9 @@ class Rankings extends Viz {
     })
   }
 
-
-
-
-  updateTableWrapper() {
-
-    this.view = tableResponsiveDiv;
-  }
-
   setOption(option, value) {
     super.setOption(option, value);
-    this.strategy = this.strategyFamilies[this.options.strategyFamily];
+    if(option == "strategyFamily") this.strategy = this.strategyFamilies[this.options.strategyFamily];
     return this.refresh();
   }
 

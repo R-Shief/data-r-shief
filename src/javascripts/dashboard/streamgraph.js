@@ -56,6 +56,8 @@ class Streamgraph extends Viz {
         // parse JSON and throw away metadata
         data = JSON.parse(data);
 
+        if(data.length < 10) {resolve(this); return;}
+
         // reformat
         data = data.map(entry => ({occurrence: entry[0], hashtag: entry[1]}));
 
@@ -140,6 +142,7 @@ class Streamgraph extends Viz {
 
         resolve(this);
       })
+      .catch(err => reject(err))
     })
   }
 
