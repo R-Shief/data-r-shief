@@ -1,13 +1,13 @@
-nav#filterBar.navbar.navbar-light.pb-1
-  div.mx-0.px-0.d-flex
-    form.form-inline
-      div.input-group.input-group-sm
+nav#filterBar.navbar.pb-1
+  div.mx-0.px-0.d-flex.w-100
+    form.form-inline.w-100
+      div.input-group.input-group-sm.w-100
         div.input-group-prepend
           span.input-group-text
             //- img(src="icons/Twitter-Logos/Twitter_Logo_Blue/Twitter_Logo_Blue.svg" height="20px")
             img(src="/icons/Twitter-Logos/Twitter_Logo_Rshiefcolor.svg" height="20px")
-        input#hashtagsText.form-control(type="search" placeholder="Hashtags" size="15")
-        input#usernamesText.form-control(type="search" placeholder="Usernames" size="15")
+        input#hashtagsText.form-control(type="search" placeholder="Hashtags" size="20")
+        input#usernamesText.form-control(type="search" placeholder="Usernames" size="20")
         //- input#keywordsText.form-control(type="search" placeholder="Keywords" size="11")
         div.input-group.input-group-sm.input-daterange(data-date-format="M d, yyyy")
           - var months = ['Jan', 'Feb', 'Mar', 'Apr', "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -15,12 +15,12 @@ nav#filterBar.navbar.navbar-light.pb-1
             span.input-group-text from
           - var def = new Date(dashOpts.filterBar.filters.filter(obj => obj.id == "#from")[0].default);
           - var d = `${months[def.getMonth()]}, ${def.getDate()} ${def.getFullYear()}`;
-          input#from.form-control(type="text" value= d size="11")
+          input#from.form-control(type="text" value= d size="20")
           div.input-group-prepend.input-group-append
             span.input-group-text to
           - var def = new Date(dashOpts.filterBar.filters.filter(obj => obj.id == "#to")[0].default);
           - var d = `${months[def.getMonth()]}, ${def.getDate()} ${def.getFullYear()}`;
-          input#to.form-control(type="text" value= d size="11")
+          input#to.form-control(type="text" value= d size="20")
         div.input-group.input-group-sm
           div.input-group-append
             button.btn.btn-outline-secondary.dropdown-toggle(type="button" id="languageMenuDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") languages

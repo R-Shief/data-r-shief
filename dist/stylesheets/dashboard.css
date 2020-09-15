@@ -17,13 +17,9 @@ body {
 
 .viz {
   width: 100%;
-  height: 450px;
+  height: 100%;
   overflow: hidden;
   position: relative;
-}
-
-.nav a {
-  font-size: .875rem;
 }
 
 #vizToggles li a {
@@ -31,7 +27,7 @@ body {
   padding-bottom: 4px;
 }
 
-#sharelink {
+.nav a, #sharelink {
   font-size: .875rem;
 }
 
@@ -55,4 +51,22 @@ body {
 .nav-pills .nav-link.active, .nav-pills .nav-link.active:hover  {
   /* background-color: #1c4954; */
   background-color: #414141;
+}
+
+/* .input-group span {
+  background-color: #6c757d;
+  opacity: .65;
+  color: black;
+} */
+
+.input-group input, .input-group button {
+  background-color: #f8f9fa;
+}
+
+.input-group input:read-only, .input-group textarea:read-only {
+  background-color: #f8f9fa;
+}
+
+.card .card-body p {
+  font-size: .875rem;
 }

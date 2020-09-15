@@ -5,7 +5,8 @@ class Rankings extends Viz {
   constructor(options) {
     super(options);
 
-    this.filterManager = options.filterManager;
+    this.dash = options.dash;
+    this.filterManager = this.dash.filterManager;
     this.id = "#rankings";
 
     this.strategyFamilies = {
@@ -46,10 +47,8 @@ class Rankings extends Viz {
 
   refresh() {
     return new Promise((resolve, reject) => {
-        fetch(`${this.filterManager.getURLWithFilters()}/${this.strategy.uriExtension}`, {method: 'GET'})
-        .then(response => response.json())
-        .then(data => {
-          dataObj = JSON.parse(data);
+        this.dash.fetchExtension(this.strategy.uriExtension, {method: 'GET'})
+        .then(dataObj => {
 
           // rebuild the table wrapper
           let tableResponsiveDiv = document.createElement("div");

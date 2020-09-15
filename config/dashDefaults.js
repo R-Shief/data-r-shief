@@ -42,5 +42,29 @@ module.exports = {
         ]
       }
     ]
-  }
+  },
+  infoBar: [
+    {
+      id: "#sampleCount",
+      default: 0,
+      infoKey: "sampleCount"
+    },
+    {
+      id: "#sampleMethod",
+      default: "randomly",
+      infoKey: "sampleMethod"
+    }
+  ],
+  share: [
+    {
+      id: "#sharelink",
+      default: "",
+      wrapper: `val`
+    },
+    {
+      id: "#shareembed",
+      default: "",
+      wrapper: `<iframe frameborder="0" src="val"></iframe>`
+    }
+  ]
 };

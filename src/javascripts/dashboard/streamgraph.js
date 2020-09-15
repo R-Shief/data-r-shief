@@ -31,7 +31,8 @@ class Streamgraph extends Viz {
     this.margin = {top: 0, right: 20, bottom: 30, left: 20};
     this.numBins;
     this.svg;
-    this.filterManager = options.filterManager;
+    this.dash = options.dash;
+    this.filterManager = this.dash.filterManager;
     this.id = "#streamgraph";
     this.uriExtension = () => this.strategyFamilies[this.options.strategyFamily].uriExtension;
 
@@ -50,11 +51,8 @@ class Streamgraph extends Viz {
 
   refresh() {
     return new Promise((resolve, reject) => {
-      fetch(`${this.filterManager.getURLWithFilters()}/${this.uriExtension()}`, {method: 'GET'})
-      .then(response => response.json())
+      this.dash.fetchExtension(this.uriExtension(), {method: 'GET'})
       .then(data => {
-        // parse JSON and throw away metadata
-        data = JSON.parse(data);
 
         if(data.length < 10) {resolve(this); return;}
 
@@ -125,7 +123,7 @@ class Streamgraph extends Viz {
         this.xAxis = g => g
           .attr("transform", `translate(0,${this.height - this.margin.bottom})`)
           .call(d3.axisBottom(this.x).ticks(this.width / 80).tickSizeOuter(0))
-          .call(g => g.select(".domain").remove())
+          // .call(g => g.select(".domain").remove())
 
         // .tickFormat(x => `${x.getMonth()}/${x.getDate()}/${x.getFullYear()}`)
 
@@ -150,7 +148,7 @@ class Streamgraph extends Viz {
     return new Promise((resolve, reject) => {
       if (build) {
         this.svg = d3.create("svg")
-            .attr("viewBox", [0, 0, this.width, this.height]);
+          .attr("viewBox", [0, 0, this.width, this.height]);
 
         this.g = this.svg.append("g");
 

@@ -9,7 +9,7 @@ var filters = {};
 router.use(express.json());
 
 router.get('/', function(req, res, next) {
-  res.render('dashboard', {
+  res.render('dashboard/dashboard', {
     title: "R-Shief Dashboard",
     dashOpts: dashDefaults,
     languages: languages,
@@ -22,7 +22,7 @@ router.get('/', function(req, res, next) {
 })
 
 router.get('/:langList/:countryList/:sourceList/:startDate/:endDate/:hashtags/:usernames/:keywords/:page', function(req, res, next) {
-  res.render('dashboard', {
+  res.render('dashboard/dashboard', {
     title: "R-Shief Dashboard",
     dashOpts: dashDefaults,
     languages: languages,

@@ -5,6 +5,11 @@ module.exports = function FilterManager(dash, options) {
   this.dash = dash;
   this.options = options;
 
+  this.getURLWithFilters = function() {
+    // return `${window.location.href}/${this.filters.langList}/${this.filters.startDate}/${this.filters.endDate}/${this.filters.hashtags}/${this.filters.usernames}/${this.filters.keywords}/${this.dataPage}`;
+    return [window.location.href, ...Object.values(this.filters), this.dataPage].join("/");
+  }
+
   // add event listeners for filter options
   this.options.filterBar.filters.forEach(pair => {
     scope.filters[pair.fkey] = pair.default;
@@ -38,17 +43,23 @@ module.exports = function FilterManager(dash, options) {
     $(this.options.filterBar.goButton.id).attr("disabled", false);
   })
 
-  // add event listener to reset data populating upon clicking the enabled button
-  if (this.options.filterBar.hasOwnProperty('clippable')) { $(this.options.filterBar.clippable.id).val(document.location.href + this.options.filterBar.clippable.default); } // if there is a clippable, set its default value
+  // set default for share fields
+  this.options.share.forEach(field => {
+    $(field.id).val(field.wrapper.replace(/val/g, scope.getURLWithFilters(scope.filters)));
+  })
+
+  // add event listener to restart data populating (and reset share fields) upon clicking the enabled button
   $(this.options.filterBar.goButton.id).click(function () {
     if (!$(this).prop("disabled")) {
       scope.dataPage = 0;
+      scope.dash.info.sampleCount = 0;
       scope.dash.populate();
       $(this).attr("disabled", true);
 
-      if (scope.options.filterBar.hasOwnProperty('clippable')) {
-        $(scope.options.filterBar.clippable.id).val(scope.getURLWithFilters(scope.filters));
-      }
+      // set share fields
+      scope.options.share.forEach(field => {
+        $(field.id).val(field.wrapper.replace(/val/g, scope.getURLWithFilters(scope.filters)));
+      })
     }
   })
 
@@ -93,9 +104,4 @@ module.exports = function FilterManager(dash, options) {
       })
     })
   })
-
-  this.getURLWithFilters = function() {
-    // return `${window.location.href}/${this.filters.langList}/${this.filters.startDate}/${this.filters.endDate}/${this.filters.hashtags}/${this.filters.usernames}/${this.filters.keywords}/${this.dataPage}`;
-    return [window.location.href, ...Object.values(this.filters), this.dataPage].join("/");
-  }
 }
