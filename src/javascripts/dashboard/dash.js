@@ -1,6 +1,6 @@
 let FilterManager = require('./filterManager.js');
-let Streamgraph = require('./streamgraph.js');
-let Rankings = require('./rankings.js');
+let Streamgraph = require('./viz/streamgraph.js');
+let Rankings = require('./viz/rankings.js');
 
 module.exports = function Dash(options) {
   this.vizClasses = [Streamgraph, Rankings];
