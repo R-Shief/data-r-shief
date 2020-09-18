@@ -21,8 +21,7 @@ module.exports = function Dash(options) {
 
   this.populate = function() {
     return new Promise((resolve, reject) =>
-      this.put()
-      .then(_ => Promise.all(vizGets()))
+      Promise.all( vizGets().concat(this.put()) )
       .then(_ => { // now up the page count once and do it all again, this time with 'build' set to false
         this.filterManager.dataPage++;
         resolve(this.populate());

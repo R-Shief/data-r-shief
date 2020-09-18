@@ -12,21 +12,19 @@ class Rankings extends Viz {
     this.strategyFamilies = {
       hashtag: {
         uriExtension: 'htRanking',
-        headerRowFn: (col) => ["#","Hashtag","Count"].map(h => document.createTextNode(h))[col],
-        rowFn: (val) => document.createTextNode(val)
+        headerRowFn: (col) => ["#","Hashtag","Count"][col],
+        rowFn: (val) => val
       },
       url: {
         uriExtension: 'urlRanking',
-        headerRowFn: (col) => ["#","URL","Count"].map(h => document.createTextNode(h))[col],
+        headerRowFn: (col) => ["#","URL","Count"][col],
         rowFn: (val) => {
+
           let elem;
           if (val.toString().substring(0, 4) == "http") {
-            elem = document.createElement("a");
-            elem.setAttribute("href", val);
-            elem.setAttribute("target", "_blank");
-            elem.appendChild(document.createTextNode(val));
+            elem = (<a href={val} target="_blank">{val}</a>);
           } else {
-            elem = document.createTextNode(val);
+            elem = val;
           }
           return elem;
         }
@@ -50,57 +48,32 @@ class Rankings extends Viz {
         this.dash.fetchExtension(this.strategy.uriExtension, {method: 'GET'})
         .then(dataObj => {
 
-          // rebuild the table wrapper
-          let tableResponsiveDiv = document.createElement("div");
-          tableResponsiveDiv.className = "table-responsive-sm";
-          tableResponsiveDiv.id = "rankingsTableWrapper";
-            let table = document.createElement("table");
-            table.className = "table-sm table-striped";
-            table.style.height = "450px";
-            table.id = "rankingsTable";
-
-              // rebuild the table header
-              let thead = document.createElement("thead");
-              let headerRow = document.createElement("tr");
-              let headerRowFn = this.strategy.headerRowFn;
-                var head0 = document.createElement("th");
-                head0.setAttribute("scope", "col");
-                head0.appendChild(headerRowFn(0));
-                headerRow.appendChild(head0);
-
-                var head1 = document.createElement("th");
-                head1.setAttribute("scope", "col");
-                head1.appendChild(headerRowFn(1));
-                headerRow.appendChild(head1);
-
-                var head2 = document.createElement("th");
-                head2.setAttribute("scope", "col");
-                head2.appendChild(headerRowFn(2));
-                headerRow.appendChild(head2);
-              thead.appendChild(headerRow);
-            table.appendChild(thead);
-
-              // rebuild the table body
-              let tbody = document.createElement("tbody");
-              let rowFn = this.strategy.rowFn;
-              dataObj.forEach(([hashtag, count], idx) => {
-                let row = document.createElement("tr");
-                  let head = document.createElement("th");
-                  head.setAttribute("scope", "row");
-                  head.appendChild(rowFn(idx + 1));
-                  row.appendChild(head);
-
-                  let col0 = document.createElement("td");
-                  col0.appendChild(rowFn(hashtag));
-                  row.appendChild(col0);
-
-                  let col1 = document.createElement("td");
-                  col1.appendChild(rowFn(count));
-                  row.appendChild(col1);
-                tbody.appendChild(row);
-              })
-            table.appendChild(tbody);
-          tableResponsiveDiv.appendChild(table);
+          let RankingsTable = (props) => {
+            const strategy = props.strategy;
+            const dataObj = props.dataObj;
+            return (
+              <div className="table-responsive-sm" id="rankingsTableWrapper">
+                <table className="table-sm table-striped" style={{height: "450px"}} id="rankingsTable">
+                  <thead>
+                    <tr>
+                      <th scope="col">{strategy.headerRowFn(0)}</th>
+                      <th scope="col">{strategy.headerRowFn(1)}</th>
+                      <th scope="col">{strategy.headerRowFn(2)}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {dataObj.map(([hashtag, count], idx) => (
+                      <tr key={hashtag}>
+                        <th scope="row">{strategy.rowFn(idx + 1)}</th>
+                        <td>{strategy.rowFn(hashtag)}</td>
+                        <td>{strategy.rowFn(count)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            );
+          }
 
           if (typeof this.view == "undefined") {
             this.view = document.createElement("div");
@@ -110,7 +83,10 @@ class Rankings extends Viz {
             document.getElementById("rankingsTableWrapper").remove();
           }
 
-          this.view.appendChild(tableResponsiveDiv);
+          let root = document.createElement("div");
+          this.view.appendChild(root);
+          let scope = this;
+          ReactDOM.render(<RankingsTable strategy={scope.strategy} dataObj={dataObj}/>, root);
 
           resolve(this);
         })

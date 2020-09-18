@@ -72,32 +72,21 @@ module.exports = function FilterManager(dash, options) {
         });
         $(this).addClass("active");
 
-        let loadingOverlayFactory = () => {
-          let loadingOverlay = document.createElement("div");
-          loadingOverlay.id = viz.id.substring(1) + "-spinner";
-          loadingOverlay.className = "d-flex justify-content-center align-items-center"
-          loadingOverlay.style.position = "absolute";
-          loadingOverlay.style.top = 0;
-          loadingOverlay.style.left = 0;
-          loadingOverlay.style.width = "100%";
-          loadingOverlay.style.height = "100%";
-          loadingOverlay.style.background = "white";
-          loadingOverlay.style.opacity = 0.8;
-            let spinner = document.createElement("div");
-            spinner.className = "spinner-border";
-            spinner.setAttribute("role", "status");
-              let srSpan = document.createElement("span");
-              srSpan.className = "sr-only";
-              srSpan.textContent = "Loading...";
-            spinner.appendChild(srSpan);
-          loadingOverlay.appendChild(spinner)
-          return loadingOverlay
+        let LoadingOverlay = (props) => {
+          let style = {position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "white", opacity: 0.8};
+          return (
+            <div id={props.id + "-spinner"} className="d-flex justify-content-center align-items-center" style={style}>
+              <div className="spinner-border" role="status">
+                <span className="sr-only">Loading...</span>
+              </div>
+            </div>
+          );
         };
 
-        let loadingOverlay = loadingOverlayFactory();
-
         vizElem = document.getElementById(viz.id.substring(1));
-        vizElem.parentNode.insertBefore(loadingOverlay, vizElem);
+        let rootElem = document.createElement("div");
+        vizElem.parentNode.insertBefore(rootElem, vizElem);
+        ReactDOM.render(<LoadingOverlay id={viz.id.substring(1)} />, rootElem);
         dash.vizs.find(targetViz => targetViz.id == viz.id).setOption("strategyFamily", vizOption.strategyFamily)
         .then(() => document.getElementById(viz.id.substring(1) + "-spinner").remove());
 
