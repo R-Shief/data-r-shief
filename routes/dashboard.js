@@ -34,7 +34,7 @@ router.get('/:langList/:countryList/:sourceList/:startDate/:endDate/:hashtags/:u
 })
 
 router.put('/:langList/:countryList/:sourceList/:startDate/:endDate/:hashtags/:usernames/:keywords/:page', function (req, res, next) {
-  // if (req.params.page == 0) database.dePopulateSession(req.sessionID);
+  if (req.params.page == 0) database.dePopulateSession(req.sessionID);
   var result = Promise.resolve()
   .then(_ => database.populateSession(req.sessionID, req.params))
   .then(success => res.sendStatus(200))

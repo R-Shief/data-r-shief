@@ -100,6 +100,6 @@ module.exports = function FilterManager(dash, options) {
   let hashtagsTextWrapperElem = document.getElementById("hashtagsTextWrapper");
   fetch('/data/hashTags.json', {method: 'GET'})
     .then(response => response.json())
-    .then(data => ReactDOM.render(<SearchDropdown id="hashtags" placeholder="Hashtags" dropdownData={data} />, hashtagsTextWrapperElem))
+    .then(data => ReactDOM.render(<SearchDropdown id="hashtags" placeholder="Hashtags" dropdownData={data} fkey="hashtags" onFilterChange={({fkey, val}) => scope.filters[fkey] = val} />, hashtagsTextWrapperElem))
 
 }

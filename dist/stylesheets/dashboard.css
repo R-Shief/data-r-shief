@@ -70,3 +70,7 @@ body {
 .card .card-body p {
   font-size: .875rem;
 }
+
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}

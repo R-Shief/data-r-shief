@@ -8,32 +8,24 @@ class SearchDropdown extends React.Component {
 
     this.handleClickItem = this.handleClickItem.bind(this);
     this.handleValueChange = this.handleValueChange.bind(this);
-    this.handleInputFocus = this.handleInputFocus.bind(this);
-    this.handleInputBlur = this.handleInputBlur.bind(this);
   }
 
   handleValueChange(e) {
     this.setState({value: e.target.value});
+    this.props.onFilterChange({fkey: this.props.fkey, val: e.target.value});
   }
 
   handleClickItem(e) {
     console.log(e.target.id);
     this.setState({value: e.target.id});
-  }
-
-  handleInputFocus(e) {
-    if(!$(this.dropdownId).hasClass("show")) $(this.dropdownId).dropdown('toggle');
-  }
-
-  handleInputBlur(e) {
-    if($(this.dropdownId).hasClass("show")) $(this.dropdownId).dropdown('toggle');
+    this.props.onFilterChange({fkey: this.props.fkey, val: e.target.id});
   }
 
   render() {
-    return [
-      <input key="input" className="form-control" id={this.inputId} type="search" placeholder={this.props.placeholder} size="20" onChange={this.handleValueChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur} value={this.state.value} />,
+    return (
       <div key="dropdown" className="input-group-prepend input-group-append">
-        <button className="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split rounded-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <input key="input" className="form-control form-control-sm rounded-0" data-toggle="dropdown" autoComplete="off" id={this.inputId} type="search" placeholder={this.props.placeholder} size="20" onChange={this.handleValueChange} value={this.state.value} />
+        <button className="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split rounded-0" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">
           <span className="sr-only">Toggle Dropdown</span>
         </button>
         <div className="dropdown-menu" id={this.dropdownId} style={{minHeight: "3rem", maxHeight: "22rem", overflowY: "scroll"}}>
@@ -50,7 +42,7 @@ class SearchDropdown extends React.Component {
           })}
         </div>
       </div>
-    ]
+    )
   }
 }
 
