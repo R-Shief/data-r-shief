@@ -6,8 +6,21 @@ nav#filterBar.navbar.pb-1
           span.input-group-text
             //- img(src="icons/Twitter-Logos/Twitter_Logo_Blue/Twitter_Logo_Blue.svg" height="20px")
             img(src="/icons/Twitter-Logos/Twitter_Logo_Rshiefcolor.svg" height="20px")
-        input#hashtagsText.form-control(type="search" placeholder="Hashtags" size="20")
+        div#hashtagsTextWrapper.input-group-sm.d-flex
+        //- input#hashtagsText.form-control(type="search" placeholder="Hashtags" size="20")
+        //- div.input-group-prepend.input-group-append
+        //-   button.btn.btn-outline-secondary.dropdown-toggle.dropdown-toggle-split(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+        //-     span.sr-only Toggle Dropdown
+        //-   div.dropdown-menu(id="hashtagsDropdown")
+        //-     a.dropdown-item(href="#") Somethin
+        //-     a.dropdown-item(href="#") Somethin else
         input#usernamesText.form-control(type="search" placeholder="Usernames" size="20")
+        div.input-group-prepend.input-group-append
+          button.btn.btn-outline-secondary.dropdown-toggle.dropdown-toggle-split(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+            span.sr-only Toggle Dropdown
+          div.dropdown-menu(id="usernamesDropdown")
+            a.dropdown-item(href="#") Somethin
+            a.dropdown-item(href="#") Somethin else
         //- input#keywordsText.form-control(type="search" placeholder="Keywords" size="11")
         div.input-group.input-group-sm.input-daterange(data-date-format="M d, yyyy")
           - var months = ['Jan', 'Feb', 'Mar', 'Apr', "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];

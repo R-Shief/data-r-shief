@@ -1,3 +1,5 @@
+let SearchDropdown = require('./components/SearchDropdown.js');
+
 module.exports = function FilterManager(dash, options) {
   let scope = this;
   this.filters = {};
@@ -93,4 +95,11 @@ module.exports = function FilterManager(dash, options) {
       })
     })
   })
+
+  // add dropdown component to the hashtag field
+  let hashtagsTextWrapperElem = document.getElementById("hashtagsTextWrapper");
+  fetch('/data/hashTags.json', {method: 'GET'})
+    .then(response => response.json())
+    .then(data => ReactDOM.render(<SearchDropdown id="hashtags" placeholder="Hashtags" dropdownData={data} />, hashtagsTextWrapperElem))
+
 }

@@ -7,7 +7,7 @@ let queryBuilder = require('./queryBuilder.js');
 // Tweak Zone
 
 let options = {
-  maxLimit: 10000000,
+  maxLimit: 500000,
   populateStride: 1000
 };
 
@@ -47,7 +47,6 @@ class Database {
           console.log(sessionPopulateSQL);
           connection.sql(sessionPopulateSQL).execute()
           .then( results => {
-            console.log("results are: " + results);
             resolve("Success!");
             connection.close();
           })
