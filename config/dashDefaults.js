@@ -32,15 +32,15 @@ module.exports = {
           {id: "#hashtagRanking", name: "Top Hashtags", strategyFamily: "hashtag"},
           {id: "#urlRanking", name: "Top URLs", strategyFamily: "url"}
         ]
-      },
-      {
-        id: "#map",
-        name: "Map",
-        options: [
-          {id: "#tweetsMap", name: "Counts", strategyFamily: "choropleth"},
-          {id: "#hashtagMap", name: "Hashtags", strategyFamily: "hashtag"}
-        ]
       }
+      // {
+      //   id: "#map",
+      //   name: "Map",
+      //   options: [
+      //     {id: "#tweetsMap", name: "Counts", strategyFamily: "choropleth"},
+      //     {id: "#hashtagMap", name: "Hashtags", strategyFamily: "hashtag"}
+      //   ]
+      // }
     ]
   },
   infoBar: [
