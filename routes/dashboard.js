@@ -21,7 +21,7 @@ router.get('/', function(req, res, next) {
 
 })
 
-router.get('/:langList/:countryList/:sourceList/:startDate/:endDate/:hashtags/:usernames/:keywords/:page', function(req, res, next) {
+router.get('/:langList/:startDate/:endDate/:hashtags/:usernames/:page', function(req, res, next) {
   res.render('dashboard/dashboard', {
     title: "R-Shief Dashboard",
     dashOpts: dashDefaults,
@@ -33,7 +33,7 @@ router.get('/:langList/:countryList/:sourceList/:startDate/:endDate/:hashtags/:u
   })
 })
 
-router.put('/:langList/:countryList/:sourceList/:startDate/:endDate/:hashtags/:usernames/:keywords/:page', function (req, res, next) {
+router.put('/:langList/:startDate/:endDate/:hashtags/:usernames/:page', function (req, res, next) {
   if (req.params.page == 0) database.dePopulateSession(req.sessionID);
   var result = Promise.resolve()
   .then(_ => database.populateSession(req.sessionID, req.params))
@@ -41,7 +41,7 @@ router.put('/:langList/:countryList/:sourceList/:startDate/:endDate/:hashtags/:u
   .catch(failure => res.send(failure));
 });
 
-router.get('/:langList/:countryList/:sourceList/:startDate/:endDate/:hashtags/:usernames/:keywords/:page/:fetch', function (req, res, next) {
+router.get('/:langList/:startDate/:endDate/:hashtags/:usernames/:page/:fetch', function (req, res, next) {
   res.setHeader('Content-Type', 'application/json');
 
   (new Promise( (resolve, reject) => {

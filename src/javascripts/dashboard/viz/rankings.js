@@ -5,8 +5,7 @@ class Rankings extends Viz {
   constructor(options) {
     super(options);
 
-    this.dash = options.dash;
-    this.filterManager = this.dash.filterManager;
+    this.fetchExtension = options.fetcher;
     this.id = "#rankings";
 
     this.strategyFamilies = {
@@ -41,11 +40,20 @@ class Rankings extends Viz {
 
     this.view;
 
+    this.live();
+
+  }
+
+  live() {
+    setTimeout(() => {
+      this.refresh();
+      this.live();
+    }, 1000);
   }
 
   refresh() {
     return new Promise((resolve, reject) => {
-        this.dash.fetchExtension(this.strategy.uriExtension, {method: 'GET'})
+        this.fetchExtension(this.strategy.uriExtension, {method: 'GET'})
         .then(dataObj => {
 
           let RankingsTable = (props) => {

@@ -3,20 +3,19 @@ let SearchDropdown = require("./SearchDropdown.js");
 class Dropdown extends React.Component {
   constructor(props) {
     super(props);
-    this.state = Object.fromEntries(props.dropdownData.map(({val, label}) => [val, props.defaultChecked.includes(val)]));
+    // this.state = Object.fromEntries(props.dropdownData.map(({val, label}) => [val, props.defaultChecked.includes(val)]));
+    this.state = Object.fromEntries(props.defaultChecked.map(lang => [lang, true]));
 
     this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(event) {
     const target = event.target;
-    this.setState({
-      [target.name]: target.checked
+    this.setState((state, props) =>{
+      const change = {[target.name]: target.checked}
+      this.props.onFilterChange({fkey: this.props.fkey, val: Object.entries(Object.assign(state, change)).filter(([key, val]) => (val)).map(([key, val]) => key)});
+      return change;
     });
-  }
-
-  componentDidUpdate() {
-    this.props.onFilterChange({fkey: this.props.fkey, val: Object.entries(this.state).filter(([key, val]) => (val)).map(([key, val]) => key)});
   }
 
   render() {
@@ -45,65 +44,137 @@ class Dropdown extends React.Component {
 class DatePicker extends React.Component {
   constructor(props) {
     super(props);
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    this.state = {value: `${months[props.def.getMonth()]}, ${props.def.getDate()} ${props.def.getFullYear()}`};
+
+    this.state = {value: props.value};
 
     this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(e) {
-    this.setState({value: e.target.value});
-    this.props.onFilterChange({fkey: this.props.fkey, val: e.target.value});
+    this.props.onFilterChange(e);
   }
 
   render() {
-    return <input key="input" id={this.props.id} className="form-control" type="text" onChange={this.handleChange} value={this.state.value} size="20" />;
+    return <input key="input" id={this.props.id} className="form-control" type="text" name={this.props.name} onChange={this.handleChange} value={this.props.value} size="20" />;
   }
 }
 
 class DateRangePicker extends React.Component {
   constructor(props) {
     super(props);
+
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const defaultFormat = (d) => `${months[d.getMonth()]}, ${d.getDate()} ${d.getFullYear()}`;
+
+    this.state = {
+      from: defaultFormat(new Date(props.fromDefault)),
+      to: defaultFormat(new Date(props.toDefault))
+    };
+
+    this.handleFilterChange = this.handleFilterChange.bind(this);
+  }
+
+  formatDate(dateString) {
+    const parsed = Date.parse(dateString);
+    if (!isNaN(parsed)) {
+      const d = new Date(parsed);
+      return d.toISOString().substring(0, 10);
+    } else {
+      return "";
+    }
   }
 
   componentDidMount() {
     const scope = this;
     $(ReactDOM.findDOMNode(this)).datepicker()
       .on('changeDate', function(e) {
-        scope.props.onFilterChange({fkey: 'from', val: $(this).find('#from').val()});
-        scope.props.onFilterChange({fkey: 'to', val: $(this).find('#to').val()});
+        scope.setState({
+          from: e.date[0],
+          to: e.date[1]
+        })
+        scope.props.onFilterChange({fkey: scope.props.fromFkey, val: scope.formatDate($(this).find('#from').val())});
+        scope.props.onFilterChange({fkey: scope.props.toFkey, val: scope.formatDate($(this).find('#to').val())});
       });
   }
 
-  render() {
+  handleFilterChange(e) {
+    // this.setState({[e.target.name]: e.target.value.toISOString().substring(0, 10)});
+    this.props.onFilterChange({fkey: this.props[e.target.name + "Fkey"], val: this.formatDate(e.target.value)});
+  }
 
+  render() {
     return (
       <div className="input-group input-group-sm input-daterange" data-date-format="M d, yyyy">
         <div key="from" className="input-group-prepend input-group-append">
           <span className="input-group-text">from</span>
         </div>
-        <DatePicker id="from" def={new Date(this.props.fromDefault)} fkey="startDate" onFilterChange={this.props.onFilterChange} />
+        <DatePicker id="from" def={new Date(this.props.fromDefault)} fkey={this.props.fromFkey} name="from" value={this.state["from"]} onFilterChange={this.handleFilterChange} />
         <div key="to" className="input-group-prepend input-group-append">
           <span className="input-group-text">to</span>
         </div>
-        <DatePicker id="to" def={new Date(this.props.toDefault)} fkey="endDate" onFilterChange={this.props.onFilterChange} />
+        <DatePicker id="to" def={new Date(this.props.toDefault)} fkey={this.props.toFkey} name="to" value={this.state["to"]} onFilterChange={this.handleFilterChange} />
       </div>
     );
+  }
+}
+
+class FilterGoButton extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    return (
+      <div className="input-group-append">
+        <button id="filterGoButton" className="btn btn-secondary" type="button" disabled={this.props.disabled} onClick={this.props.onClick}>
+          <img src="/icons/bootstrap-icons-1.0.0-alpha5/search.svg" />
+        </button>
+      </div>
+    )
   }
 }
 
 class FilterBar extends React.Component {
   constructor(props) {
     super(props)
-    this.filters = {};
+    this.filters = props.filterDefaults;
+    this.state = {
+      goButtonDisabled: true,
+      hashtagData: [],
+      usernameData: [],
+      languageData: []
+    };
 
     this.handleFilterChange = this.handleFilterChange.bind(this);
+    this.handleGoButtonClicked = this.handleGoButtonClicked.bind(this);
+  }
+
+  componentDidMount() {
+    $('.input-daterange').datepicker();
+    Promise.all([
+      fetch('/data/hashTags.json').then(response => response.json()).then(data => data.map(hashtag => hashtag)),
+      fetch('/data/usernames.json').then(response => response.json()).then(data => data.map(username => "@" + username)),
+      fetch('/data/languages.json').then(response => response.json()).then(data => data.map(language => {return { val: language["639-1"], label: language["ISO language name"]} }))
+    ])
+    .then(datum => this.setState({
+      hashtagData: datum[0],
+      usernameData: datum[1],
+      languageData: datum[2]
+    }))
   }
 
   handleFilterChange(e) {
-    // console.log(e.fkey + " changed to " + e.val);
-    this.filters[e.fkey] = e.val;
-    console.log(this.filters);
+    this.setState({
+      goButtonDisabled: false
+    });
+    this.props.onFilterChange(e);
+  }
+
+  handleGoButtonClicked(e) {
+    this.setState({
+      goButtonDisabled: true
+    });
+    this.props.onFilterSubmit();
   }
 
   render() {
@@ -117,15 +188,11 @@ class FilterBar extends React.Component {
                   <img src="/icons/Twitter-Logos/Twitter_Logo_Rshiefcolor.svg" height="20px" />
                 </span>
               </div>
-              <SearchDropdown id="hashtags" placeholder="Hashtags" dropdownData={this.props.hashtagData} fkey="hashtags" onFilterChange={this.handleFilterChange} />
-              <SearchDropdown id="usernames" placeholder="Usernames" dropdownData={this.props.usernameData} fkey="usernames" onFilterChange={this.handleFilterChange} />
-              <DateRangePicker fromDefault={this.props.fromDefault} toDefault={this.props.toDefault} onFilterChange={this.handleFilterChange} />
-              <Dropdown buttonLabel="languages" dropdownData={this.props.languagesData} defaultChecked={this.props.defaultLanguages} fkey="langList" onFilterChange={this.handleFilterChange} />
-              <div className="input-group-append">
-                <button id="filterGoButton" className="btn btn-secondary" type="button" disabled>
-                  <img src="/icons/bootstrap-icons-1.0.0-alpha5/search.svg" />
-                </button>
-              </div>
+              <SearchDropdown id="hashtags" placeholder="Hashtags" dropdownData={this.state.hashtagData} fkey="hashtags" onFilterChange={this.handleFilterChange} />
+              <SearchDropdown id="usernames" placeholder="Usernames" dropdownData={this.state.usernameData} fkey="usernames" onFilterChange={this.handleFilterChange} />
+              <DateRangePicker fromDefault={this.props.filterDefaults.startDate} toDefault={this.props.filterDefaults.endDate} fromFkey="startDate" toFkey="endDate" onFilterChange={this.handleFilterChange} />
+              <Dropdown buttonLabel="languages" dropdownData={this.state.languageData} defaultChecked={this.props.filterDefaults.langList} fkey="langList" onFilterChange={this.handleFilterChange} />
+              <FilterGoButton disabled={this.state.goButtonDisabled} onClick={this.handleGoButtonClicked} />
             </div>
           </form>
         </div>

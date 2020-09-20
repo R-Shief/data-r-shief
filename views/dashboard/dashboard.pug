@@ -10,7 +10,14 @@ html
       link(href="/stylesheets/dashboard.css", rel="stylesheet")
   body
     block content
-      include filterBar
+      //- include filterBar
+      div#root
+      div.container-fluid
+        ul#pills-tab.nav.nav-tabs.nav-fill.py-0(role="tablist")
+          each viz, idx in dashOpts.vizBar.vizs
+            - var classes = idx == 0 ? "nav-link active" : "nav-link";
+            li.nav-item
+              a(class= classes href= viz.id + "-tab" data-toggle="pill")= viz.name
       main#dash.container-fluid.tab-content(role="main")
         each viz, idx in dashOpts.vizBar.vizs
           - var classes = idx == 0 ? "viz tab-pane fade border border-top-0 rounded-bottom show active" : "viz tab-pane fade border border-top-0 rounded"

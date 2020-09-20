@@ -16,7 +16,6 @@ class SearchDropdown extends React.Component {
   }
 
   handleClickItem(e) {
-    console.log(e.target.id);
     this.setState({value: e.target.id});
     this.props.onFilterChange({fkey: this.props.fkey, val: e.target.id});
   }

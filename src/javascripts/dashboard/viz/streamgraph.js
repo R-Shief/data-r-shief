@@ -31,11 +31,19 @@ class Streamgraph extends Viz {
     this.margin = {top: 0, right: 20, bottom: 30, left: 20};
     this.numBins;
     this.svg;
-    this.dash = options.dash;
-    this.filterManager = this.dash.filterManager;
+    this.fetchExtension = options.fetcher;
     this.id = "#streamgraph";
     this.uriExtension = () => this.strategyFamilies[this.options.strategyFamily].uriExtension;
 
+    // create a refresh loop
+    this.live();
+  }
+
+  live() {
+    setTimeout(() => {
+      this.refresh();
+      this.live();
+    }, 1000);
   }
 
   static getViewOptions() {
@@ -51,9 +59,8 @@ class Streamgraph extends Viz {
 
   refresh() {
     return new Promise((resolve, reject) => {
-      this.dash.fetchExtension(this.uriExtension(), {method: 'GET'})
+      this.fetchExtension(this.uriExtension(), {method: 'GET'})
       .then(data => {
-
         if(data.length < 10) {resolve(this); return;}
 
         // reformat
