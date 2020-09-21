@@ -61,7 +61,7 @@ class Streamgraph extends Viz {
     return new Promise((resolve, reject) => {
       this.fetchExtension(this.uriExtension(), {method: 'GET'})
       .then(data => {
-        if(data.length < 10) {resolve(this); return;}
+        if(data.length < 10) {resolve(this); return data.length;}
 
         // reformat
         data = data.map(entry => ({occurrence: entry[0], hashtag: entry[1]}));
@@ -145,9 +145,11 @@ class Streamgraph extends Viz {
         let shouldBuild = typeof this.svg == "undefined";
         this.updateSVG(shouldBuild);
 
+        return data.length;
+
       })
-      .then(_ => {
-        this.props.onLoadChange({id: "streamgraph", isLoading: false});
+      .then(dataLength => {
+        if (dataLength > 10) this.props.onLoadChange({id: "streamgraph", isLoading: false});
         resolve(this);
       })
       .catch(err => reject(err))

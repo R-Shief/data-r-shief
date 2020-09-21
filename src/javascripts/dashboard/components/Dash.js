@@ -15,7 +15,8 @@ class Dash extends React.Component {
       vizClasses: [Streamgraph, Rankings],
       sampleCount: 0,
       sampleMethod: 'randomly',
-      totalCount: 87707630
+      totalCount: 87707630,
+      maxLimit: 50000
     };
 
     this.populate = this.populate.bind(this);
@@ -40,9 +41,13 @@ class Dash extends React.Component {
     return new Promise((resolve, reject) =>
       fetch(this.getURLWithFilters(this.state.filters), {method: 'PUT'})
       .then(response => response.json())
-      .then(rowsAffected => { // now up the page count once and do it all again
-        this.setState((state, props) => ({dataPage: state.dataPage + 1, sampleCount: state.sampleCount + rowsAffected.rowsAffected}));
-        resolve(this.populate());
+      .then(obj => { // now up the page count once and do it all again
+        let newCount;
+        this.setState((state, props) => {
+          newCount = state.sampleCount + obj.rowsAffected;
+          return {dataPage: state.dataPage + 1, sampleCount: newCount};
+        });
+        resolve(newCount < this.state.maxLimit && this.populate());
       })
       .catch(failure => reject(failure))
     ).catch(failure => console.log(failure));

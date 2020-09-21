@@ -7,7 +7,7 @@ let queryBuilder = require('./queryBuilder.js');
 // Tweak Zone
 
 let options = {
-  maxLimit: 500000,
+  maxLimit: 50000,
   populateStride: 1000
 };
 

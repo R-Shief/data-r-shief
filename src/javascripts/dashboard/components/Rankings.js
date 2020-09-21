@@ -24,9 +24,10 @@ class Rankings extends Viz {
 
     this.state = {
       strategyFamily: "hashtag",
-      strategy: this.strategyFamilies["hashtag"],
       dataObj: []
     };
+
+    this.strategy = () => this.strategyFamilies[this.state.strategyFamily];
 
     this.handleOptionClick = this.handleOptionClick.bind(this);
 
@@ -47,24 +48,23 @@ class Rankings extends Viz {
     }, 1000);
   }
 
-  handleOptionClick(pair, e) {
+  handleOptionClick({name, val}, e) {
     console.log("clicked");
-    this.setState({[pair.name]: pair.val});
+    this.setState({[name]: val});
     this.props.onLoadChange({id: "rankings", isLoading: true});
     this.refresh();
   }
 
   refresh() {
-    return this.fetchExtension(this.state.strategy.uriExtension, {method: 'GET'})
+    return this.fetchExtension(this.strategy().uriExtension, {method: 'GET'})
       .then(dataObj => this.setState({dataObj: dataObj}))
       .then(_ => {
         this.props.onLoadChange({id: "rankings", isLoading: false});
-        resolve(this);
       });
   }
 
   render() {
-    const strategy = this.state.strategy;
+    const strategy = this.strategy();
     const OptionButton = (props) => (
       <a className={"nav-link" + ((props.isActive) ? " active" : "")} id="hashtagStreamgraph" onClick={this.handleOptionClick.bind(this, {name: props.name, val: props.val})}>{props.label}</a>
     );
