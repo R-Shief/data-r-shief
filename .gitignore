@@ -4,3 +4,5 @@ public/data/_*
 logs/*
 #*.bundle.js
 *conf.*
+bigData
+!/**/.gitkeep

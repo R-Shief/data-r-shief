@@ -59,7 +59,7 @@ class Dash extends React.Component {
 
   handleFilterChange(e) {
     this.setState((state, props) => {
-      const newFilters = Object.assign({}, state.filters, {[e.fkey]: e.val});
+      const newFilters = Object.assign({}, state.filters, {[e.fkey]: e.val != "" ? e.val : "*"});
       return {filters: newFilters};
     });
   }

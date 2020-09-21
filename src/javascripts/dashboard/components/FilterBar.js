@@ -1,4 +1,5 @@
 let SearchDropdown = require("./SearchDropdown.js");
+let oboe = require('oboe');
 
 class Dropdown extends React.Component {
   constructor(props) {
@@ -146,19 +147,19 @@ class FilterBar extends React.Component {
 
     this.handleFilterChange = this.handleFilterChange.bind(this);
     this.handleGoButtonClicked = this.handleGoButtonClicked.bind(this);
+    this.handleLiveFilterChange = this.handleLiveFilterChange.bind(this);
   }
 
   componentDidMount() {
     $('.input-daterange').datepicker();
+
     Promise.all([
       fetch('/data/hashTags.json').then(response => response.json()).then(data => data.map(hashtag => hashtag)),
-      fetch('/data/usernames.json').then(response => response.json()).then(data => data.map(username => "@" + username)),
       fetch('/data/languages.json').then(response => response.json()).then(data => data.map(language => {return { val: language["639-1"], label: language["ISO language name"]} }))
     ])
     .then(datum => this.setState({
       hashtagData: datum[0],
-      usernameData: datum[1],
-      languageData: datum[2]
+      languageData: datum[1]
     }))
   }
 
@@ -167,6 +168,15 @@ class FilterBar extends React.Component {
       goButtonDisabled: false
     });
     this.props.onFilterChange(e);
+  }
+
+  handleLiveFilterChange(e) {
+    fetch(window.location.href + '/' + (e.val != "" ? e.val : "*"))
+      .then(response => response.json())
+      .then(data => {
+        this.setState({usernameData: data});
+      });
+    this.handleFilterChange(e);
   }
 
   handleGoButtonClicked(e) {
@@ -188,7 +198,7 @@ class FilterBar extends React.Component {
                 </span>
               </div>
               <SearchDropdown id="hashtags" placeholder="Hashtags" dropdownData={this.state.hashtagData} fkey="hashtags" onFilterChange={this.handleFilterChange} />
-              <SearchDropdown id="usernames" placeholder="Usernames" dropdownData={this.state.usernameData} fkey="usernames" onFilterChange={this.handleFilterChange} />
+              <SearchDropdown id="usernames" placeholder="Usernames" dropdownData={this.state.usernameData} fkey="usernames" onFilterChange={this.handleLiveFilterChange} />
               <DateRangePicker fromDefault={this.props.filterDefaults.startDate} toDefault={this.props.filterDefaults.endDate} fromFkey="startDate" toFkey="endDate" onFilterChange={this.handleFilterChange} />
               <Dropdown buttonLabel="languages" dropdownData={this.state.languageData} defaultChecked={this.props.filterDefaults.langList} fkey="langList" onFilterChange={this.handleFilterChange} />
               <FilterGoButton disabled={this.state.goButtonDisabled} onClick={this.handleGoButtonClicked} />
