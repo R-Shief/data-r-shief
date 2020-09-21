@@ -22,9 +22,9 @@ class SearchDropdown extends React.Component {
 
   render() {
     return (
-      <div key="dropdown" className="input-group-prepend input-group-append">
-        <input key="input" className="form-control form-control-sm rounded-0" data-toggle="dropdown" autoComplete="off" id={this.inputId} type="search" placeholder={this.props.placeholder} size="20" onChange={this.handleValueChange} value={this.state.value} />
-        <button className="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split rounded-0" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">
+      <div key="dropdown" className="input-group-prepend input-group-append flex-grow-1">
+        <input key="input" className="form-control form-control-sm rounded-0 flex-grow-1" data-toggle="dropdown" autoComplete="off" id={this.inputId} type="search" placeholder={this.props.placeholder} size="20" onChange={this.handleValueChange} value={this.state.value} />
+        <button className="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split ml-auto rounded-0" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">
           <span className="sr-only">Toggle Dropdown</span>
         </button>
         <div className="dropdown-menu" id={this.dropdownId} style={{minHeight: "3rem", maxHeight: "22rem", overflowY: "scroll"}}>
