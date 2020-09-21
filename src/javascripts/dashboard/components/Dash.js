@@ -64,9 +64,9 @@ class Dash extends React.Component {
     this.populate();
   }
 
-  componentDidUpdate() {
-    console.log(this.state);
-  }
+  // componentDidUpdate() {
+  //   console.log(this.state);
+  // }
 
   render() {
     return (

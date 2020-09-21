@@ -1,5 +1,6 @@
 let Viz = require('./Viz.js');
 let d3 = require('d3');
+let VizOptionBar = require('./VizOptionBar.js');
 
 class Streamgraph extends Viz {
   constructor(props) {
@@ -14,11 +15,9 @@ class Streamgraph extends Viz {
       }
     };
 
-    let defaultOptions = {
+    this.state = {
       strategyFamily: "hashtag"
     };
-
-    this.options = defaultOptions;
 
     this.svg;
     this.fetchExtension = props.fetcher;
@@ -27,9 +26,11 @@ class Streamgraph extends Viz {
     this.height = props.bounds.height;
     this.margin = {top: 0, right: 20, bottom: 30, left: 20};
 
-    this.uriExtension = () => this.strategyFamilies[this.options.strategyFamily].uriExtension;
+    this.uriExtension = () => this.strategyFamilies[this.state.strategyFamily].uriExtension;
 
     this.svgRef = React.createRef();
+
+    this.handleOptionClick = this.handleOptionClick.bind(this);
   }
 
   componentDidMount() {
@@ -38,9 +39,22 @@ class Streamgraph extends Viz {
 
   live() {
     setTimeout(() => {
-      this.refresh()
-        .then(() => this.live());
+        if (this.props.isActive) {
+          this.refresh()
+            .then(() => this.live());
+        } else {
+          this.live();
+        }
     }, 1000);
+  }
+
+  handleOptionClick(pair, e) {
+    console.log("clicked");
+    this.setState({[pair.name]: pair.val});
+    this.props.onLoadChange({id: "streamgraph", isLoading: true});
+    this.series = [];
+    this.updateSVG(true)
+    .then(() => this.refresh());
   }
 
   refresh() {
@@ -131,6 +145,9 @@ class Streamgraph extends Viz {
         let shouldBuild = typeof this.svg == "undefined";
         this.updateSVG(shouldBuild);
 
+      })
+      .then(_ => {
+        this.props.onLoadChange({id: "streamgraph", isLoading: false});
         resolve(this);
       })
       .catch(err => reject(err))
@@ -140,11 +157,9 @@ class Streamgraph extends Viz {
   updateSVG(build=false) {
     return new Promise((resolve, reject) => {
       if (build) {
-        // this.svg = d3.create("svg")
-        //   .attr("viewBox", [0, 0, this.width, this.height]);
-
         this.svg = d3.select(this.svgRef.current);
 
+        if (this.g) this.g.remove();
         this.g = this.svg.append("g");
 
         this.t = this.svg.transition()
@@ -177,16 +192,21 @@ class Streamgraph extends Viz {
   }
 
   render() {
+    const OptionButton = (props) => (
+      <a className={"nav-link" + ((props.isActive) ? " active" : "")} id="hashtagStreamgraph" onClick={this.handleOptionClick.bind(this, {name: props.name, val: props.val})}>{props.label}</a>
+    );
+
     return (
-      <svg ref={this.svgRef} viewBox={`0 0 ${this.width} ${this.height}`}></svg>
+      <div id="streamgraph">
+        <VizOptionBar id="streamgraph-options">
+          <OptionButton isActive={this.state.strategyFamily=="hashtag"} name="strategyFamily" val="hashtag" onClick={this.handleOptionClick} label="By Hashtag" />
+          <OptionButton isActive={this.state.strategyFamily=="language"} name="strategyFamily" val="language" onClick={this.handleOptionClick} label="By Language" />
+        </VizOptionBar>
+        <svg ref={this.svgRef} viewBox={`0 0 ${this.width} ${this.height}`}></svg>
+      </div>
     );
   }
 }
-
-Streamgraph.optionComponents =  [
-  <a className="nav-link active" id="hashtagStreamgraph">By Hashtag</a>,
-  <a className="nav-link" id="languageStreamgraph">By Language</a>
-];
 
 Streamgraph.info = {
   id: "streamgraph",

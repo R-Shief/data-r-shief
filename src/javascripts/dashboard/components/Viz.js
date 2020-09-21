@@ -1,7 +1,6 @@
 class Viz extends React.Component {
   constructor(props) {
     super(props)
-
   }
 
   static getOptionComponents() {
@@ -13,7 +12,7 @@ class Viz extends React.Component {
   }
 
   render() {
-
+    return null;
   }
 }
 
