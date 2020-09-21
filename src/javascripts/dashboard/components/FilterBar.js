@@ -3,7 +3,6 @@ let SearchDropdown = require("./SearchDropdown.js");
 class Dropdown extends React.Component {
   constructor(props) {
     super(props);
-    // this.state = Object.fromEntries(props.dropdownData.map(({val, label}) => [val, props.defaultChecked.includes(val)]));
     this.state = Object.fromEntries(props.defaultChecked.map(lang => [lang, true]));
 
     this.handleChange = this.handleChange.bind(this);
