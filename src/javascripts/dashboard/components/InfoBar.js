@@ -1,10 +1,15 @@
+let ClipboardJS = require('clipboard');
+
 class ShareModal extends React.Component {
   constructor(props) {
     super(props);
   }
 
-  render() {
+  componentDidMount() {
+    let clipboard = new ClipboardJS('.clippable');
+  }
 
+  render() {
     const ShareEmbed = (props) => (
       <div className="input-group input-group-sm mb-2">
         <div className="input-group-prepend">
@@ -12,7 +17,7 @@ class ShareModal extends React.Component {
             <img src="icons/bootstrap-icons-1.0.0-alpha5/code.svg" />
           </span>
         </div>
-        <textarea className="form-control" rows="3" readOnly size="30" defaultValue={`<iframe frameborder="0" src="${props.url}"></iframe>`} />
+        <textarea id="shareembed" className="form-control" rows="3" readOnly size="30" defaultValue={`<iframe frameborder="0" src="${props.url}"></iframe>`} />
         <div className="input-group-append">
           <button className="btn clippable btn-outline-secondary" data-clipboard-target="#shareembed">
             Copy
@@ -28,7 +33,7 @@ class ShareModal extends React.Component {
             <img src="icons/bootstrap-icons-1.0.0-alpha5/link-45deg.svg" />
           </span>
         </div>
-        <input className="form-control" type="text" readOnly value={props.url} size="30" />
+        <input id="sharelink" className="form-control" type="text" readOnly value={props.url} size="30" />
         <div className="input-group-append">
           <button className="btn clippable btn-outline-secondary" data-clipboard-target="#sharelink">
             Copy

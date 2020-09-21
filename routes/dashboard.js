@@ -1,8 +1,6 @@
 var express = require('express');
 var database = require('../database.js');
-var dashDefaults = require('../config/dashDefaults.js');
-var languages = require('../dist/data/languages.js');
-var iso_3166 = require('../dist/data/iso-3166.js');
+var filterDefaults = require('../config/filterDefaults.js');
 var router = express.Router();
 var filters = {};
 
@@ -10,10 +8,7 @@ router.use(express.json());
 
 router.get('/', function(req, res, next) {
   res.render('dashboard/dashboard', {
-    title: "R-Shief Dashboard",
-    dashOpts: dashDefaults,
-    languages: languages,
-    countries: iso_3166
+    filterDefaults: filterDefaults
   }, function(err, html) {
       console.log(err);
       res.send(html);
@@ -23,10 +18,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/:langList/:startDate/:endDate/:hashtags/:usernames/:page', function(req, res, next) {
   res.render('dashboard/dashboard', {
-    title: "R-Shief Dashboard",
-    dashOpts: dashDefaults,
-    languages: languages,
-    countries: iso_3166
+    filterDefaults: Object.assign(filterDefaults, req.params)
   }, function(err, html) {
       console.log(err);
       res.send(html);
