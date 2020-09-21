@@ -82,8 +82,6 @@ class VizViewer extends React.Component {
         return JSON.parse(json);
       })
       .then(data => {
-        // this.info.sampleCount += typeof data.length == "number" ? data.length : this.info.sampleCount;
-        // updateInfoBar();
         return data;
       })
   }

@@ -47,7 +47,7 @@ class Database {
           console.log(sessionPopulateSQL);
           connection.sql(sessionPopulateSQL).execute()
           .then( results => {
-            resolve("Success!");
+            resolve(results.getAffectedItemsCount());
             connection.close();
           })
           .catch(err => console.log(err));

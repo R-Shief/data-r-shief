@@ -73,7 +73,7 @@ class InfoBar extends React.Component {
       <div className="card">
         <div className="card-body d-flex align-items-center px-0 pl-3 py-0">
           <p className="my-0">
-            Using <strong>{this.props.sampleCount}</strong> samples taken <strong>{this.props.sampleMethod}</strong> from <strong>{this.props.totalCount}</strong> tweets
+            Using <strong>{this.props.sampleCount.toLocaleString()}</strong> samples taken <strong>{this.props.sampleMethod}</strong> from <strong>{this.props.totalCount.toLocaleString()}</strong> tweets
           </p>
           <button type="button" className="btn btn-sm btn-outline-secondary ml-auto" data-toggle="modal" data-target="#shareModal">
             <img src="icons/bootstrap-icons-1.0.0-alpha5/share-fill.svg" />

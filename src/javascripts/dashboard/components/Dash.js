@@ -13,12 +13,10 @@ class Dash extends React.Component {
       filters: props.filterDefaults,
       dataPage: 0,
       vizClasses: [Streamgraph, Rankings],
-      sampleCount: '0',
+      sampleCount: 0,
       sampleMethod: 'randomly',
-      totalCount: '87,707,630'
+      totalCount: 87707630
     };
-
-    // this.vizClasses = [Streamgraph, Rankings];
 
     this.populate = this.populate.bind(this);
     this.getURLWithFilters = this.getURLWithFilters.bind(this);
@@ -27,15 +25,23 @@ class Dash extends React.Component {
   }
 
   componentDidMount() {
-
     this.populate();
+  }
+
+  updateInfoBar() {
+      this.options.infoBar.forEach(field => {
+        let val = this.info[field.infoKey];
+        val = typeof val == "number" ? Number(val).toLocaleString() : val;
+        $(field.id).text(val);
+      })
   }
 
   populate() {
     return new Promise((resolve, reject) =>
       fetch(this.getURLWithFilters(this.state.filters), {method: 'PUT'})
-      .then(_ => { // now up the page count once and do it all again, this time with 'build' set to false
-        this.setState((state, props) => ({dataPage: state.dataPage + 1}));
+      .then(response => response.json())
+      .then(rowsAffected => { // now up the page count once and do it all again
+        this.setState((state, props) => ({dataPage: state.dataPage + 1, sampleCount: state.sampleCount + rowsAffected.rowsAffected}));
         resolve(this.populate());
       })
       .catch(failure => reject(failure))

@@ -29,7 +29,7 @@ router.put('/:langList/:startDate/:endDate/:hashtags/:usernames/:page', function
   if (req.params.page == 0) database.dePopulateSession(req.sessionID);
   var result = Promise.resolve()
   .then(_ => database.populateSession(req.sessionID, req.params))
-  .then(success => res.sendStatus(200))
+  .then(success => res.json({rowsAffected: success}))
   .catch(failure => res.send(failure));
 });
 
