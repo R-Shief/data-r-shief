@@ -1,5 +1,5 @@
 let Viz = require('./Viz.js');
-let VizOptionBar = require('./VizOptionBar.js');
+let {OptionButton, VizOptionBar} = require('./VizOptionBar.js');
 
 class Rankings extends Viz {
   constructor(props) {
@@ -65,9 +65,9 @@ class Rankings extends Viz {
 
   render() {
     const strategy = this.strategy();
-    const OptionButton = (props) => (
-      <a className={"nav-link" + ((props.isActive) ? " active" : "")} id="hashtagStreamgraph" onClick={this.handleOptionClick.bind(this, {name: props.name, val: props.val})}>{props.label}</a>
-    );
+    // const OptionButton = (props) => (
+    //   <a className={"nav-link" + ((props.isActive) ? " active" : "")} id="hashtagStreamgraph" onClick={this.handleOptionClick.bind(this, {name: props.name, val: props.val})}>{props.label}</a>
+    // );
     return (
       <div id="rankings">
         <VizOptionBar id="rankings-options">

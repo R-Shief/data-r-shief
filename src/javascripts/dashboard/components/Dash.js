@@ -2,8 +2,9 @@ let FilterBar = require('./FilterBar.js');
 let VizViewer = require('./VizViewer.js');
 let InfoBar = require('./InfoBar.js');
 
-let Streamgraph = require('./Streamgraph.js');
-let Rankings = require('./rankings.js');
+let Streamgraph = require('./viz/Streamgraph.js');
+let Rankings = require('./viz/rankings.js');
+let MapViz = require('./viz/MapViz.js');
 
 class Dash extends React.Component {
   constructor(props) {
@@ -12,7 +13,7 @@ class Dash extends React.Component {
     this.state = {
       filters: props.filterDefaults,
       dataPage: 0,
-      vizClasses: [Streamgraph, Rankings],
+      vizClasses: [Streamgraph, Rankings, MapViz],
       sampleCount: 0,
       sampleMethod: 'randomly',
       totalCount: 87707630,

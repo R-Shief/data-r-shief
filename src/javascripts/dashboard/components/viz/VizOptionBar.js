@@ -1,3 +1,7 @@
+const OptionButton = (props) => (
+  <a className={"nav-link" + ((props.isActive) ? " active" : "")} id="hashtagStreamgraph" onClick={props.onClick.bind(this, {name: props.name, val: props.val})}>{props.label}</a>
+);
+
 class VizOptionBar extends React.Component {
   constructor(props) {
     super(props);
@@ -22,4 +26,7 @@ class VizOptionBar extends React.Component {
   }
 }
 
-module.exports = VizOptionBar;
+module.exports = {
+  OptionButton: OptionButton,
+  VizOptionBar: VizOptionBar
+};

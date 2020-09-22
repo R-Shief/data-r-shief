@@ -1,6 +1,6 @@
 let Viz = require('./Viz.js');
 let d3 = require('d3');
-let VizOptionBar = require('./VizOptionBar.js');
+let {OptionButton, VizOptionBar} = require('./VizOptionBar.js');
 
 class Streamgraph extends Viz {
   constructor(props) {
@@ -194,9 +194,9 @@ class Streamgraph extends Viz {
   }
 
   render() {
-    const OptionButton = (props) => (
-      <a className={"nav-link" + ((props.isActive) ? " active" : "")} id="hashtagStreamgraph" onClick={this.handleOptionClick.bind(this, {name: props.name, val: props.val})}>{props.label}</a>
-    );
+    // const OptionButton = (props) => (
+    //   <a className={"nav-link" + ((props.isActive) ? " active" : "")} id="hashtagStreamgraph" onClick={this.handleOptionClick.bind(this, {name: props.name, val: props.val})}>{props.label}</a>
+    // );
 
     return (
       <div id="streamgraph">

@@ -63,6 +63,9 @@ router.get('/:langList/:startDate/:endDate/:hashtags/:usernames/:page/:fetch', f
       case 'urlRanking':
         proc = 'urlCounts';
         break;
+      case 'choropleth':
+        proc = 'coords';
+        break;
       default:
         throw new Error('Invalid URL filter fetch parameter.');
     };

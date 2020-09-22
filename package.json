@@ -24,6 +24,7 @@
     "morgan": "~1.9.1",
     "mysql": "^2.18.1",
     "oboe": "^2.1.5",
+    "php-serialize": "^4.0.2",
     "pug": "2.0.0-beta11",
     "three": "^0.118.3",
     "underscore": "^1.10.2"
