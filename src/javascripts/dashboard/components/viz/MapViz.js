@@ -124,14 +124,16 @@ class MapViz extends Viz {
 
         // console.log(data);
 
+        const numBins = 7;
+
         const extent = d3.extent(data.values());
         const extentRange = extent[1] - extent[0];
-        const step = extentRange / 5;
+        const step = extentRange / numBins;
         const range = d3.range(...extent, step).map((i) => i == 0 ? 0 : Math.log(i));
-        console.log([extent, extentRange, step, range].join(" : "));
+        // console.log([extent, extentRange, step, range].join(" : "));
         const colorScale = d3.scaleThreshold()
           .domain(range)
-          .range(d3.schemeBlues[7]);
+          .range(d3.schemeBlues[numBins]);
 
         this.g.selectAll("path")
           .data(this.topo.features)
@@ -143,12 +145,19 @@ class MapViz extends Viz {
               .attr("fill", function(d) {
                 d.total = data.get(d.id) || 0;
                 return colorScale(d.total);
-              }),
-            update => update.transition(this.t)
-            .attr("fill", function(d) {
-              d.total = data.get(d.id) || 0;
-              return colorScale(d.total);
-            })
+              })
+              .append("title")
+                .text(d => `${d.properties.name}: ${data.get(d.id) || 0}`),
+            update => {
+              update.transition(this.t)
+              .attr("fill", function(d) {
+                d.total = data.get(d.id) || 0;
+                return colorScale(d.total);
+              });
+              update.select("title")
+              .transition(this.t)
+                .text(d => `${d.properties.name}: ${data.get(d.id) || 0}`)
+            }
           );
     })
   }
@@ -169,14 +178,15 @@ class MapViz extends Viz {
   render() {
     return (
       <div id="mapViz" className="bg-dark">
-        <VizOptionBar id="mapViz-options">
-          <OptionButton isActive={this.state.strategyFamily=="choropleth"} name="strategyFamily" val="choropleth" onClick={this.handleOptionClick} label="Choropleth" />
-          <OptionButton isActive={this.state.strategyFamily=="hashtag"} name="strategyFamily" val="hashtag" onClick={this.handleOptionClick} label="Hashtag Bubbles" />
-        </VizOptionBar>
         <svg ref={this.svgRef} viewBox={`0 0 ${this.width} ${this.height}`}></svg>
       </div>
     );
   }
+
+  // <VizOptionBar id="mapViz-options">
+  //   <OptionButton isActive={this.state.strategyFamily=="choropleth"} name="strategyFamily" val="choropleth" onClick={this.handleOptionClick} label="Country Choropleth" />
+  //   <OptionButton isActive={this.state.strategyFamily=="hashtag"} name="strategyFamily" val="hashtag" onClick={this.handleOptionClick} label="Hashtag Bubbles" />
+  // </VizOptionBar>
 
 }
 
