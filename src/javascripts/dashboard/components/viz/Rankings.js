@@ -1,5 +1,5 @@
 let Viz = require('./Viz.js');
-let {OptionButton, VizOptionBar} = require('./VizOptionBar.js');
+let {OptionButton, VizOptionBar} = require('./VizOptions.js');
 
 class Rankings extends Viz {
   constructor(props) {
@@ -10,14 +10,31 @@ class Rankings extends Viz {
     this.strategyFamilies = {
       hashtag: {
         uriExtension: 'htRanking',
-        headerRowFn: (col) => ["#","Hashtag","Count"][col],
-        rowFn: (val) => val
+        headers: ["#", "Hashtag", "Count"],
+        rowFn: (cols, idx) => {
+          let ret = [...cols];
+          ret.unshift(idx + 1);
+          return ret;
+        }
       },
       url: {
         uriExtension: 'urlRanking',
-        headerRowFn: (col) => ["#","URL","Count"][col],
-        rowFn: (val) => {
-          return (val.toString().substring(0, 4) == "http") ? (<a href={val} target="_blank">{val}</a>) : val;
+        headers: ["#", "URL", "Count"],
+        rowFn: (cols, idx) => {
+          let ret = [...cols];
+          ret.unshift(idx + 1);
+          ret[1] = (ret[1].toString().substring(0, 4) == "http") ? (<a href={ret[1]} target="_blank">{ret[1]}</a>) : ret[1];
+          return ret;
+        }
+      },
+      tweets: {
+        uriExtension: 'tweetList',
+        headers: ["Username", "Tweet", "Origin", "Time Created"],
+        rowFn: (cols, idx) => {
+          let ret = [...cols];
+          ret[2] = ret[2].match(/&gt.*&lt/g).substr(4).substr(-1, -3);
+          ret[3] = new Date(ret[3]).toLocaleString();
+          return ret;
         }
       }
     };
@@ -65,32 +82,32 @@ class Rankings extends Viz {
 
   render() {
     const strategy = this.strategy();
-    // const OptionButton = (props) => (
-    //   <a className={"nav-link" + ((props.isActive) ? " active" : "")} id="hashtagStreamgraph" onClick={this.handleOptionClick.bind(this, {name: props.name, val: props.val})}>{props.label}</a>
-    // );
     return (
       <div id="rankings">
         <VizOptionBar id="rankings-options">
           <OptionButton isActive={this.state.strategyFamily=="hashtag"} name="strategyFamily" val="hashtag" onClick={this.handleOptionClick} label="Top Hashtags" />
           <OptionButton isActive={this.state.strategyFamily=="url"} name="strategyFamily" val="url" onClick={this.handleOptionClick} label="Top URLs" />
+          <OptionButton isActive={this.state.strategyFamily=="tweets"} name="strategyFamily" val="tweets" onClick={this.handleOptionClick} label="Tweets" />
         </VizOptionBar>
-        <div className="table-responsive-sm" id="rankingsTableWrapper" style={{height: "440px", overflowY: "scroll"}}>
-          <table className="table-sm table-striped" style={{height: "450px"}} id="rankingsTable">
-            <thead>
+        <div className="table-responsive-sm" id="rankingsTableWrapper" style={{height: "490px"}}>
+          <table className="table table-striped table-hover mb-0" id="rankingsTable" style={{height: "440px"}}>
+            <thead style={{tableLayout: "fixed", width: "100%", display: "table"}}>
               <tr>
-                <th scope="col">{strategy.headerRowFn(0)}</th>
-                <th scope="col">{strategy.headerRowFn(1)}</th>
-                <th scope="col">{strategy.headerRowFn(2)}</th>
+                {strategy.headers.map((col, idx) => (<th key={idx} scope="col">{col}</th>))}
               </tr>
             </thead>
-            <tbody>
-              {this.state.dataObj.map(([hashtag, count], idx) => (
-                <tr key={hashtag}>
-                  <th scope="row">{strategy.rowFn(idx + 1)}</th>
-                  <td>{strategy.rowFn(hashtag)}</td>
-                  <td>{strategy.rowFn(count)}</td>
-                </tr>
-              ))}
+            <tbody style={{display: "block", height: "440px", overflowY: "scroll", tableLayout: "fixed", width: "100%"}}>
+              {this.state.dataObj.map((cols, idx) => {
+                const newCols = strategy.rowFn(cols, idx);
+                return (
+                  <tr key={cols[0]} style={{display: "table", tableLayout: "fixed", width:"100%"}}>
+                    <th scope="row">{newCols[0]}</th>
+                    {newCols.filter((_, idx) => idx != 0).map((col, idx) => (
+                      <td key={idx}>{col}</td>
+                    ))}
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -106,7 +123,7 @@ Rankings.optionComponents = [
 
 Rankings.info = {
   id: "rankings",
-  name: "Rankings"
+  name: "Lists"
 }
 
 module.exports = Rankings;

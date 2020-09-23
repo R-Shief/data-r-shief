@@ -3,6 +3,7 @@ var database = require('../database.js');
 var filterDefaults = require('../config/filterDefaults.js');
 var router = express.Router();
 var usernames = require('../bigData/usernames.json');
+var procMap = require('../config/procMap.js');
 
 router.use(express.json());
 
@@ -43,32 +44,8 @@ router.get('/:langList/:startDate/:endDate/:hashtags/:usernames/:page/:fetch', f
   res.setHeader('Content-Type', 'application/json');
 
   (new Promise( (resolve, reject) => {
-    let proc;
-    switch (req.params.fetch) {
-      case 'uStreamgraph':
-        proc = 'userOccurrences';
-        break;
-      case 'uCirclePacking':
-        proc = 'users';
-        break;
-      case 'htStreamgraph':
-        proc = 'hashtagOccurrences';
-        break;
-      case 'lgStreamgraph':
-        proc = 'languageOccurrences';
-        break;
-      case 'htRanking':
-        proc = 'hashtagCounts';
-        break;
-      case 'urlRanking':
-        proc = 'urlCounts';
-        break;
-      case 'choropleth':
-        proc = 'coords';
-        break;
-      default:
-        throw new Error('Invalid URL filter fetch parameter.');
-    };
+    let proc = procMap[req.params.fetch];
+    if (!proc) throw new Error('Invalid URL filter fetch parameter.');
     resolve(
       database.fetchDbResults(req.sessionID, proc)
     );

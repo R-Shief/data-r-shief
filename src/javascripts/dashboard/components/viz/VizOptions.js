@@ -14,7 +14,7 @@ class VizOptionBar extends React.Component {
           <div id="vizToggles" className="collapse navbar-collapse show">
             <ul id="pills-tab" className="navbar-nav nav nav-pills">
               {this.props.children.map((optionComponent, idx) => (
-                <li className="nav-item">
+                <li key={idx} className="nav-item">
                   {optionComponent}
                 </li>
               ))}

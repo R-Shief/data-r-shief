@@ -1,6 +1,6 @@
 let Viz = require('./Viz.js');
 let d3 = require('d3');
-let {OptionButton, VizOptionBar} = require('./VizOptionBar.js');
+let {OptionButton, VizOptionBar} = require('./VizOptions.js');
 
 class Streamgraph extends Viz {
   constructor(props) {

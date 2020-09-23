@@ -70,7 +70,7 @@ class InfoBar extends React.Component {
 
   render() {
     return [
-      <div className="card">
+      <div key="infobar" className="card">
         <div className="card-body d-flex align-items-center px-0 pl-3 py-0">
           <p className="my-0">
             Using <strong>{this.props.sampleCount.toLocaleString()}</strong> samples taken <strong>{this.props.sampleMethod}</strong> from <strong>{this.props.totalCount.toLocaleString()}</strong> tweets
@@ -80,7 +80,7 @@ class InfoBar extends React.Component {
           </button>
         </div>
       </div>,
-      <ShareModal url={this.props.getUrl()} />
+      <ShareModal key="shareModal" url={this.props.getUrl()} />
     ];
   }
 }

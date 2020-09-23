@@ -1,6 +1,6 @@
 let Viz = require('./Viz.js');
 let d3 = require('d3');
-let {OptionButton, VizOptionBar} = require('./VizOptionBar.js');
+let {OptionButton, VizOptionBar} = require('./VizOptions.js');
 // let PHPUnserialize = require('php-unserialize');
 let {unserialize} = require('php-serialize');
 

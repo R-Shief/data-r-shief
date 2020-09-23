@@ -16,7 +16,7 @@ class VizTabs extends React.Component {
       <div className="container-fluid">
         <ul ref={this.tabRef} id="pills-tab" className="nav nav-tabs nav-fill py-0" role="tablist">
           {this.props.vizInfos.map((vizInfo, idx) => (
-            <li className="nav-item">
+            <li key={vizInfo.id} className="nav-item">
               <a className={"nav-link" + (idx == 0 ? " active" : "")} name={vizInfo.id} href={"#" + vizInfo.id + "-tab"} data-toggle="pill">
                 {vizInfo.name}
               </a>
@@ -91,12 +91,12 @@ class VizViewer extends React.Component {
 
   render() {
     return [
-      <VizTabs onTabSwitch={this.handleTabSwitch} vizInfos={this.props.vizClasses.map(vizClass => vizClass.getInfo())} />,
-      <main id="dash" className="container-fluid tab-content" role="main">
+      <VizTabs key="vizTabs" onTabSwitch={this.handleTabSwitch} vizInfos={this.props.vizClasses.map(vizClass => vizClass.getInfo())} />,
+      <main key="vizViews" id="dash" className="container-fluid tab-content" role="main">
         {this.props.vizClasses.map((VizClass, idx) => {
           const vizInfos = VizClass.getInfo();
           return (
-            <div className={"viz tab-pane fade border border-top-0 rounded-bottom" + (idx == 0 ? " show active" : "")} id={vizInfos.id + "-tab"} role="tabpanel" aria-labelledby={vizInfos.id + "-tab"}>
+            <div key={vizInfos.id + "-tab"} className={"viz tab-pane fade border border-top-0 rounded-bottom" + (idx == 0 ? " show active" : "")} id={vizInfos.id + "-tab"} role="tabpanel" aria-labelledby={vizInfos.id + "-tab"}>
               <VizClass isActive={vizInfos.id == this.state.activeViz} fetcher={this.fetchExtension} bounds={this.bounds} onLoadChange={this.handleLoadChange} />
               {(this.state.isLoading[vizInfos.id] || !Object.keys(this.state.isLoading).includes(vizInfos.id)) &&
                 <VizSpinner id={vizInfos.id} />
