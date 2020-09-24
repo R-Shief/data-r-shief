@@ -1,4 +1,5 @@
 let ClipboardJS = require('clipboard');
+let OverviewModal = require('./OverviewModal.js');
 
 class ShareModal extends React.Component {
   constructor(props) {
@@ -46,7 +47,7 @@ class ShareModal extends React.Component {
       <div className="modal fade" id="shareModal" tabIndex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
-            <div className="modal-header">
+            <div className="modal-header py-2">
               <h5 className="modal-title" id="shareModalLabel">Share</h5>
               <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
@@ -75,12 +76,18 @@ class InfoBar extends React.Component {
           <p className="my-0">
             Using <strong>{this.props.sampleCount.toLocaleString()}</strong> filtered samples taken <strong>{this.props.sampleMethod}</strong> (<strong>{(this.props.sampleCount / this.props.totalCount).toLocaleString('en-US', {style: "percent", minimumFractionDigits: 3})}</strong>)
           </p>
-          <button type="button" className="btn btn-sm btn-outline-secondary ml-auto" data-toggle="modal" data-target="#shareModal">
-            <img src="icons/bootstrap-icons-1.0.0-alpha5/share-fill.svg" />
-          </button>
+          <div className="btn-group ml-auto" role="group" aria-label="Info Buttons">
+            <button type="button" className="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#shareModal">
+              <img src="icons/bootstrap-icons-1.0.0-alpha5/share-fill.svg" />
+            </button>
+            <button type="button" className="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#overviewModal">
+              <img src="icons/bootstrap-icons-1.0.0-alpha5/info.svg" />
+            </button>
+          </div>
         </div>
       </div>,
-      <ShareModal key="shareModal" url={this.props.getUrl()} />
+      <ShareModal key="shareModal" url={this.props.getUrl()} />,
+      <OverviewModal key="overviewModal" />
     ];
   }
 }

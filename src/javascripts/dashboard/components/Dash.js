@@ -1,7 +1,6 @@
 let FilterBar = require('./FilterBar.js');
 let VizViewer = require('./VizViewer.js');
 let InfoBar = require('./InfoBar.js');
-let OverviewModal = require('./OverviewModal.js');
 
 let Streamgraph = require('./viz/Streamgraph.js');
 let Rankings = require('./viz/rankings.js');
@@ -83,7 +82,6 @@ class Dash extends React.Component {
         <footer className="container-fluid mt-1">
           <InfoBar sampleCount={this.state.sampleCount} sampleMethod={this.state.sampleMethod} totalCount={this.state.totalCount} getUrl={this.getURLWithFilters} />
         </footer>
-        <OverviewModal show="true" />
       </div>
     );
   }

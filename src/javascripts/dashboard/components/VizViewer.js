@@ -14,7 +14,7 @@ class VizTabs extends React.Component {
   render() {
     return (
       <div className="container-fluid">
-        <ul ref={this.tabRef} id="pills-tab" className="nav nav-tabs nav-fill py-0" role="tablist">
+        <ul ref={this.tabRef} id="vizTabs" className="nav nav-tabs nav-fill py-0" role="tablist">
           {this.props.vizInfos.map((vizInfo, idx) => (
             <li key={vizInfo.id} className="nav-item">
               <a className={"nav-link" + (idx == 0 ? " active" : "")} name={vizInfo.id} href={"#" + vizInfo.id + "-tab"} data-toggle="pill">
