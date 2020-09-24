@@ -1,5 +1,5 @@
 const OptionButton = (props) => (
-  <a className={"nav-link" + ((props.isActive) ? " active" : "")} id="hashtagStreamgraph" onClick={props.onClick.bind(this, {name: props.name, val: props.val})}>{props.label}</a>
+  <a className={"nav-link px-2" + ((props.isActive) ? " active" : "")} id="hashtagStreamgraph" onClick={props.onClick.bind(this, {name: props.name, val: props.val})}>{props.label}</a>
 );
 
 class VizOptionBar extends React.Component {
@@ -9,17 +9,15 @@ class VizOptionBar extends React.Component {
 
   render() {
     return (
-      <nav className="navbar navbar-expand-md bg-light pl-1" id={this.props.id}>
-        <div className="ml-1.pl-0">
-          <div id="vizToggles" className="collapse navbar-collapse show">
-            <ul id="pills-tab" className="navbar-nav nav nav-pills">
+      <nav className="navbar bg-light pl-1" id={this.props.id}>
+        <div id="vizToggles" className="ml-1.pl-0">
+            <ul id="pills-tab" className="navbar-nav nav nav-pills d-flex flex-row">
               {this.props.children.map((optionComponent, idx) => (
-                <li key={idx} className="nav-item">
+                <li key={idx} className="nav-item mr-2">
                   {optionComponent}
                 </li>
               ))}
             </ul>
-          </div>
         </div>
       </nav>
     );

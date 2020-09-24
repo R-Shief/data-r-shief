@@ -32,8 +32,10 @@ class Rankings extends Viz {
         headers: ["Username", "Tweet", "Origin", "Time Created"],
         rowFn: (cols, idx) => {
           let ret = [...cols];
-          ret[2] = ret[2].match(/&gt.*&lt/g).substr(4).substr(-1, -3);
-          ret[3] = new Date(ret[3]).toLocaleString();
+          if (ret[2] && ret[3]) {
+            ret[2] = ret[2].match(/&gt.*&lt/g)[0].substr(4).slice(0, -3);
+            ret[3] = new Date(ret[3]).toLocaleString();
+          }
           return ret;
         }
       }
@@ -74,7 +76,9 @@ class Rankings extends Viz {
 
   refresh() {
     return this.fetchExtension(this.strategy().uriExtension, {method: 'GET'})
-      .then(dataObj => this.setState({dataObj: dataObj}))
+      .then(dataObj => {
+        this.setState({dataObj: dataObj});
+      })
       .then(_ => {
         this.props.onLoadChange({id: "rankings", isLoading: false});
       });
@@ -100,7 +104,7 @@ class Rankings extends Viz {
               {this.state.dataObj.map((cols, idx) => {
                 const newCols = strategy.rowFn(cols, idx);
                 return (
-                  <tr key={cols[0]} style={{display: "table", tableLayout: "fixed", width:"100%"}}>
+                  <tr key={cols.reduce((ac, cv) => ac + cv)} style={{display: "table", tableLayout: "fixed", width:"100%"}}>
                     <th scope="row">{newCols[0]}</th>
                     {newCols.filter((_, idx) => idx != 0).map((col, idx) => (
                       <td key={idx}>{col}</td>

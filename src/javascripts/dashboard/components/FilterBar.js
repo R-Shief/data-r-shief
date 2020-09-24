@@ -20,9 +20,9 @@ class Dropdown extends React.Component {
 
   render() {
     return (
-      <div className="input-group input-group-sm">
-        <div className="input-group-append">
-          <button className="btn btn-outline-secondary dropdown-toggle" type="button" id="languageMenuDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <div className="input-group input-group-sm d-flex flex-grow-1">
+        <div className="input-group-append flex-grow-1">
+          <button className="btn btn-sm btn-outline-secondary dropdown-toggle flex-grow-1" type="button" id="languageMenuDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {this.props.buttonLabel}
           </button>
           <div id={this.props.id} className="dropdown-menu" aria-labelledby="languageMenuDropdown" style={{height: "22rem", overflowY: "scroll"}}>
@@ -125,8 +125,8 @@ class FilterGoButton extends React.Component {
 
   render() {
     return (
-      <div className="input-group-append">
-        <button id="filterGoButton" className="btn btn-secondary" type="button" disabled={this.props.disabled} onClick={this.props.onClick}>
+      <div className="input-group-append ml-auto">
+        <button id="filterGoButton" className="btn btn-sm btn-secondary" type="button" disabled={this.props.disabled} onClick={this.props.onClick}>
           <img src="/icons/bootstrap-icons-1.0.0-alpha5/search.svg" />
         </button>
       </div>
@@ -188,7 +188,7 @@ class FilterBar extends React.Component {
 
   render() {
     return (
-      <nav id="filterBar" className="navbar pb-1">
+      <nav id="filterBar" className="navbar pt-3 pb-1">
         <div className="mx-0 px-0 d-flex w-100">
           <form className="form-inline w-100">
             <div className="input-group input-group-sm w-100">
@@ -200,8 +200,10 @@ class FilterBar extends React.Component {
               <SearchDropdown id="hashtags" placeholder="Hashtags" dropdownData={this.state.hashtagData} fkey="hashtags" onFilterChange={this.handleFilterChange} />
               <SearchDropdown id="usernames" placeholder="Usernames" dropdownData={this.state.usernameData} fkey="usernames" onFilterChange={this.handleLiveFilterChange} />
               <DateRangePicker fromDefault={this.props.filterDefaults.startDate} toDefault={this.props.filterDefaults.endDate} fromFkey="startDate" toFkey="endDate" onFilterChange={this.handleFilterChange} />
-              <Dropdown buttonLabel="languages" dropdownData={this.state.languageData} defaultChecked={this.props.filterDefaults.langList} fkey="langList" onFilterChange={this.handleFilterChange} />
-              <FilterGoButton disabled={this.state.goButtonDisabled} onClick={this.handleGoButtonClicked} />
+              <div className="input-group-append flex-grow-1">
+                <Dropdown buttonLabel="languages" dropdownData={this.state.languageData} defaultChecked={this.props.filterDefaults.langList} fkey="langList" onFilterChange={this.handleFilterChange} />
+                <FilterGoButton disabled={this.state.goButtonDisabled} onClick={this.handleGoButtonClicked} />
+              </div>
             </div>
           </form>
         </div>
