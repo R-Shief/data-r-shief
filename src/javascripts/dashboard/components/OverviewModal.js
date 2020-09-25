@@ -1,10 +1,18 @@
 class OverviewModal extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      hashtagData: ["#foo", "#bar", "#fizz", "#buzz"]
+    };
   }
 
   componentDidMount() {
     $("#overviewModal").modal({});
+
+    fetch('/data/hashTags.json')
+    .then(result => result.json())
+    .then(hashtagData => this.setState({hashtagData: hashtagData}));
   }
 
   render() {
@@ -32,20 +40,9 @@ class OverviewModal extends React.Component {
               </ul>
               <div key="overviewTabs" className="tab-content">
                 <div className="viz tab-pane fade border border-top-0 rounded-bottom px-2 pt-2 show active" id="overviewInterface" role="tabpanel" aria-labelledby="overviewInterface">
-                  <h4>The Filter Bar</h4>
-                  <p>You can find a complete list of avaiable hashtags by clicking the hashtags dropdown; Likewise usernames can be found by typing in the usernames filter.</p>
-
+                  <p>Click the hashtag dropdown to find a complete list of avaiable hashtags. Likewise usernames can be found by typing a few keys into the usernames field, like so:</p>
                   <img className="mt-0 mb-4" src="/images/overview/r-shief-guide-2.png" />
-                  <div className="alert alert-secondary" role="alert">
-                    <h4 className="alert-heading">Notes</h4>
-                    <p>The filter bar samples tweets for all views concurrently, but some views may impose additional filters. For example, the map only uses tweets that have geo tags.</p>
-                    <hr />
-                    <p>Only tweets that satsify <strong>all</strong> filters are sampled. The only exception is when a filter has multiple entries.
-                    For example a hashtag filter for "#egypt, #superbowl" will give you tweets from either hashtag inclusively.</p>
-                  </div>
-                  <hr />
-                  <h4>Views</h4>
-                  <p>Most views come with options for customizing which facets of the data are to be visualized. If you're unsure which view to use, refer to the table below for descriptions and strengths of each:</p>
+                  <p>If you're unsure which view to use, refer to the table below:</p>
                   <div className="table-responsive">
                     <table className="table">
                       <thead>
@@ -73,12 +70,37 @@ class OverviewModal extends React.Component {
                         </tr>
                       </tbody>
                     </table>
+                    <hr />
+                    <div className="alert alert-secondary" role="alert">
+                      <h4 className="alert-heading">Notes</h4>
+                      <p>The filter bar samples tweets for all views concurrently, but some views may impose additional filters. For example, the map only uses tweets that have geo tags.</p>
+                      <hr />
+                      <p>Only tweets that satsify <strong>all</strong> filters are sampled. The only exception is when a filter has multiple entries.
+                      For example a hashtag filter for "#egypt, #superbowl" will give you tweets from either hashtag inclusively.</p>
+                    </div>
                   </div>
                 </div>
                 <div className="viz tab-pane fade border border-top-0 rounded-bottom px-2 pt-2" id="overviewData" role="tabpanel" aria-labelledby="overviewInterface">
-                  <p>The data consists of <strong>87,707,630</strong> tweets in <strong>58</strong> languages recorded between <strong>March 2011</strong> and <strong>June 2013</strong> from hashtags relating to the <strong>Occupy Movements</strong> and the <strong>Arab Spring Uprisings</strong>. Samples of <strong>1,239</strong> hashtags were collected in total.</p>
-                  <p>This dashboard takes a <strong>random sample</strong> of the archive, which ensures sample sizes N &gt; 1000 are representative of the whole with high confidence.</p>
-                  <p>Links and embeds (<img style={{height: "12px"}} src="icons/bootstrap-icons-1.0.0-alpha5/share-fill.svg" />) are guaranteed consistent results, as samples are taken <strong>deterministically</strong> (psuedorandomly).
+                  <p>The data consists of <strong>87,707,630</strong> tweets in <strong>58</strong> languages recorded between <strong>March 2011</strong> and <strong>June 2013</strong> from hashtags relating to the <strong>Occupy Movements</strong> and the <strong>Arab Spring Uprisings</strong>. Samples of <strong>1,239</strong> hashtags were collected in total. Here is complete table:</p>
+                  <div className="table-responsive">
+                    <table className="table table-striped table-hover d-block" style={{height: "400px", overflowY: "scroll"}}>
+                      <tbody>
+                        {this.state.hashtagData.reduce((acc, curr) => {
+                          if (!acc.hasOwnProperty("arr")) acc = {
+                            arr: [[acc]]
+                          };
+                          if (acc.arr[acc.arr.length-1].length < 3) {
+                            acc.arr[acc.arr.length-1].push(curr);
+                          } else {
+                            acc.arr.push([]);
+                          }
+                          return acc;
+                        }).arr.map((subArr, i) => (<tr key={i}>{subArr.map((hashtag, j) => (<td key={j}>{hashtag}</td>))}</tr>))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <p>This dashboard takes a <strong>pseudorandom sample</strong> of the archive, which ensures sample sizes N &gt; 1000 are representative of the whole with high confidence.</p>
+                  <p>Links and embeds (<img style={{height: "12px"}} src="icons/bootstrap-icons-1.0.0-alpha5/share-fill.svg" />) are guaranteed consistent results, as pseudorandom sampling is <strong>deterministic</strong>.
                   </p>
                 </div>
               </div>
