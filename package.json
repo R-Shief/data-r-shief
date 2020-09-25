@@ -26,6 +26,8 @@
     "oboe": "^2.1.5",
     "php-serialize": "^4.0.2",
     "pug": "2.0.0-beta11",
+    "react": "^16.13.1",
+    "react-device-detect": "^1.13.1",
     "three": "^0.118.3",
     "underscore": "^1.10.2"
   },

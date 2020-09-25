@@ -1,3 +1,6 @@
+// import React from 'react';
+// import { isMobile, withOrientationChange } from 'react-device-detect';
+
 let FilterBar = require('./FilterBar.js');
 let VizViewer = require('./VizViewer.js');
 let InfoBar = require('./InfoBar.js');
@@ -5,6 +8,8 @@ let InfoBar = require('./InfoBar.js');
 let Streamgraph = require('./viz/Streamgraph.js');
 let Rankings = require('./viz/rankings.js');
 let MapViz = require('./viz/MapViz.js');
+
+let rdd = require("react-device-detect");
 
 class Dash extends React.Component {
   constructor(props) {
@@ -17,7 +22,8 @@ class Dash extends React.Component {
       sampleCount: 0,
       sampleMethod: 'randomly',
       totalCount: 87707630,
-      maxLimit: 50000
+      maxLimit: 50000,
+      noticeActive: true
     };
 
     this.populate = this.populate.bind(this);
@@ -75,7 +81,14 @@ class Dash extends React.Component {
   // }
 
   render() {
+
     return [
+      <div key="orientationNotice" className={"alert alert-warning alert-dismissible position-fixed" + ((this.props.isPortrait && this.state.noticeActive) ? " fade show" : " d-none")} style={{zIndex: 999, top: "50px", left: "50%", width: "75%", marginLeft: "-37.5%"}} role="alert">
+        <strong>Hint:</strong> Try in landscape!
+        <button type="button" className="close" onClick={() => this.setState({noticeActive: false})} aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>,
       <FilterBar key="filterBar" filterDefaults={this.props.filterDefaults} onFilterChange={this.handleFilterChange} onFilterSubmit={this.handleFilterSubmit} />,
       <VizViewer key="vizViewer" vizClasses={this.state.vizClasses} getUrl={this.getURLWithFilters} />,
       <footer key="infoBar" className="container-fluid mt-1 mb-3">
@@ -85,4 +98,6 @@ class Dash extends React.Component {
   }
 }
 
-module.exports = Dash;
+// <div>{this.props.isPortrait && <OrientationNotice />}</div>,
+
+module.exports = rdd.withOrientationChange(Dash);
