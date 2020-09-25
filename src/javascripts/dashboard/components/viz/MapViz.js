@@ -20,11 +20,10 @@ class MapViz extends Viz {
 
     this.state = {
       strategyFamily: "choropleth",
-      strategy: this.strategyFamilies["choropleth"]
+      strategy: this.strategyFamilies["choropleth"],
+      width: props.bounds.width,
+      height: props.bounds.height
     };
-
-    this.width = props.bounds.width;
-    this.height = props.bounds.height;
 
     this.refreshStrategy = this.refreshStrategy.bind(this);
     this.handleOptionClick = this.handleOptionClick.bind(this);
@@ -75,7 +74,7 @@ class MapViz extends Viz {
           this.projection = d3.geoMercator()
             .scale(70)
             .center([0, 20])
-            .translate([this.width/2, this.height/2]);
+            .translate([this.state.width/2, this.state.height/2]);
 
           const polyProject = (obj) => {
             if (obj.length != 2) {
@@ -177,11 +176,13 @@ class MapViz extends Viz {
 
   render() {
     return (
-      <div id="mapViz" className="bg-dark">
-        <svg ref={this.svgRef} viewBox={`0 0 ${this.width} ${this.height}`}></svg>
+      <div id="mapViz" className="bg-dark h-100" style={{overflow: "hidden"}}>
+        <svg ref={this.svgRef} viewBox={`0 0 ${this.state.width} ${this.state.height}`}></svg>
       </div>
     );
   }
+
+  // style={{flexGrow: 1, width: "100%", height: "100%"}}
 
   // <VizOptionBar id="mapViz-options">
   //   <OptionButton isActive={this.state.strategyFamily=="choropleth"} name="strategyFamily" val="choropleth" onClick={this.handleOptionClick} label="Country Choropleth" />

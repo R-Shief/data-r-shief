@@ -13,7 +13,7 @@ class VizTabs extends React.Component {
 
   render() {
     return (
-      <div className="container-fluid">
+      <nav className="container-fluid">
         <ul ref={this.tabRef} id="vizTabs" className="nav nav-tabs nav-fill py-0" role="tablist">
           {this.props.vizInfos.map((vizInfo, idx) => (
             <li key={vizInfo.id} className="nav-item">
@@ -23,7 +23,7 @@ class VizTabs extends React.Component {
             </li>
           ))}
         </ul>
-      </div>
+      </nav>
     );
   }
 }
@@ -50,7 +50,7 @@ class VizViewer extends React.Component {
     super(props);
 
     this.fetchExtension = this.fetchExtension.bind(this);
-    this.bounds = {width: 960, height: 350};
+    this.bounds = {width: 960, height: 375};
     this.state = {
       activeViz: props.vizClasses[0].getInfo().id,
       isLoading: {}
@@ -92,7 +92,7 @@ class VizViewer extends React.Component {
   render() {
     return [
       <VizTabs key="vizTabs" onTabSwitch={this.handleTabSwitch} vizInfos={this.props.vizClasses.map(vizClass => vizClass.getInfo())} />,
-      <main key="vizViews" id="dash" className="container-fluid tab-content" role="main">
+      <main key="vizViews" id="dash" className="container-fluid tab-content flex-grow-1" role="main">
         {this.props.vizClasses.map((VizClass, idx) => {
           const vizInfos = VizClass.getInfo();
           return (

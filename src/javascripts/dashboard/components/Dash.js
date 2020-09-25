@@ -75,15 +75,13 @@ class Dash extends React.Component {
   // }
 
   render() {
-    return (
-      <div>
-        <FilterBar filterDefaults={this.props.filterDefaults} onFilterChange={this.handleFilterChange} onFilterSubmit={this.handleFilterSubmit} />
-        <VizViewer vizClasses={this.state.vizClasses} getUrl={this.getURLWithFilters} />
-        <footer className="container-fluid mt-1">
-          <InfoBar sampleCount={this.state.sampleCount} sampleMethod={this.state.sampleMethod} totalCount={this.state.totalCount} getUrl={this.getURLWithFilters} />
-        </footer>
-      </div>
-    );
+    return [
+      <FilterBar key="filterBar" filterDefaults={this.props.filterDefaults} onFilterChange={this.handleFilterChange} onFilterSubmit={this.handleFilterSubmit} />,
+      <VizViewer key="vizViewer" vizClasses={this.state.vizClasses} getUrl={this.getURLWithFilters} />,
+      <footer key="infoBar" className="container-fluid mt-1 mb-3">
+        <InfoBar sampleCount={this.state.sampleCount} sampleMethod={this.state.sampleMethod} totalCount={this.state.totalCount} getUrl={this.getURLWithFilters} />
+      </footer>
+    ];
   }
 }
 
