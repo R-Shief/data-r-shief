@@ -16,18 +16,19 @@ class Streamgraph extends Viz {
     };
 
     this.state = {
-      strategyFamily: "hashtag"
+      strategyFamily: "hashtag",
+      width: props.bounds.width,
+      height: props.bounds.height
     };
 
     this.svg;
     this.fetchExtension = props.fetcher;
 
-    this.width = props.bounds.width;
-    this.height = props.bounds.height;
-    this.margin = {top: 0, right: 20, bottom: 30, left: 20};
+    this.margin = {top: 0, right: 20, bottom: 70, left: 20};
 
     this.uriExtension = () => this.strategyFamilies[this.state.strategyFamily].uriExtension;
 
+    this.wrapperRef = React.createRef();
     this.svgRef = React.createRef();
 
     this.handleOptionClick = this.handleOptionClick.bind(this);
@@ -35,6 +36,12 @@ class Streamgraph extends Viz {
 
   componentDidMount() {
     this.live();
+    window.addEventListener('resize', () => {
+      this.setState({
+        width: this.wrapperRef.current.offsetWidth,
+        height: this.wrapperRef.current.offsetHeight
+      })
+    })
   }
 
   live() {
@@ -119,17 +126,17 @@ class Streamgraph extends Viz {
         // create a scale object for x values according to UTC time using dateExtent
         this.x = d3.scaleUtc()
             .domain(this.dateExtent)
-            .range([this.margin.left, this.width - this.margin.right])
+            .range([this.margin.left, this.state.width - this.margin.right])
 
         // create a scale object for the y axis using the min and max of the series data structure
         this.y = d3.scaleLinear()
             .domain([d3.min(this.series, d => d3.min(d, d => d[0])), d3.max(this.series, d => d3.max(d, d => d[1]))])
-            .range([this.height - this.margin.bottom, this.margin.top])
+            .range([this.state.height - this.margin.bottom, this.margin.top])
 
         // create the bottom axis object and position it appropriately
         this.xAxis = g => g
-          .attr("transform", `translate(0,${this.height - this.margin.bottom})`)
-          .call(d3.axisBottom(this.x).ticks(this.width / 80).tickSizeOuter(0))
+          .attr("transform", `translate(0,${this.state.height - this.margin.bottom})`)
+          .call(d3.axisBottom(this.x).ticks(this.state.width / 80).tickSizeOuter(0))
           // .call(g => g.select(".domain").remove())
 
         // .tickFormat(x => `${x.getMonth()}/${x.getDate()}/${x.getFullYear()}`)
@@ -199,16 +206,18 @@ class Streamgraph extends Viz {
     // );
 
     return (
-      <div id="streamgraph">
+      <div ref={this.wrapperRef} id="streamgraph" className="d-flex flex-column" style={{height: "100%"}}>
         <VizOptionBar id="streamgraph-options">
           <OptionButton isActive={this.state.strategyFamily=="hashtag"} name="strategyFamily" val="hashtag" onClick={this.handleOptionClick} label="By Hashtag" />
           <OptionButton isActive={this.state.strategyFamily=="language"} name="strategyFamily" val="language" onClick={this.handleOptionClick} label="By Language" />
         </VizOptionBar>
-        <svg ref={this.svgRef} viewBox={`0 0 ${this.width} ${this.height}`}></svg>
+        <svg ref={this.svgRef} className="flex-grow-1" style={{width: "100%"}}></svg>
       </div>
     );
   }
 }
+
+// viewBox={`0 0 ${this.state.width} ${this.state.height}`}
 
 Streamgraph.info = {
   id: "streamgraph",

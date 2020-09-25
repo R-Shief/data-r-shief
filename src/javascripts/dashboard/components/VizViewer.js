@@ -50,7 +50,7 @@ class VizViewer extends React.Component {
     super(props);
 
     this.fetchExtension = this.fetchExtension.bind(this);
-    this.bounds = {width: 960, height: 375};
+    this.bounds = {width: 960, height: 250};
     this.state = {
       activeViz: props.vizClasses[0].getInfo().id,
       isLoading: {}

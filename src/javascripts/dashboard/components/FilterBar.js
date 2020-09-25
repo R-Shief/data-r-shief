@@ -189,10 +189,10 @@ class FilterBar extends React.Component {
 
   render() {
     return (
-      <nav id="filterBar" className="navbar navbar-expand-md pt-3 pb-1">
-        <h1 className="navbar-brand d-md-none" href="#">R-Shief Dashboard</h1>
-        <button type="button" className="d-md-none rounded" style={{backgroundColor: "#FFFFFF"}} onClick={() => this.setState((state, props) => ({filterBarActive: !state.filterBarActive}))} aria-controls="filterBarSupportedContent" aria-expanded="false" aria-label="Toggle Filter Bar">
-          <img src="icons/bootstrap-icons-1.0.0-alpha5/filter.svg" />
+      <nav id="filterBar" className="navbar navbar-expand-md pt-0 pb-1">
+        <h1 className="navbar-brand mb-0 d-md-none" href="#">Dashboard</h1>
+        <button type="button" className="navbar-toggler d-md-none rounded" style={{backgroundColor: "#FFFFFF"}} onClick={() => this.setState((state, props) => ({filterBarActive: !state.filterBarActive}))} aria-controls="filterBarSupportedContent" aria-expanded="false" aria-label="Toggle Filter Bar">
+          <img height="30px" src="icons/bootstrap-icons-1.0.0-alpha5/filter.svg" />
         </button>
         <div className="mx-0 px-0 d-flex w-100" id="filterBarSupportedContent">
           <form className={"form-inline w-100" + (this.state.filterBarActive ? "" : " d-none d-md-block")}>
