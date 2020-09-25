@@ -36,6 +36,10 @@ class Streamgraph extends Viz {
 
   componentDidMount() {
     this.live();
+    this.setState({
+      width: this.wrapperRef.current.offsetWidth,
+      height: this.wrapperRef.current.offsetHeight
+    });
     window.addEventListener('resize', () => {
       this.setState({
         width: this.wrapperRef.current.offsetWidth,
