@@ -22,7 +22,7 @@ class Dropdown extends React.Component {
     return (
       <div className="input-group input-group-sm d-flex flex-grow-1">
         <div className="input-group-append flex-grow-1">
-          <button className="btn btn-sm btn-outline-secondary dropdown-toggle flex-grow-1" type="button" id="languageMenuDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button className="btn btn-sm btn-outline-secondary dropdown-toggle flex-grow-1" type="button" id="languageMenuDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style={{borderColor: "#ced4da"}}>
             {this.props.buttonLabel}
           </button>
           <div id={this.props.id} className="dropdown-menu" aria-labelledby="languageMenuDropdown" style={{height: "22rem", overflowY: "scroll"}}>

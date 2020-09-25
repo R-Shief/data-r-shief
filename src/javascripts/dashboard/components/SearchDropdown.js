@@ -22,11 +22,9 @@ class SearchDropdown extends React.Component {
 
   render() {
     return (
-      <div key="dropdown" className="input-group-prepend input-group-append flex-grow-1">
+      <div key="dropdown" className="input-group-prepend input-group-append flex-grow-1" style={{position: "relative"}}>
         <input key="input" className="form-control form-control-sm rounded-0 flex-grow-1" data-toggle="dropdown" autoComplete="off" id={this.inputId} type="search" placeholder={this.props.placeholder} size="20" onChange={this.handleValueChange} value={this.state.value} />
-        <button className="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split ml-auto rounded-0" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">
-          <span className="sr-only">Toggle Dropdown</span>
-        </button>
+        <img src='icons/bootstrap-icons-1.0.0-alpha5/caret-down-fill.svg' style={{position: "absolute", right: "10px", top: "11px", height: "8px"}} />
         <div className="dropdown-menu" id={this.dropdownId} style={{minHeight: "3rem", maxHeight: "22rem", overflowY: "scroll"}}>
           {this.props.dropdownData.filter(item => item.includes(this.state.value)).map((item) => {
             const startIdx = item.indexOf(this.state.value, 1);
@@ -44,5 +42,9 @@ class SearchDropdown extends React.Component {
     )
   }
 }
+
+// <button className="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split ml-auto rounded-0" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">
+//   <span className="sr-only">Toggle Dropdown</span>
+// </button>
 
 module.exports = SearchDropdown;

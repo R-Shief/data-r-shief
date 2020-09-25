@@ -64,6 +64,10 @@ html, body {
   background-color: #f8f9fa;
 }
 
+.input-group button {
+  border-color: #000000;
+}
+
 .input-group input:read-only, .input-group textarea:read-only {
   background-color: #f8f9fa;
 }
