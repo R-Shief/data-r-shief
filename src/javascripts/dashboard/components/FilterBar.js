@@ -142,7 +142,8 @@ class FilterBar extends React.Component {
       goButtonDisabled: true,
       hashtagData: [],
       usernameData: [],
-      languageData: []
+      languageData: [],
+      filterBarActive: false
     };
 
     this.handleFilterChange = this.handleFilterChange.bind(this);
@@ -188,9 +189,13 @@ class FilterBar extends React.Component {
 
   render() {
     return (
-      <nav id="filterBar" className="navbar pt-3 pb-1">
-        <div className="mx-0 px-0 d-flex w-100">
-          <form className="form-inline w-100">
+      <nav id="filterBar" className="navbar navbar-expand-md pt-3 pb-1">
+        <h1 className="navbar-brand d-md-none" href="#">R-Shief Dashboard</h1>
+        <button type="button" className="d-md-none rounded" style={{backgroundColor: "#FFFFFF"}} onClick={() => this.setState((state, props) => ({filterBarActive: !state.filterBarActive}))} aria-controls="filterBarSupportedContent" aria-expanded="false" aria-label="Toggle Filter Bar">
+          <img src="icons/bootstrap-icons-1.0.0-alpha5/filter.svg" />
+        </button>
+        <div className="mx-0 px-0 d-flex w-100" id="filterBarSupportedContent">
+          <form className={"form-inline w-100" + (this.state.filterBarActive ? "" : " d-none d-md-block")}>
             <div className="input-group input-group-sm w-100">
               <div className="input-group-prepend">
                 <span className="input-group-text">
