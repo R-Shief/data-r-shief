@@ -25,7 +25,6 @@ class OverviewModal extends React.Component {
                 <span aria-hidden="true">×</span>
               </button>
               <h2>Getting started</h2>
-              <p>The R-Shief Dashboard is a fully interactive collection of data visualization tools.</p>
               <ul id="overviewTabList" className="nav nav-tabs nav-fill py-0" role="tablist">
                 <li className="nav-item">
                   <a className="nav-link active" href="#overviewInterface" data-toggle="pill">
@@ -40,6 +39,7 @@ class OverviewModal extends React.Component {
               </ul>
               <div key="overviewTabs" className="tab-content">
                 <div className="viz tab-pane fade border border-top-0 rounded-bottom px-2 pt-2 show active" id="overviewInterface" role="tabpanel" aria-labelledby="overviewInterface">
+                  <p>The R-Shief Dashboard is a fully interactive collection of data visualization tools.</p>
                   <p>Click the hashtag dropdown to find a complete list of avaiable hashtags. Likewise usernames can be found by typing a few keys into the usernames field, like so:</p>
                   <img className="mt-0 mb-4" src="/images/overview/r-shief-guide-2.png" />
                   <p>If you're unsure which view to use, refer to the table below:</p>
