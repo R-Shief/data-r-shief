@@ -87,9 +87,14 @@ class MapViz extends Viz {
             .center([0, 20])
             // .translate([this.state.width/2, this.state.height/2]);
 
-          const zoomed = () => this.g
-            .selectAll('path')
-            .attr('transform', d3.event.transform);
+          const zoomed = () => {
+            this.g
+              .selectAll('path')
+              .attr('transform', d3.event.transform);
+            this.g
+              .selectAll("text.legend")
+              .attr('transform', d3.event.transform);
+          }
 
           this.zoom = d3.zoom()
             .scaleExtent([1, 8])
@@ -152,30 +157,42 @@ class MapViz extends Viz {
           .domain(range)
           .range(d3.schemeBlues[numBins]);
 
+        const mapPath = d3.geoPath()
+          .projection(this.projection);
+
         this.g.selectAll("path")
           .data(this.topo.features)
           .join(
-            enter => enter.append("path")
-              .attr("d", d3.geoPath()
-                .projection(this.projection)
-              )
-              .attr("fill", function(d) {
-                d.total = data.get(d.id) || 0;
-                return colorScale(d.total);
-              })
-              .append("title")
-                .text(d => `${d.properties.name}: ${data.get(d.id) || 0}`),
+            enter => {
+              enter.append("path")
+                .attr("d", mapPath)
+                .attr("fill", function(d) {
+                  d.total = data.get(d.id) || 0;
+                  return colorScale(d.total);
+                });
+              enter.append("text")
+                .classed("legend", true)
+                .attr("text-anchor", "middle")
+                .attr("x", d => mapPath.centroid(d)[0])
+                .attr("y", d => mapPath.centroid(d)[1])
+                .text(d => `${d.properties.name}: ${data.get(d.id) || 0}`)
+                .style("font-size", ".1rem");
+            },
             update => {
               update.transition(this.t)
               .attr("fill", function(d) {
                 d.total = data.get(d.id) || 0;
                 return colorScale(d.total);
               });
-              update.select("title")
-              .transition(this.t)
-                .text(d => `${d.properties.name}: ${data.get(d.id) || 0}`)
             }
           );
+
+      this.g.selectAll("text.legend")
+        .classed("legend", true)
+        .attr("x", d => mapPath.centroid(d)[0])
+        .attr("y", d => mapPath.centroid(d)[1])
+        .text(d => `${d.properties.name}: ${data.get(d.id) || 0}`)
+
     })
   }
 
