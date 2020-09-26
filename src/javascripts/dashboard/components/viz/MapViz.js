@@ -31,6 +31,7 @@ class MapViz extends Viz {
     this.live = this.live.bind(this);
 
     this.svgRef = React.createRef();
+    this.wrapperRef = React.createRef();
 
     this.svg = d3.select(this.svgRef.current);
   }
@@ -38,6 +39,16 @@ class MapViz extends Viz {
   componentDidMount() {
     this.build();
     this.live();
+    this.setState({
+      width: this.wrapperRef.current.offsetWidth,
+      height: this.wrapperRef.current.offsetHeight
+    });
+    window.addEventListener('resize', () => {
+      this.setState({
+        width: this.wrapperRef.current.offsetWidth,
+        height: this.wrapperRef.current.offsetHeight
+      });
+    })
   }
 
   live() {
@@ -74,7 +85,15 @@ class MapViz extends Viz {
           this.projection = d3.geoMercator()
             .scale(70)
             .center([0, 20])
-            .translate([this.state.width/2, this.state.height/2]);
+            // .translate([this.state.width/2, this.state.height/2]);
+
+          const zoomed = () => this.g
+            .selectAll('path')
+            .attr('transform', d3.event.transform);
+
+          this.zoom = d3.zoom()
+            .scaleExtent([1, 8])
+            .on('zoom', zoomed);
 
           const polyProject = (obj) => {
             if (obj.length != 2) {
@@ -90,29 +109,28 @@ class MapViz extends Viz {
             .duration(2000);
         }
 
-        const unserialized = rawData.map(d => {
-          const coords = unserialize(d[0], {}).coordinates;
-          // console.log(coords);
-          return this.projection(coords);
-          // return coords;
-        });
+        this.svg.call(this.zoom);
 
-        // console.log(unserialized);
+        this.projection = d3.geoMercator()
+          .scale(70)
+          .center([0, 20])
+          // .translate([this.state.width/2, this.state.height/2]);
+
+        const unserialized = rawData.map(d => unserialize(d[0], {}).coordinates.map(c => Math.abs(c)));
 
         let data = d3.map();
         const doesContain = (poly, coord) => {
           if (poly.some(child => child.length != 2)) {
             return poly.some(child => doesContain(child, coord));
           } else {
-            // console.log(poly);
             return d3.polygonContains(poly, coord);
           }
         }
         this.topo.projectedFeatures.forEach(feature => {
           const poly = feature.poly;
           const count = unserialized.filter(coord => {
-            const dc = doesContain(poly, coord);
-            // console.log(dc);
+            const dc = doesContain(poly, this.projection(coord));
+            // if (dc) console.log([feature.id, coord, dc].join(", "));
             return dc;
           }).length;
           // console.log(count);
@@ -176,11 +194,12 @@ class MapViz extends Viz {
 
   render() {
     return (
-      <div id="mapViz" className="bg-dark h-100" style={{overflow: "hidden"}}>
-        <svg ref={this.svgRef} viewBox={`0 0 ${this.state.width} ${this.state.height}`}></svg>
+      <div id="mapViz" ref={this.wrapperRef} className="d-flex flex-column" style={{height: "100%"}}>
+        <svg ref={this.svgRef} className="flex-grow-1" style={{width: "100%"}}></svg>
       </div>
     );
   }
+  // viewBox={`0 0 ${this.state.width} ${this.state.height}`}
 
   // style={{flexGrow: 1, width: "100%", height: "100%"}}
 
