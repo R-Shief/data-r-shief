@@ -64,6 +64,10 @@ class Dash extends React.Component {
     return [window.location.href, ...Object.values(this.state.filters), this.state.dataPage].join("/");
   }
 
+  componentDidUpdate() {
+    if (this.shouldPopulate) {this.populate(); this.shouldPopulate=false;}
+  }
+
   handleFilterChange(e) {
     this.setState((state, props) => {
       const newFilters = Object.assign({}, state.filters, {[e.fkey]: e.val != "" ? e.val : "*"});
@@ -72,8 +76,8 @@ class Dash extends React.Component {
   }
 
   handleFilterSubmit(e) {
-    this.setState({dataPage: 0});
-    this.populate();
+    this.setState({dataPage: 0, sampleCount: 0});
+    this.shouldPopulate = true;
   }
 
   // componentDidUpdate() {
