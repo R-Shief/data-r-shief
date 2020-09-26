@@ -227,6 +227,7 @@ class Streamgraph extends Viz {
             .attr("y2", scope.state.height - scope.margin.top - scope.margin.bottom)
 
           scope.lineDate
+            .attr("text-anchor", "middle")
             .attr("x", x)
             .text(d => scope.formatDate(scope.series[0][idx].data.date))
 
@@ -237,12 +238,11 @@ class Streamgraph extends Viz {
             .data(dataSelect)
             .join(
               enter => enter.append("circle")
-                .attr("cx", (d, i) => 10)
+                .attr("cx", 10)
                 .attr("cy", (d, i) => i * circleSpacing + marginT)
                 .attr("r", 10)
                 .style("fill", ({key}) => scope.colors.get(key)),
               update => update
-                .attr("cx", (d, i) => 10)
                 .attr("cy", (d, i) => i * circleSpacing + marginT)
                 .style("fill", ({key}) => scope.colors.get(key)),
               exit => exit.remove()
@@ -253,12 +253,11 @@ class Streamgraph extends Viz {
             .join(
               enter => enter.append("text")
                 .classed('legend', true)
-                .attr("x", 20)
+                .attr("x", 25)
                 .attr("y", (d, i) => i * circleSpacing + marginT)
                 .text(d => `${d.key} ${d[idx].data[d.key]}`),
               update => update
-                .attr("x", 20)
-                .attr("y", (d, i) => i * circleSpacing + marginT)
+                .attr("y", (d, i) => i * circleSpacing + marginT + 5)
                 .text(d => `${d.key} ${d[idx].data[d.key]}`),
               exit => exit.remove()
             );
