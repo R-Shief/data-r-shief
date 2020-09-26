@@ -151,6 +151,11 @@ class Streamgraph extends Viz {
             .y0(d => this.y(d[0]))
             .y1(d => this.y(d[1]))
 
+        this.colors = d3.map();
+        this.series.forEach(({key}) => {
+          this.colors.set(key, this.color(key));
+        });
+
         // if the svg doesn't exist, create it for the first time, otherwise, just re-build the graph components (x and y scales, x axis and area objects)
 
         let shouldBuild = typeof this.svg == "undefined";
@@ -182,61 +187,82 @@ class Streamgraph extends Viz {
           .call(this.xAxis);
 
         this.line = this.svg.append("line")
-          .attr("y1", 0)
+          .attr("y1", 30)
           .style("stroke-width", 1)
           .style("stroke", "black")
           .style("fill", "none");
 
-        console.log(this.series);
+        this.lineDate = this.svg.append("text")
+          .attr("y", 20);
 
-        let circleSpacing = 25;
-        let initialY = 25;
+        const dtf = new Intl.DateTimeFormat('en-US', {
+          weekday: 'long',
+          month: 'long',
+          year: 'numeric',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          timeZone: 'UTC'
+        });
+
+        const reducer = (acc, curr) => Object({...acc, [curr.type]: curr.value});
+
+        this.formatDate = (date) => {
+          const parts = dtf.formatToParts(date).reduce(reducer, {});
+          return `${parts.weekday}, ${parts.month} ${parts.day} ${parts.year} ${parts.hour}:${parts.minute} ${parts.dayPeriod}`
+        };
 
         let scope = this;
         this.svg.on('mousemove', function() {
           const [x, y] = d3.mouse(this);
-          // const dataSelect = scope.series[Math.floor(x/scope.state.width)];
-          // console.log(dataSelect);
-          // console.log([scope.series[Math.floor(x/scope.state.width)]]);
 
-          const idx = Math.floor(x/scope.series[0].length);
-          const dataSelect = scope.series.filter(cat => cat[idx].data[cat.key] != 0);
-          // console.log(dataSelect);
+          const idx = Math.floor((x/scope.state.width)*scope.series[0].length);
+          // const nonZeroData = scope.series.filter(cat => cat[idx].data[cat.key] != 0);
+          const dataSelect = scope.series.sort((a, b) => b[idx].data[b.key] - a[idx].data[a.key]).slice(0, 10);
+          // const tenNonZeroOr = nonZeroData.length < 10 ? nonZeroData : nonZeroData.filter(cat => cat[idx].data[cat.key] > 5);
+
           scope.line
             .attr("x1", x)
             .attr("x2", x)
             .attr("y2", scope.state.height - scope.margin.top - scope.margin.bottom)
 
-          // console.log(scope.series);
+          scope.lineDate
+            .attr("x", x)
+            .text(d => scope.formatDate(scope.series[0][idx].data.date))
+
+          const circleSpacing = (scope.state.height - scope.margin.top - scope.margin.bottom) / dataSelect.length;
+          const marginT = circleSpacing / 2;
 
           scope.svg.selectAll("circle")
             .data(dataSelect)
             .join(
-                enter => enter.append("circle")
-                  .attr("cx", (d, i) => x)
-                  .attr("cy", (d, i) => i * circleSpacing + initialY)
-                  .attr("r", 10)
-                  .style("fill", ({key}) => scope.color(key)),
-                update => update
-                  .attr("cx", (d, i) => x)
-                  .attr("cy", (d, i) => i * circleSpacing + initialY),
-                exit => exit.remove()
-                )
+              enter => enter.append("circle")
+                .attr("cx", (d, i) => 10)
+                .attr("cy", (d, i) => i * circleSpacing + marginT)
+                .attr("r", 10)
+                .style("fill", ({key}) => scope.colors.get(key)),
+              update => update
+                .attr("cx", (d, i) => 10)
+                .attr("cy", (d, i) => i * circleSpacing + marginT)
+                .style("fill", ({key}) => scope.colors.get(key)),
+              exit => exit.remove()
+            );
 
           scope.svg.selectAll("text.legend")
             .data(dataSelect)
             .join(
               enter => enter.append("text")
                 .classed('legend', true)
-                .attr("x", x + 20)
-                .attr("y", (d, i) => i * circleSpacing + initialY)
+                .attr("x", 20)
+                .attr("y", (d, i) => i * circleSpacing + marginT)
                 .text(d => `${d.key} ${d[idx].data[d.key]}`),
               update => update
-                .attr("x", x + 10)
-                .attr("y", (d, i) => i * circleSpacing + initialY)
+                .attr("x", 20)
+                .attr("y", (d, i) => i * circleSpacing + marginT)
                 .text(d => `${d.key} ${d[idx].data[d.key]}`),
               exit => exit.remove()
-            )
+            );
+
         })
 
       }
@@ -245,12 +271,12 @@ class Streamgraph extends Viz {
         .data(this.series)
         .join(
           enter => enter.append("path")
-            .attr("fill", ({key}) => this.color(key))
+            .attr("fill", ({key}) => this.colors.get(key))
             .attr("d", (d) => this.area(d))
             .append("title")
               .text(({key}) => key),
           update => update.transition(this.t)
-            .attr("fill", ({key}) => this.color(key))
+            .attr("fill", ({key}) => this.colors.get(key))
             .attr("d", (d) => this.area(d)),
           exit => exit.remove().selectAll("title").remove()
         );
