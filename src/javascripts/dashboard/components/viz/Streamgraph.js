@@ -179,7 +179,66 @@ class Streamgraph extends Viz {
           .duration(2000);
 
         this.bottomAxis = this.svg.append("g")
-            .call(this.xAxis);
+          .call(this.xAxis);
+
+        this.line = this.svg.append("line")
+          .attr("y1", 0)
+          .style("stroke-width", 1)
+          .style("stroke", "black")
+          .style("fill", "none");
+
+        console.log(this.series);
+
+        let circleSpacing = 25;
+        let initialY = 25;
+
+        let scope = this;
+        this.svg.on('mousemove', function() {
+          const [x, y] = d3.mouse(this);
+          // const dataSelect = scope.series[Math.floor(x/scope.state.width)];
+          // console.log(dataSelect);
+          // console.log([scope.series[Math.floor(x/scope.state.width)]]);
+
+          const idx = Math.floor(x/scope.series[0].length);
+          const dataSelect = scope.series.filter(cat => cat[idx].data[cat.key] != 0);
+          // console.log(dataSelect);
+          scope.line
+            .attr("x1", x)
+            .attr("x2", x)
+            .attr("y2", scope.state.height - scope.margin.top - scope.margin.bottom)
+
+          // console.log(scope.series);
+
+          scope.svg.selectAll("circle")
+            .data(dataSelect)
+            .join(
+                enter => enter.append("circle")
+                  .attr("cx", (d, i) => x)
+                  .attr("cy", (d, i) => i * circleSpacing + initialY)
+                  .attr("r", 10)
+                  .style("fill", ({key}) => scope.color(key)),
+                update => update
+                  .attr("cx", (d, i) => x)
+                  .attr("cy", (d, i) => i * circleSpacing + initialY),
+                exit => exit.remove()
+                )
+
+          scope.svg.selectAll("text.legend")
+            .data(dataSelect)
+            .join(
+              enter => enter.append("text")
+                .classed('legend', true)
+                .attr("x", x + 20)
+                .attr("y", (d, i) => i * circleSpacing + initialY)
+                .text(d => `${d.key} ${d[idx].data[d.key]}`),
+              update => update
+                .attr("x", x + 10)
+                .attr("y", (d, i) => i * circleSpacing + initialY)
+                .text(d => `${d.key} ${d[idx].data[d.key]}`),
+              exit => exit.remove()
+            )
+        })
+
       }
 
       this.g.selectAll("path")
