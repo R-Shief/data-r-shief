@@ -4,8 +4,8 @@ class SiteFooter extends React.Component {
   }
 
   render() {
-    return (
-      <div className="d-flex justify-content-center" style={{backgroundColor: "#414141"}}>
+    return [
+      <div key="contactAndSocials" className="d-flex justify-content-center" style={{backgroundColor: "#414141"}}>
         <div className="container-fluid d-flex py-3 align-items-center" style={{width: "980px", color: "white", fontSize: "14px"}}>
           <div><strong>
             <p className="mb-0">Laila Shereen Sakr</p>
@@ -23,8 +23,13 @@ class SiteFooter extends React.Component {
             </div>
           </div>
         </div>
+      </div>,
+      <div style={{backgroundColor: "white"}}>
+        <div className="container-fluid" style={{width: "980px", fontSize: "13px", color: "#a0a09f"}}>
+          <p className="my-3">© 2020 created by <u><a href="https://vjumamel.com" target="_blank" style={{color: "#a0a09f"}}>VJ Um Amel</a></u></p>
+        </div>
       </div>
-    );
+    ];
   }
 }
 
