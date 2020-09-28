@@ -1,6 +1,9 @@
 // import React from 'react';
 // import { isMobile, withOrientationChange } from 'react-device-detect';
 
+let HeaderBar = require('./HeaderBar.js');
+let SiteFooter = require('./SiteFooter.js');
+
 let FilterBar = require('./FilterBar.js');
 let VizViewer = require('./VizViewer.js');
 let InfoBar = require('./InfoBar.js');
@@ -23,7 +26,8 @@ class Dash extends React.Component {
       sampleMethod: 'randomly',
       totalCount: 87707630,
       maxLimit: 50000,
-      noticeActive: true
+      noticeActive: true,
+      height: 900
     };
 
     this.populate = this.populate.bind(this);
@@ -33,6 +37,10 @@ class Dash extends React.Component {
   }
 
   componentDidMount() {
+    this.setState({height: window.innerHeight});
+    $(window).on("resize", () => {
+      this.setState({height: window.innerHeight});
+    });
     this.populate();
   }
 
@@ -87,16 +95,22 @@ class Dash extends React.Component {
   render() {
 
     return [
-      <div key="orientationNotice" className={"alert alert-warning alert-dismissible position-fixed" + ((this.props.isPortrait && this.state.noticeActive) ? " fade show" : " d-none")} style={{zIndex: 999, top: "50px", left: "50%", width: "75%", marginLeft: "-37.5%"}} role="alert">
-        <strong>Hint:</strong> Try in landscape!
-        <button type="button" className="close" onClick={() => this.setState({noticeActive: false})} aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+      <div key="main" className="d-flex flex-column" style={{height: this.state.height + "px"}}>
+        <div key="landscapeHint" className={"alert alert-warning alert-dismissible position-fixed" + ((this.props.isPortrait && this.state.noticeActive) ? " fade show" : " d-none")} style={{zIndex: 999, top: "50px", left: "50%", width: "75%", marginLeft: "-37.5%"}} role="alert">
+          <strong>Hint:</strong> Try in landscape!
+          <button type="button" className="close" onClick={() => this.setState({noticeActive: false})} aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <HeaderBar key="headerBar" />
+        <FilterBar key="filterBar" filterDefaults={this.props.filterDefaults} onFilterChange={this.handleFilterChange} onFilterSubmit={this.handleFilterSubmit} />
+        <VizViewer key="vizViewer" vizClasses={this.state.vizClasses} getUrl={this.getURLWithFilters} />
+        <div className="container-fluid mt-1 mb-3">
+          <InfoBar sampleCount={this.state.sampleCount} sampleMethod={this.state.sampleMethod} totalCount={this.state.totalCount} getUrl={this.getURLWithFilters} />
+        </div>
       </div>,
-      <FilterBar key="filterBar" filterDefaults={this.props.filterDefaults} onFilterChange={this.handleFilterChange} onFilterSubmit={this.handleFilterSubmit} />,
-      <VizViewer key="vizViewer" vizClasses={this.state.vizClasses} getUrl={this.getURLWithFilters} />,
-      <footer key="infoBar" className="container-fluid mt-1 mb-3">
-        <InfoBar sampleCount={this.state.sampleCount} sampleMethod={this.state.sampleMethod} totalCount={this.state.totalCount} getUrl={this.getURLWithFilters} />
+      <footer key="footer">
+        <SiteFooter />
       </footer>
     ];
   }
