@@ -5,15 +5,41 @@ class OverviewModal extends React.Component {
     this.state = {
       hashtagData: ["#foo", "#bar", "#fizz", "#buzz"]
     };
+
+    this.dtf = new Intl.DateTimeFormat('en-US', {
+      weekday: 'long',
+      month: 'long',
+      year: 'numeric',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      timeZone: 'UTC'
+    });
   }
 
   componentDidMount() {
     $("#overviewModal").modal({});
 
-    fetch('/data/hashTags.json')
+    fetch('/data/hashTagDictionary.json')
     .then(result => result.json())
     .then(hashtagData => this.setState({hashtagData: hashtagData}));
   }
+
+  formatDate(dateString) {
+    const parsed = typeof dateString == "undefined" ? [] : dateString.split("-");
+    // console.log(dateString + " " + parsed + " " + parsed.length);
+    if (parsed.length == 3) {
+      // console.log(parsed);
+      let date = new Date();
+      date.setFullYear(parsed[0]);
+      date.setDate(parsed[1]);
+      date.setMonth(parsed[2]);
+      const parts = this.dtf.formatToParts(date).reduce((acc, curr) => Object({...acc, [curr.type]: curr.value}), {});
+      return `${parts.month} ${parts.day}, ${parts.year}`
+    } else {
+      return dateString;
+    }
+  };
 
   render() {
     return (
@@ -83,19 +109,20 @@ class OverviewModal extends React.Component {
                 <div className="viz tab-pane fade border border-top-0 rounded-bottom px-2 pt-2" id="overviewData" role="tabpanel" aria-labelledby="overviewInterface">
                   <p>The data consists of <strong>87,707,630</strong> tweets in <strong>58</strong> languages recorded between <strong>March 2011</strong> and <strong>June 2013</strong> from hashtags relating to the <strong>Occupy Movements</strong> and the <strong>Arab Spring Uprisings</strong>. Samples of <strong>1,239</strong> hashtags were collected in total. Here is a complete table:</p>
                   <div className="table-responsive">
-                    <table className="table table-striped table-hover d-block" style={{height: "400px", overflowY: "scroll"}}>
-                      <tbody>
-                        {this.state.hashtagData.reduce((acc, curr) => {
-                          if (!acc.hasOwnProperty("arr")) acc = {
-                            arr: [[acc]]
-                          };
-                          if (acc.arr[acc.arr.length-1].length < 3) {
-                            acc.arr[acc.arr.length-1].push(curr);
-                          } else {
-                            acc.arr.push([]);
-                          }
-                          return acc;
-                        }).arr.map((subArr, i) => (<tr key={i}>{subArr.map((hashtag, j) => (<td key={j}>{hashtag}</td>))}</tr>))}
+                    <table className="table table-striped table-hover d-block" style={{height: "400px", overflowY: "hidden"}}>
+                      <thead style={{tableLayout: "fixed", width: "100%", display: "table"}}>
+                        <tr>
+                          <th scope="col">Hashtag</th>
+                          <th scope="col">Definition</th>
+                        </tr>
+                      </thead>
+                      <tbody style={{display: "block", height: "95%", overflowY: "scroll", tableLayout: "fixed", width: "100%"}}>
+                        {this.state.hashtagData.map((hashtag, idx) => (
+                          <tr key={hashtag.hashtag + idx.toString()}>
+                            <th scope="row">{hashtag.hashtag}</th>
+                            <td>{hashtag.definition}</td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -111,5 +138,23 @@ class OverviewModal extends React.Component {
     );
   }
 }
+
+// <th scope="col">Started Collecting</th>
+// <th scope="col">Stopped Collecting</th>
+
+// <td>{this.formatDate(hashtag.startDate)}</td>
+// <td>{this.formatDate(hashtag.endDate)}</td>
+
+// {this.state.hashtagData.reduce((acc, curr) => {
+//   if (!acc.hasOwnProperty("arr")) acc = {
+//     arr: [[acc]]
+//   };
+//   if (acc.arr[acc.arr.length-1].length < 3) {
+//     acc.arr[acc.arr.length-1].push(curr);
+//   } else {
+//     acc.arr.push([]);
+//   }
+//   return acc;
+// }).arr.map((subArr, i) => (<tr key={i}>{subArr.map((hashtag, j) => (<td key={j}>{hashtag}</td>))}</tr>))}
 
 module.exports = OverviewModal;

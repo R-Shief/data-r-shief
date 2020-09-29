@@ -205,10 +205,8 @@ class Streamgraph extends Viz {
           timeZone: 'UTC'
         });
 
-        const reducer = (acc, curr) => Object({...acc, [curr.type]: curr.value});
-
         this.formatDate = (date) => {
-          const parts = dtf.formatToParts(date).reduce(reducer, {});
+          const parts = dtf.formatToParts(date).reduce((acc, curr) => Object({...acc, [curr.type]: curr.value}), {});
           return `${parts.weekday}, ${parts.month} ${parts.day} ${parts.year} ${parts.hour}:${parts.minute} ${parts.dayPeriod}`
         };
 

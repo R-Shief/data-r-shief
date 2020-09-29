@@ -33,7 +33,7 @@ class HeaderBar extends React.Component {
     ];
     let activeItem = "Dashboard";
     return [
-      <nav className="navbar navbar-expand-md fixed-top" style={{backgroundColor: "#414141"}} id="headerBar">
+      <nav key="headerNav" className="navbar navbar-expand-md fixed-top" style={{backgroundColor: "#414141"}} id="headerBar">
         <div className="container-fluid" style={{width: "980px"}}>
           <a href="https://r-shief.org" className="navbar-header">
             <img src="icons/r-shief-logo-1-color-smaller.png" />
@@ -53,7 +53,7 @@ class HeaderBar extends React.Component {
           </div>
         </div>
       </nav>,
-      <div style={{height:"61px"}}></div>
+      <div key="marginFix" style={{height:"61px"}}></div>
     ];
   }
 }
