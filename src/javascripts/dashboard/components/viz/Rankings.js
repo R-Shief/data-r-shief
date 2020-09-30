@@ -29,7 +29,7 @@ class Rankings extends Viz {
       },
       tweets: {
         uriExtension: 'tweetList',
-        headers: ["Username", "Tweet", "Origin", "Time Created"],
+        headers: ["Username", "Tweet", "Origin", "Tweeted On"],
         rowFn: (cols, idx) => {
           let ret = [...cols];
           if (ret[2] && ret[3]) {
