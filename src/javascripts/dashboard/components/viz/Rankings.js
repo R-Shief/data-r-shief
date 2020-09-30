@@ -42,7 +42,7 @@ class Rankings extends Viz {
     };
 
     this.state = {
-      strategyFamily: "hashtag",
+      strategyFamily: "tweets",
       dataObj: []
     };
 
@@ -89,9 +89,9 @@ class Rankings extends Viz {
     return (
       <div id="rankings" className="d-flex flex-column" style={{height:"100%"}}>
         <VizOptionBar id="rankings-options">
+          <OptionButton isActive={this.state.strategyFamily=="tweets"} name="strategyFamily" val="tweets" onClick={this.handleOptionClick} label="Tweets" />
           <OptionButton isActive={this.state.strategyFamily=="hashtag"} name="strategyFamily" val="hashtag" onClick={this.handleOptionClick} label="Top Hashtags" />
           <OptionButton isActive={this.state.strategyFamily=="url"} name="strategyFamily" val="url" onClick={this.handleOptionClick} label="Top URLs" />
-          <OptionButton isActive={this.state.strategyFamily=="tweets"} name="strategyFamily" val="tweets" onClick={this.handleOptionClick} label="Tweets" />
         </VizOptionBar>
         <div className="table-responsive-sm flex-grow-1" id="rankingsTableWrapper">
           <table className="table table-striped table-hover mb-0" id="rankingsTable" style={{height: "100%"}}>

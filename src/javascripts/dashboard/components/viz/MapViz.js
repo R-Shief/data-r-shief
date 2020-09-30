@@ -32,6 +32,7 @@ class MapViz extends Viz {
 
     this.svgRef = React.createRef();
     this.wrapperRef = React.createRef();
+    this.tooltipRef = React.createRef();
 
     this.svg = d3.select(this.svgRef.current);
   }
@@ -83,21 +84,37 @@ class MapViz extends Viz {
           this.g = this.svg.append("g");
 
           this.projection = d3.geoMercator()
-            .scale(70)
-            .center([0, 20])
+            .scale(110)
+            .center([-200, 50])
             // .translate([this.state.width/2, this.state.height/2]);
+
+          this.tooltipDiv = d3.select(this.tooltipRef.current)
+            .style("opacity", 0);
 
           const zoomed = () => {
             this.g
               .selectAll('path')
               .attr('transform', d3.event.transform);
+
+            const mapRange = (val, in_min, in_max, out_min, out_max) => (val - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+            var val = mapRange(d3.event.transform.k, 1.0, 9.0, 0.0, 1.0);
+            var powval = Math.pow(val, 1/20);
+            const fontScale = mapRange(powval, 0.0, 1.0, 0.8, 0.1) + "rem";
+            // console.log([d3.event.transform.k, val, powval, fontScale].join(", "));
+
             this.g
               .selectAll("text.legend")
-              .attr('transform', d3.event.transform);
+              .attr('transform', d3.event.transform)
+              .style('font-size', fontScale);
+
+            this.showIDs = this.IDs.slice(0, Math.floor(mapRange(Math.pow(mapRange(d3.event.transform.k, 1.0, 9.0, 0.0, 1.0), 1/10), 0.0, 1.0, 40.0, this.IDs.length))).map(d => d.id);
+            this.g.selectAll("text.legend")
+              .style("visibility", d => this.showIDs.includes(d.id) ? "visible" : "hidden");
+
           }
 
           this.zoom = d3.zoom()
-            .scaleExtent([1, 8])
+            .scaleExtent([1, 9])
             .on('zoom', zoomed);
 
           const polyProject = (obj) => {
@@ -108,7 +125,26 @@ class MapViz extends Viz {
               return this.projection(obj);
             }
           }
-          this.topo.projectedFeatures = this.topo.features.map(feature => ({poly: feature.geometry.coordinates.map(polyProject), id: feature.id}));
+
+          const polyArea = (obj) => {
+            let ret, which;
+            if (obj.some(child => child.length != 2)) {
+              ret = obj.reduce((acc, curr) => acc + polyArea(curr), 0);
+              which = "a"
+            } else {
+              ret = d3.polygonArea(obj);
+              which = "b"
+            }
+            // console.log(which + ": " + ret);
+            return ret;
+          }
+
+          this.topo.projectedFeatures = this.topo.features.map(feature => ({poly: feature.geometry.coordinates.map(polyProject), id: feature.id, area: feature.geometry.coordinates.map(polyArea)}));
+          this.IDs = this.topo.projectedFeatures.map(feature => ({id: feature.id, area: feature.area[0]}));
+          // console.log(this.IDs);
+          this.IDs.sort((a, b) => b.area-a.area);
+          this.showIDs = this.IDs.slice(0, 20).map(d => d.id);
+          // console.log(this.IDs);
 
           this.t = this.svg.transition()
             .duration(2000);
@@ -117,8 +153,8 @@ class MapViz extends Viz {
         this.svg.call(this.zoom);
 
         this.projection = d3.geoMercator()
-          .scale(70)
-          .center([0, 20])
+          .scale(110)
+          .center([-200, 50])
           // .translate([this.state.width/2, this.state.height/2]);
 
         const unserialized = rawData.map(d => unserialize(d[0], {}).coordinates.map(c => Math.abs(c)));
@@ -128,6 +164,7 @@ class MapViz extends Viz {
           if (poly.some(child => child.length != 2)) {
             return poly.some(child => doesContain(child, coord));
           } else {
+            // console.log(poly, coord);
             return d3.polygonContains(poly, coord);
           }
         }
@@ -139,7 +176,7 @@ class MapViz extends Viz {
             return dc;
           }).length;
           // console.log(count);
-          data.set(feature.id, count)
+          data.set(feature.id, {count: count, area: feature.area})
         });
 
         // console.log(this.topo);
@@ -148,7 +185,7 @@ class MapViz extends Viz {
 
         const numBins = 7;
 
-        const extent = d3.extent(data.values());
+        const extent = d3.extent(data.values().map(d => d.count));
         const extentRange = extent[1] - extent[0];
         const step = extentRange / numBins;
         const range = d3.range(...extent, step).map((i) => i == 0 ? 0 : Math.log(i));
@@ -167,31 +204,48 @@ class MapViz extends Viz {
               enter.append("path")
                 .attr("d", mapPath)
                 .attr("fill", function(d) {
-                  d.total = data.get(d.id) || 0;
+                  d.total = data.get(d.id).count || 0;
                   return colorScale(d.total);
-                });
+                })
+                .on("mouseover", (d) => {
+                  this.tooltipDiv.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                  this.tooltipDiv.html(`${d.properties.name}: ${d.total || 0}`)
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 200) + "px")
+                })
+                .on("mouseout", (d) => {
+                  this.tooltipDiv.transition()
+                    .duration(200)
+                    .style("opacity", 0);
+                })
               enter.append("text")
                 .classed("legend", true)
                 .attr("text-anchor", "middle")
                 .attr("x", d => mapPath.centroid(d)[0])
                 .attr("y", d => mapPath.centroid(d)[1])
-                .text(d => `${d.properties.name}: ${data.get(d.id) || 0}`)
-                .style("font-size", ".1rem");
+                .text(d => d.properties.name)
+                .style("font-size", ".5rem");
             },
             update => {
               update.transition(this.t)
               .attr("fill", function(d) {
-                d.total = data.get(d.id) || 0;
+                d.total = data.get(d.id).count || 0;
                 return colorScale(d.total);
               });
             }
           );
 
+        // console.log(this.showIDs);
+
       this.g.selectAll("text.legend")
         .classed("legend", true)
         .attr("x", d => mapPath.centroid(d)[0])
         .attr("y", d => mapPath.centroid(d)[1])
-        .text(d => `${d.properties.name}: ${data.get(d.id) || 0}`)
+        .text(d => {
+          return d.properties.name;
+        })
 
     })
   }
@@ -210,9 +264,14 @@ class MapViz extends Viz {
   }
 
   render() {
+    const tooltipStyle = {
+      backgroundColor: "#414141",
+      color: "#E1E2E1"
+    };
     return (
       <div id="mapViz" ref={this.wrapperRef} className="d-flex flex-column" style={{height: "100%"}}>
         <svg ref={this.svgRef} className="flex-grow-1" style={{width: "100%"}}></svg>
+        <div className="tooltip px-1 rounded border" ref={this.tooltipRef} style={tooltipStyle}></div>
       </div>
     );
   }
