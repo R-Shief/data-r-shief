@@ -22,7 +22,15 @@ class OverviewModal extends React.Component {
 
     fetch('/data/hashtagDictionary.json')
     .then(result => result.json())
-    .then(hashtagData => this.setState({hashtagData: hashtagData}));
+    .then(hashtagData => {
+      var flags = {};
+      var uniqueHashtagsData = hashtagData.filter(entry => {
+        if (flags[entry.hashtag]) return false;
+        flags[entry.hashtag] = true;
+        return true;
+      })
+      this.setState({hashtagData: uniqueHashtagsData});
+    });
   }
 
   formatDate(dateString) {
