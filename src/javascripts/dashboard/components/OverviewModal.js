@@ -20,7 +20,7 @@ class OverviewModal extends React.Component {
   componentDidMount() {
     $("#overviewModal").modal({});
 
-    fetch('/data/hashTagDictionary.json')
+    fetch('/data/hashtagDictionary.json')
     .then(result => result.json())
     .then(hashtagData => this.setState({hashtagData: hashtagData}));
   }
