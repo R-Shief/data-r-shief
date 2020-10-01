@@ -105,14 +105,14 @@ class OverviewModal extends React.Component {
                         </tr>
                       </tbody>
                     </table>
+                  </div>
+                  <hr />
+                  <div className="alert alert-secondary" role="alert">
+                    <h4 className="alert-heading">Notes</h4>
+                    <p>The filter bar samples tweets for all views concurrently, but some views may impose additional filters. For example, the map only uses tweets that have geo tags.</p>
                     <hr />
-                    <div className="alert alert-secondary" role="alert">
-                      <h4 className="alert-heading">Notes</h4>
-                      <p>The filter bar samples tweets for all views concurrently, but some views may impose additional filters. For example, the map only uses tweets that have geo tags.</p>
-                      <hr />
-                      <p>Only tweets that satsify <strong>all</strong> filters are sampled. The only exception is when a filter has multiple entries.
-                      For example a hashtag filter for "#egypt, #superbowl" will give you tweets from either hashtag inclusively.</p>
-                    </div>
+                    <p>Only tweets that satsify <strong>all</strong> filters are sampled. The only exception is when a filter has multiple entries.
+                    For example a hashtag filter for "#egypt, #superbowl" will give you tweets from either hashtag inclusively.</p>
                   </div>
                 </div>
                 <div className="viz tab-pane fade border border-top-0 rounded-bottom px-2 pt-2" id="overviewData" role="tabpanel" aria-labelledby="overviewInterface">
