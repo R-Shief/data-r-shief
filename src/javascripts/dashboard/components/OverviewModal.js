@@ -54,15 +54,16 @@ class OverviewModal extends React.Component {
       <div className="modal fade" id="overviewModal" tabIndex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-lg" role="document">
           <div className="modal-content">
-            <div className="modal-body">
+            <div className="pt-2 pr-3">
               <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
-              <h2>Getting started</h2>
+            </div>
+            <div className="modal-body pt-0">
               <ul id="overviewTabList" className="nav nav-tabs nav-fill py-0" role="tablist">
                 <li className="nav-item">
                   <a className="nav-link active" href="#overviewInterface" data-toggle="pill">
-                    <h4>The Interface</h4>
+                    <h4>Getting Started</h4>
                   </a>
                 </li>
                 <li className="nav-item">

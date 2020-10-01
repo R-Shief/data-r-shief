@@ -11,6 +11,6 @@ FROM node:12-alpine AS build
 WORKDIR /app
 COPY --from=builder /app/ ./app/
 COPY . ./
-RUN npm install pm2 -g
+RUN npm i -g pm2-runtime
 
 CMD [ "npm", "start" ]
