@@ -6,3 +6,4 @@ logs/*
 *conf.*
 bigData
 !/**/.gitkeep
+*secrets*

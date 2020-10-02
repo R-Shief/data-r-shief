@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
   res.render('dashboard/dashboard', {
     filterDefaults: filterDefaults
   }, function(err, html) {
-      console.log(err);
+      if(err) console.log(err);
       res.send(html);
   })
 
@@ -21,7 +21,7 @@ router.get('/:langList/:startDate/:endDate/:hashtags/:usernames/:page', function
   res.render('dashboard/dashboard', {
     filterDefaults: Object.assign(filterDefaults, req.params)
   }, function(err, html) {
-      console.log(err);
+      if (err) console.log(err);
       res.send(html);
   })
 })

@@ -1,31 +1,31 @@
-var createError = require('http-errors');
+// Add app
 var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-
-var database = require('./database.js');
-
-var indexRouter = require('./routes/index');
-var dashRouter = require('./routes/dashboard');
-
 var app = express();
 
+// Use express's built in json and url encoding middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 // view engine setup
+var path = require('path');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+// Add logger
+var logger = require('morgan');
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+
+// Add static path
 app.use(express.static(path.join(__dirname, 'dist')));
 
-if (app.get('env') === 'production') {
-  app.set('trust proxy', 1) // trust first proxy
-  database.sessionConf.cookie.secure = true // serve secure cookies
-}
-app.use(database.session(database.sessionConf));
+if (app.get('env') === 'production') app.set('trust proxy', 1) // trust first proxy (for secure cookies)
+
+var database = require('./database.js');
+app.use(database.session);
+
+// Routers =============================================================
+var indexRouter = require('./routes/index');
+var dashRouter = require('./routes/dashboard');
 
 app.use('/', indexRouter);
 app.use('/dashboard', dashRouter);
@@ -42,6 +42,11 @@ app.get('/headerNav', function(req, res, next) {
   res.render('header');
 })
 
+
+
+// Error Handlers ========================================================
+
+var createError = require('http-errors');
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
