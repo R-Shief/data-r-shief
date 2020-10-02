@@ -81,10 +81,8 @@ class OverviewModal extends React.Component {
               </ul>
               <div key="overviewTabs" className="tab-content">
                 <div className="viz tab-pane fade border border-top-0 rounded-bottom px-2 pt-2 show active" id="overviewInterface" role="tabpanel" aria-labelledby="overviewInterface">
-                  <p>The R-Shief Dashboard is a fully interactive collection of data visualization tools.</p>
-                  <p>Click the hashtag dropdown to find a complete list of avaiable hashtags. Likewise usernames can be found by typing a few keys into the usernames field, like so:</p>
-                  <img className="mt-0 mb-4" src="/images/overview/r-shief-guide-2.png" />
-                  <p>If you're unsure which view to use, refer to the table below:</p>
+                  <p>The R-Shief Dashboard is a fully interactive collection of data visualization tools. If you're unsure which view to use, refer to the table below.</p>
+                  <img className="mt-0 mb-4 d-none" src="/images/overview/r-shief-guide-2.png" />
                   <div className="table-responsive">
                     <table className="table">
                       <thead>
@@ -115,7 +113,9 @@ class OverviewModal extends React.Component {
                   </div>
                   <hr />
                   <div className="alert alert-secondary" role="alert">
-                    <h4 className="alert-heading">Notes</h4>
+                    <h4 className="alert-heading">Tips</h4>
+                    <p>Click the hashtag dropdown to find a complete list of avaiable hashtags or start typing into the usernames field to see matches.</p>
+                    <hr />
                     <p>The filter bar samples tweets for all views concurrently, but some views may impose additional filters. For example, the map only uses tweets that have geo tags.</p>
                     <hr />
                     <p>Only tweets that satsify <strong>all</strong> filters are sampled. The only exception is when a filter has multiple entries.
