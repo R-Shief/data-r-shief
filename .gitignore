@@ -1,9 +1,8 @@
 node_modules/
-bibVizWeb/
-public/data/_*
 logs/*
 #*.bundle.js
 *conf.*
 bigData
 !/**/.gitkeep
 *secrets*
+_*

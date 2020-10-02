@@ -17,8 +17,9 @@ router.get('/', function(req, res, next) {
 })
 
 router.get('/:langList/:startDate/:endDate/:hashtags/:usernames/:page', function(req, res, next) {
+  let changes = Object.fromEntries(Object.entries(req.params).map(([key, val]) => [key, key == "langList" ? val.split(",") : val]));
   res.render('dashboard/dashboard', {
-    filterDefaults: Object.assign(filterDefaults, req.params)
+    filterDefaults: Object.assign(filterDefaults, )
   }, function(err, html) {
       if (err) console.log(err);
       res.send(html);

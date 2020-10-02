@@ -17,9 +17,9 @@ class SiteFooter extends React.Component {
           <div className="ml-auto">
             <strong><p className="mb-1">laila at r-shief dot org</p></strong>
             <div className="d-flex justify-content-center">
-              <a href="https://twitter.com/rshief" target="_blank"><img className="pl-1" src="icons/twitter_icon_wix.png" height="30px" /></a>
-              <a href="https://facebook.com/RShief" target="_blank"><img className="pl-1" src="icons/facebookIcon.png" height="30px" /></a>
-              <a href="https://github.com/R-Shief" target="_blank"><img className="pl-1" src="icons/github_mark_white.png" height="30px" /></a>
+              <a href="https://twitter.com/rshief" target="_blank"><img className="pl-1" src="icons/social/twitter_icon_wix.png" height="30px" /></a>
+              <a href="https://facebook.com/RShief" target="_blank"><img className="pl-1" src="icons/social/facebookIcon.png" height="30px" /></a>
+              <a href="https://github.com/R-Shief" target="_blank"><img className="pl-1" src="icons/social/github_mark_white.png" height="30px" /></a>
             </div>
           </div>
         </div>
