@@ -123,7 +123,8 @@ class OverviewModal extends React.Component {
                   </div>
                 </div>
                 <div className="viz tab-pane fade border border-top-0 rounded-bottom px-2 pt-2" id="overviewData" role="tabpanel" aria-labelledby="overviewInterface">
-                  <p>The data consists of <strong>87,707,630</strong> tweets in <strong>58</strong> languages recorded between <strong>March 2011</strong> and <strong>June 2013</strong> from hashtags relating to the <strong>Occupy Movements</strong> and the <strong>Arab Spring Uprisings</strong>. Samples of <strong>1,239</strong> hashtags were collected in total. Expand (<img src="icons/bootstrap-icons-1.0.0-alpha5/box-arrow-up-right.svg" height="13px" />) the table below for more data on each hashtag.</p>
+                  <p>The data consists of <strong>87,707,630</strong> tweets in <strong>58</strong> languages recorded between <strong>March 2011</strong> and <strong>June 2013</strong> from hashtags relating to the <strong>Occupy Movements</strong> and the <strong>Arab Spring Uprisings</strong>. <strong>544,124</strong> are geo-tagged.</p>
+                  <p>Samples from <strong>1,239</strong> hashtags were collected in total. Expand (<img src="icons/bootstrap-icons-1.0.0-alpha5/box-arrow-up-right.svg" height="13px" />) the table below for more data on each hashtag.</p>
                   <div className="table-responsive">
                     <button className="btn btn-outline-default float-right" style={{marginBottom: "-42px", paddingTop: "1rem"}} data-toggle="modal" data-target="#dataModal">
                       <img src="icons/bootstrap-icons-1.0.0-alpha5/box-arrow-up-right.svg" />
@@ -131,17 +132,21 @@ class OverviewModal extends React.Component {
                     <table className="table table-striped table-hover d-block" style={{height: "400px", overflowY: "hidden"}}>
                       <thead style={{tableLayout: "fixed", width: "100%", display: "table"}}>
                         <tr>
-                          <th scope="col">Hashtag</th>
-                          <th scope="col">Definition</th>
+                          <th scope="col">Hashtags</th>
                         </tr>
                       </thead>
                       <tbody style={{display: "block", height: "95%", overflowY: "scroll", tableLayout: "fixed", width: "100%"}}>
-                        {this.state.hashtagData.map((hashtag, idx) => (
-                          <tr key={hashtag.hashtag + idx.toString()}>
-                            <th scope="row">{hashtag.hashtag}</th>
-                            <td>{hashtag.definition}</td>
-                          </tr>
-                        ))}
+                        {this.state.hashtagData.reduce((acc, curr) => {
+                          if (!acc.hasOwnProperty("arr")) acc = {
+                            arr: [[acc]]
+                          };
+                          if (acc.arr[acc.arr.length-1].length < 3) {
+                            acc.arr[acc.arr.length-1].push(curr);
+                          } else {
+                            acc.arr.push([]);
+                          }
+                          return acc;
+                        }).arr.map((subArr, i) => (<tr key={i}>{subArr.map((hashtag, j) => (<td key={j}>{hashtag.hashtag}</td>))}</tr>))}
                       </tbody>
                     </table>
                   </div>
@@ -200,16 +205,13 @@ class OverviewModal extends React.Component {
 // <td>{this.formatDate(hashtag.startDate)}</td>
 // <td>{this.formatDate(hashtag.endDate)}</td>
 
-// {this.state.hashtagData.reduce((acc, curr) => {
-//   if (!acc.hasOwnProperty("arr")) acc = {
-//     arr: [[acc]]
-//   };
-//   if (acc.arr[acc.arr.length-1].length < 3) {
-//     acc.arr[acc.arr.length-1].push(curr);
-//   } else {
-//     acc.arr.push([]);
-//   }
-//   return acc;
-// }).arr.map((subArr, i) => (<tr key={i}>{subArr.map((hashtag, j) => (<td key={j}>{hashtag}</td>))}</tr>))}
+// {this.state.hashtagData.map((hashtag, idx) => (
+//   <tr key={hashtag.hashtag + idx.toString()}>
+//     <th scope="row">{hashtag.hashtag}</th>
+//     <td>{hashtag.definition}</td>
+//   </tr>
+// ))}
+
+
 
 module.exports = OverviewModal;
