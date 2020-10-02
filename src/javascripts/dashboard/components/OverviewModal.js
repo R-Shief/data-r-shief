@@ -123,13 +123,13 @@ class OverviewModal extends React.Component {
                   </div>
                 </div>
                 <div className="viz tab-pane fade border border-top-0 rounded-bottom px-2 pt-2" id="overviewData" role="tabpanel" aria-labelledby="overviewInterface">
-                  <p>The data consists of <strong>87,707,630</strong> tweets in <strong>58</strong> languages recorded between <strong>March 2011</strong> and <strong>June 2013</strong> from hashtags relating to the <strong>Occupy Movements</strong> and the <strong>Arab Spring Uprisings</strong>. <strong>544,124</strong> are geo-tagged.</p>
+                  <p>The data consists of <strong>87,707,630</strong> tweets in <strong>58</strong> languages recorded between <strong>March 2011</strong> and <strong>June 2013</strong> from hashtags relating to the <strong>Occupy Movements</strong> and the <strong>Arab Spring Uprisings</strong>, of which <strong>544,124</strong> are geo-tagged.</p>
                   <p>Samples from <strong>1,239</strong> hashtags were collected in total. Expand (<img src="icons/bootstrap-icons-1.0.0-alpha5/box-arrow-up-right.svg" height="13px" />) the table below for more data on each hashtag.</p>
                   <div className="table-responsive">
                     <button className="btn btn-outline-default float-right" style={{marginBottom: "-42px", paddingTop: "1rem"}} data-toggle="modal" data-target="#dataModal">
                       <img src="icons/bootstrap-icons-1.0.0-alpha5/box-arrow-up-right.svg" />
                     </button>
-                    <table className="table table-striped table-hover d-block" style={{height: "400px", overflowY: "hidden"}}>
+                    <table className="table table-striped table-hover d-block" style={{height: "360px", overflowY: "hidden"}}>
                       <thead style={{tableLayout: "fixed", width: "100%", display: "table"}}>
                         <tr>
                           <th scope="col">Hashtags</th>
@@ -150,9 +150,12 @@ class OverviewModal extends React.Component {
                       </tbody>
                     </table>
                   </div>
-                  <p>This dashboard takes a <strong>pseudorandom sample</strong> of the archive, which ensures sample sizes N &gt; 1000 are representative of the whole with high confidence.</p>
-                  <p>Links and embeds (<img style={{height: "12px"}} src="icons/bootstrap-icons-1.0.0-alpha5/share-fill.svg" />) are guaranteed consistent results, as pseudorandom sampling is <strong>deterministic</strong>.
-                  </p>
+                  <div className="alert alert-secondary" role="alert">
+                    <h4 className="alert-heading">Notes</h4>
+                    <p>This dashboard takes a <strong>pseudorandom sample</strong> of the archive, which ensures sample sizes N &gt; 1000 are representative of the whole with high confidence.</p>
+                    <hr />
+                    <p>Links and embeds (<img style={{height: "12px"}} src="icons/bootstrap-icons-1.0.0-alpha5/share-fill.svg" />) are guaranteed equivalent results.</p>
+                  </div>
                 </div>
               </div>
             </div>
