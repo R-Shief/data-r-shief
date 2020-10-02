@@ -92,10 +92,10 @@ class Database {
     });
   }
 
-  fetchDbResults(sessionID, proc) {
+  fetchDbResults(proc, ...args) {
     return new Promise((resolve, reject) => {
       this.pool.getSession().then(connection => {
-        var fetchSQL = `CALL ${proc}('${sessionID}',${options.maxLimit})`;
+        var fetchSQL = `CALL ${proc}('${args.length == 1 ? args[0] : args.join(",")}',${options.maxLimit})`;
         connection.sql(fetchSQL).execute().then(results => {
           resolve(results.fetchAll());
           //resolve(typeof(results[0][0]) !== undefined ? results : [{from_user: "No Results", text: "Please try again."}]);

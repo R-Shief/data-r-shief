@@ -2,7 +2,6 @@ var express = require('express');
 var database = require('../database.js');
 var filterDefaults = require('../config/filterDefaults.js');
 var router = express.Router();
-var usernames = require('../bigData/usernames.json');
 var procMap = require('../config/procMap.js');
 
 router.use(express.json());
@@ -36,8 +35,8 @@ router.put('/:langList/:startDate/:endDate/:hashtags/:usernames/:page', function
 
 router.get('/:usernameQuery', function(req, res, next) {
   res.setHeader('Content-Type', 'application/json');
-  const ret = req.params.usernameQuery != "*" ? usernames.usernames.filter(username => username.includes(req.params.usernameQuery)).slice(0, 100) : [];
-  res.json(ret);
+  database.fetchDbResults('usernames', req.params.usernameQuery)
+    .then(results => res.json(JSON.stringify(results)))
 })
 
 router.get('/:langList/:startDate/:endDate/:hashtags/:usernames/:page/:fetch', function (req, res, next) {
@@ -47,7 +46,7 @@ router.get('/:langList/:startDate/:endDate/:hashtags/:usernames/:page/:fetch', f
     let proc = procMap[req.params.fetch];
     if (!proc) throw new Error('Invalid URL filter fetch parameter.');
     resolve(
-      database.fetchDbResults(req.sessionID, proc)
+      database.fetchDbResults(proc, req.sessionID)
     );
   }))
   .then(results => {
