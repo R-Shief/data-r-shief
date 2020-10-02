@@ -31,6 +31,13 @@ class OverviewModal extends React.Component {
       })
       this.setState({hashtagData: uniqueHashtagsData});
     });
+
+    // $('#dataModal').on('shown.bs.modal', function () {
+    //   console.log("attempting");
+    //    $($.fn.dataTable.tables(true)).DataTable()
+    //       .columns.adjust();
+    // });
+
   }
 
   formatDate(dateString) {
@@ -50,8 +57,8 @@ class OverviewModal extends React.Component {
   };
 
   render() {
-    return (
-      <div className="modal fade" id="overviewModal" tabIndex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
+    return [
+      <div key="overviewModal" className="modal fade" id="overviewModal" tabIndex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-lg" role="document">
           <div className="modal-content">
             <div className="pt-2 pr-3">
@@ -116,8 +123,11 @@ class OverviewModal extends React.Component {
                   </div>
                 </div>
                 <div className="viz tab-pane fade border border-top-0 rounded-bottom px-2 pt-2" id="overviewData" role="tabpanel" aria-labelledby="overviewInterface">
-                  <p>The data consists of <strong>87,707,630</strong> tweets in <strong>58</strong> languages recorded between <strong>March 2011</strong> and <strong>June 2013</strong> from hashtags relating to the <strong>Occupy Movements</strong> and the <strong>Arab Spring Uprisings</strong>. Samples of <strong>1,239</strong> hashtags were collected in total. Here is a complete table:</p>
+                  <p>The data consists of <strong>87,707,630</strong> tweets in <strong>58</strong> languages recorded between <strong>March 2011</strong> and <strong>June 2013</strong> from hashtags relating to the <strong>Occupy Movements</strong> and the <strong>Arab Spring Uprisings</strong>. Samples of <strong>1,239</strong> hashtags were collected in total. Expand (<img src="icons/bootstrap-icons-1.0.0-alpha5/box-arrow-up-right.svg" height="13px" />) the table below for more data on each hashtag.</p>
                   <div className="table-responsive">
+                    <button className="btn btn-outline-default float-right" style={{marginBottom: "-42px", paddingTop: "1rem"}} data-toggle="modal" data-target="#dataModal">
+                      <img src="icons/bootstrap-icons-1.0.0-alpha5/box-arrow-up-right.svg" />
+                    </button>
                     <table className="table table-striped table-hover d-block" style={{height: "400px", overflowY: "hidden"}}>
                       <thead style={{tableLayout: "fixed", width: "100%", display: "table"}}>
                         <tr>
@@ -143,8 +153,44 @@ class OverviewModal extends React.Component {
             </div>
           </div>
         </div>
+      </div>,
+
+      <div key="dataModal" className="modal fade" id="dataModal" tabIndex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-lg" role="document" style={{width: "100%", maxWidth: "none", height: "100%", maxHeight: "none", margin: 0, padding: 0}}>
+          <div className="modal-content">
+            <div className="modal-body pt-0">
+              <div className="table-responsive">
+                <button type="button" className="close" style={{marginBottom: "-42px", paddingTop: "1rem"}} data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+                <table className="table table-striped table-hover d-block" style={{height: "96vh", overflowY: "hidden"}}>
+                  <thead style={{tableLayout: "fixed", width: "100%", display: "table"}}>
+                    <tr>
+                      <th scope="col" style={{width: "15%"}}>Hashtag</th>
+                      <th scope="col" style={{width: "48%"}}>Definition</th>
+                      <th scope="col" style={{width: "11%"}}>Number Collected</th>
+                      <th scope="col" style={{width: "13%"}}>Started Collecting</th>
+                      <th scope="col" style={{width: "13%"}}>Stopped Collecting</th>
+                    </tr>
+                  </thead>
+                  <tbody style={{display: "block", height: "95%", overflowY: "scroll", tableLayout: "fixed", width: "100%"}}>
+                    {this.state.hashtagData.map((hashtag, idx) => (
+                      <tr key={hashtag.hashtag + idx.toString()}>
+                        <th scope="row"  style={{width: "15%"}}>{hashtag.hashtag}</th>
+                        <td style={{width: "48%"}}>{hashtag.definition}</td>
+                        <td style={{width: "11%"}}>{hashtag.numTweet}</td>
+                        <td style={{width: "13%"}}>{this.formatDate(hashtag.startDate)}</td>
+                        <td style={{width: "13%"}}>{this.formatDate(hashtag.endDate)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    );
+    ];
   }
 }
 
