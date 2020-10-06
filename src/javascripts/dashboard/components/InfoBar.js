@@ -18,7 +18,7 @@ class ShareModal extends React.Component {
             <img src="icons/bootstrap-icons-1.0.0-alpha5/code.svg" />
           </span>
         </div>
-        <textarea id="shareembed" className="form-control" rows="3" readOnly size="30" defaultValue={`<iframe frameborder="0" src="${props.url}"></iframe>`} />
+        <textarea id="shareembed" className="form-control" rows="3" readOnly size="30" defaultValue={`<iframe frameBorder="0" width="100%" height="100%" scrolling="no" src="${props.url.split("/").slice(0, -1).join("/") + "?embed=true"}"></iframe>`} />
         <div className="input-group-append">
           <button className="btn clippable btn-outline-secondary" data-clipboard-target="#shareembed">
             Copy
@@ -34,7 +34,7 @@ class ShareModal extends React.Component {
             <img src="icons/bootstrap-icons-1.0.0-alpha5/link-45deg.svg" />
           </span>
         </div>
-        <input id="sharelink" className="form-control" type="text" readOnly value={props.url} size="30" />
+        <input id="sharelink" className="form-control" type="text" readOnly value={props.url.split("/").slice(0, -1).join("/")} size="30" />
         <div className="input-group-append">
           <button className="btn clippable btn-outline-secondary" data-clipboard-target="#sharelink">
             Copy

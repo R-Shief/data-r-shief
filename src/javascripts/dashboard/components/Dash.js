@@ -69,6 +69,7 @@ class Dash extends React.Component {
   }
 
   getURLWithFilters() {
+    // console.log(this.state.filters, this.state.dataPage);
     return [window.location.href, ...Object.values(this.state.filters), this.state.dataPage].join("/");
   }
 
@@ -102,7 +103,7 @@ class Dash extends React.Component {
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <HeaderBar key="headerBar" />
+        {this.props.includeWix && <HeaderBar key="headerBar" />}
         <FilterBar key="filterBar" filterDefaults={this.props.filterDefaults} onFilterChange={this.handleFilterChange} onFilterSubmit={this.handleFilterSubmit} />
         <VizViewer key="vizViewer" vizClasses={this.state.vizClasses} getUrl={this.getURLWithFilters} />
         <div className="container-fluid mt-1 mb-3">
@@ -110,7 +111,7 @@ class Dash extends React.Component {
         </div>
       </div>,
       <footer key="footer">
-        <SiteFooter />
+        {this.props.includeWix && <SiteFooter />}
       </footer>
     ];
   }

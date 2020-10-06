@@ -8,7 +8,8 @@ router.use(express.json());
 
 router.get('/', function(req, res, next) {
   res.render('dashboard/dashboard', {
-    filterDefaults: filterDefaults
+    filterDefaults: filterDefaults,
+    includeWix: "true"
   }, function(err, html) {
       if(err) console.log(err);
       res.send(html);
@@ -16,10 +17,11 @@ router.get('/', function(req, res, next) {
 
 })
 
-router.get('/:langList/:startDate/:endDate/:hashtags/:usernames/:page', function(req, res, next) {
+router.get('/:langList/:startDate/:endDate/:hashtags/:usernames', function(req, res, next) {
   let changes = Object.fromEntries(Object.entries(req.params).map(([key, val]) => [key, key == "langList" ? val.split(",") : val]));
   res.render('dashboard/dashboard', {
-    filterDefaults: Object.assign(filterDefaults, )
+    filterDefaults: Object.assign(filterDefaults, changes),
+    includeWix: req.query.embed ? "false" : "true"
   }, function(err, html) {
       if (err) console.log(err);
       res.send(html);

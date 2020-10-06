@@ -24,6 +24,7 @@ html
     script(crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js")
     script(src="https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js" crossorigin)
     script.
-      // Filter defaults injected by expressjs router dashboard.js
+      // Filter defaults and whether to include header/footer injected by expressjs router dashboard.js
       var filterDefaults = !{JSON.stringify(filterDefaults)};
+      var includeWix = !{includeWix};
     script(src='/javascripts/dashboard.bundle.js')
