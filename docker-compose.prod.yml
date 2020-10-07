@@ -2,9 +2,7 @@ version: "3.8"
 
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: darthnerda/r-shief-web:latest
     ports:
       - 3000:3000
     command: [ "npm", "start" ]
