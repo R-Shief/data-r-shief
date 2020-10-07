@@ -9,7 +9,7 @@ services:
       - 3000:3000
     volumes:
       - .:/app
-    command: [ "npm", "run-script", "start:dev" ]
+    command: [ "npm", "start" ]
     restart: unless-stopped
     networks:
       - app-network
@@ -19,12 +19,21 @@ services:
     container_name: webserver
     ports:
       - "80:80"
+      - "443:443"
     volumes:
-      - ./nginx-conf-dev:/etc/nginx/conf.d
+      - ./nginx-conf:/etc/nginx/conf.d
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
     depends_on:
       - app
     networks:
       - app-network
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
 
 networks:
   app-network:
