@@ -10,7 +10,7 @@ services:
     networks:
       - app-network
 
-  webserver:
+  nginx:
     image: nginx:mainline-alpine
     container_name: webserver
     ports:
