@@ -7,9 +7,12 @@ var procMap = require('../config/procMap.js');
 router.use(express.json());
 
 router.get('/', function(req, res, next) {
+  req.session.views = req.session.views || 0;
+  req.session.views++;
   res.render('dashboard/dashboard', {
     filterDefaults: filterDefaults,
-    includeWix: "true"
+    includeWix: "true",
+    overviewUpOnStartup: req.session.views > 1 ? "false" : "true"
   }, function(err, html) {
       if(err) console.log(err);
       res.send(html);
@@ -18,10 +21,13 @@ router.get('/', function(req, res, next) {
 })
 
 router.get('/:langList/:startDate/:endDate/:hashtags/:usernames', function(req, res, next) {
+  req.session.views = req.session.views || 0;
+  req.session.views++;
   let changes = Object.fromEntries(Object.entries(req.params).map(([key, val]) => [key, key == "langList" ? val.split(",") : val]));
   res.render('dashboard/dashboard', {
     filterDefaults: Object.assign(filterDefaults, changes),
-    includeWix: req.query.embed ? "false" : "true"
+    includeWix: req.query.embed ? "false" : "true",
+    overviewUpOnStartup: req.session.views > 1 ? "false" : "true"
   }, function(err, html) {
       if (err) console.log(err);
       res.send(html);

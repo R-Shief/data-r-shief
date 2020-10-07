@@ -87,7 +87,7 @@ class InfoBar extends React.Component {
         </div>
       </div>,
       <ShareModal key="shareModal" url={this.props.getUrl()} />,
-      <OverviewModal key="overviewModal" />
+      <OverviewModal key="overviewModal" upOnStartup={this.props.overviewUpOnStartup} />
     ];
   }
 }

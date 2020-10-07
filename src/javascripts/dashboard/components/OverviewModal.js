@@ -18,7 +18,7 @@ class OverviewModal extends React.Component {
   }
 
   componentDidMount() {
-    $("#overviewModal").modal({});
+    if (this.props.upOnStartup) $("#overviewModal").modal({});
 
     fetch('/data/hashtagDictionary.json')
     .then(result => result.json())
