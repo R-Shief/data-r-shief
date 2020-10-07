@@ -7,14 +7,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3000:3000
-    volumes:
-      - .:/app
     command: [ "npm", "start" ]
     restart: unless-stopped
     networks:
       - app-network
 
-  webserver:
+  nginx:
     image: nginx:mainline-alpine
     container_name: webserver
     ports:
@@ -22,8 +20,8 @@ services:
       - "443:443"
     volumes:
       - ./nginx-conf:/etc/nginx/conf.d
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
     depends_on:
       - app
     networks:
@@ -32,8 +30,8 @@ services:
   certbot:
     image: certbot/certbot
     volumes:
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
 
 networks:
   app-network:

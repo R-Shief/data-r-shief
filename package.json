@@ -24,7 +24,6 @@
     "mysql": "^2.18.1",
     "oboe": "^2.1.5",
     "php-serialize": "^4.0.2",
-    "pm2": "^4.5.0",
     "pug": "2.0.0-beta11",
     "react": "^16.13.1",
     "react-device-detect": "^1.13.1",
