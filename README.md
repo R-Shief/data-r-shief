@@ -19,13 +19,15 @@ module.exports = {
 }
 ```
 
-# For Developers
-This documentation assumes that a mysql 8.0 database with the R-Shief schema and subroutines is available over the internet.
+This documentation also assumes that a mysql 8.0 database with the R-Shief schema and subroutines is available over the internet.
 
-To spin the server up for development, cd into the root of this repo, make sure all dependencies are installed with ```npm i```, and run ```npm run-script start:dev```. This will make the node server automatically restart the server and re-compile the source code when changes are detected. You should now be able to find the dashboard at localhost:3000/dashboard and the bibliography visualization at localhost:3000/bibviz.
+# For Developers
+To spin the server up for development, cd into the root of this repo, make sure all dependencies are installed with ```npm i``` and run ```npm run-script start:dev```. This will make the node server automatically restart the server and re-compile the source code when changes are detected.
+
+You should now be able to find the dashboard at localhost:3000/dashboard and the bibliography visualization at localhost:3000/bibviz.
 
 # Tour
-The backend is a node server using the ExpressJS framework for routing and middleware. Look in app.js or dashboardRouter.js to find the majority of the backend processing. The dashboard assumes that a mysql 8
+The backend is a node server using the ExpressJS framework for routing and middleware. Look in app.js or dashboardRouter.js to find the majority of the backend processing.
 
 The function ```res.render``` will look in the ```views``` folder for a pug template file, which is basically HTML, but with python-esque whitespace delimiting instead of closing tags. The dashboard and bibviz template files will include a 'bundle' javascript located in ```public/javascripts```. These are the compiled scripts, and are not meant to be edited. To make changes, spin the server up in dev mode (```npm run-script start:dev```) and edit the source files in the ```src``` folder. They will automatically be re-compiled, minified, transpiled, and bundled by Webpack (and Babel).
 
