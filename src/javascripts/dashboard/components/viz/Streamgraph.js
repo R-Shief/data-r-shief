@@ -69,6 +69,10 @@ class Streamgraph extends Viz {
   }
 
   refresh() {
+    this.setState({
+      width: this.wrapperRef.current.offsetWidth,
+      height: this.wrapperRef.current.offsetHeight
+    });
     return new Promise((resolve, reject) => {
       this.fetchExtension(this.uriExtension(), {method: 'GET'})
       .then(data => {
