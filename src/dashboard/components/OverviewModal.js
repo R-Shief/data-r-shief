@@ -82,7 +82,6 @@ class OverviewModal extends React.Component {
               <div key="overviewTabs" className="tab-content">
                 <div className="viz tab-pane fade border border-top-0 rounded-bottom px-2 pt-2 show active" id="overviewInterface" role="tabpanel" aria-labelledby="overviewInterface">
                   <p>The R-Shief Dashboard is a fully interactive collection of data visualization tools. If you're unsure which view to use, refer to the table below.</p>
-                  <img className="mt-0 mb-4 d-none" src="/images/overview/r-shief-guide-2.png" />
                   <div className="table-responsive">
                     <table className="table">
                       <thead>
