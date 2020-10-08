@@ -1,5 +1,5 @@
 {
-  "name": "nodeapp",
+  "name": "data-r-shief",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -7,7 +7,7 @@
     "build": "webpack --mode=production",
     "start:dev": "npm-run-all --parallel watch:server watch:build",
     "watch:build": "webpack --mode=development --watch",
-    "watch:server": "set debug = nodeapp:* & nodemon ./bin/www"
+    "watch:server": "set debug = data-r-shief:* & nodemon ./bin/www"
   },
   "dependencies": {
     "@mysql/xdevapi": "8.0.21",

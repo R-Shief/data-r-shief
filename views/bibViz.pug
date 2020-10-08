@@ -1,7 +1,10 @@
-extends base
-
-append stylesheets
-  link(rel='stylesheet', href='/stylesheets/bibviz.css')
-
-append scripts
-  script(src="/javascripts/bibViz.bundle.js")
+doctype html
+html(lang="en")
+  head
+    title= title
+    block stylesheets
+      // Global stylesheet
+      link(rel='stylesheet', href='/stylesheets/style.css')
+      link(rel='stylesheet', href='/stylesheets/bibviz.css')
+  body
+    script(src="/javascripts/bibViz.bundle.js")

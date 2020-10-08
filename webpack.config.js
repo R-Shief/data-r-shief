@@ -4,9 +4,8 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 module.exports = {
   mode: "development",
   entry: {
-    dashboard: './src/javascripts/dashboard/dashboardClient.js',
-    bibViz: './src/javascripts/bibViz/bibVizClient.js',
-    test: './src/javascripts/test.js'
+    dashboard: './src/dashboard/dashboardClient.js',
+    bibViz: './src/bibViz/bibVizClient.js'
   },
   plugins: [
     new CleanWebpackPlugin()
@@ -17,7 +16,7 @@ module.exports = {
   },
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist/javascripts'),
+    path: path.resolve(__dirname, 'public/javascripts'),
   },
   module: {
     rules: [

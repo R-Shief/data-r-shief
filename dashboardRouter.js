@@ -1,15 +1,15 @@
 var express = require('express');
-var database = require('../database.js');
-var filterDefaults = require('../config/filterDefaults.js');
+var database = require('./database.js');
+var filterDefaults = require('./config/filterDefaults.js');
 var router = express.Router();
-var procMap = require('../config/procMap.js');
+var procMap = require('./config/procMap.js');
 
 router.use(express.json());
 
 router.get('/', function(req, res, next) {
   req.session.views = req.session.views || 0;
   req.session.views++;
-  res.render('dashboard/dashboard', {
+  res.render('dashboard', {
     filterDefaults: filterDefaults,
     includeWix: "true",
     overviewUpOnStartup: req.session.views > 1 ? "false" : "true"
@@ -24,7 +24,7 @@ router.get('/:langList/:startDate/:endDate/:hashtags/:usernames', function(req, 
   req.session.views = req.session.views || 0;
   req.session.views++;
   let changes = Object.fromEntries(Object.entries(req.params).map(([key, val]) => [key, key == "langList" ? val.split(",") : val]));
-  res.render('dashboard/dashboard', {
+  res.render('dashboard', {
     filterDefaults: Object.assign(filterDefaults, changes),
     includeWix: req.query.embed ? "false" : "true",
     overviewUpOnStartup: req.session.views > 1 ? "false" : "true"

@@ -16,36 +16,33 @@ var logger = require('morgan');
 app.use(logger('dev'));
 
 // Add static path
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, 'public')));
 
-if (app.get('env') === 'production') app.set('trust proxy', 1) // trust first proxy (for secure cookies)
+// trust first proxy (for secure cookies)
+if (app.get('env') === 'production') app.set('trust proxy', 1)
 
+// Add sessions handler
 var database = require('./database.js');
 app.use(database.session);
 
 // Routers =============================================================
-var indexRouter = require('./routes/index');
-var dashRouter = require('./routes/dashboard');
+var dashRouter = require('./dashboardRouter.js');
 
-app.use('/', indexRouter);
+app.get('/', function(req, res, next) {
+  res.render('index', {title: "R-Shief"});
+});
+
 app.use('/dashboard', dashRouter);
 
 app.get('/bibViz', function(req, res, next) {
-  res.render('bibViz');
+  res.render('bibViz', {title: "Bibliography Visualization"});
 });
-
-app.get('/test', function(req, res, next) {
-  res.render('test');
-})
 
 app.get('/headerNav', function(req, res, next) {
   res.render('header');
 })
 
-
-
 // Error Handlers ========================================================
-
 var createError = require('http-errors');
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
