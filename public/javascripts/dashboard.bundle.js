@@ -6801,7 +6801,7 @@ eval("function _typeof(obj) { \"@babel/helpers - typeof\"; if (typeof Symbol ===
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("var Dash = __webpack_require__(/*! ./components/Dash.js */ \"./src/dashboard/components/Dash.js\");\n\n$(document).ready(function () {\n  window.history.replaceState({}, null, \"/dashboard\");\n  ReactDOM.render( /*#__PURE__*/React.createElement(Dash, {\n    filterDefaults: filterDefaults,\n    includeWix: includeWix,\n    overviewUpOnStartup: overviewUpOnStartup\n  }), document.getElementById(\"root\"));\n});\nconsole.log(\"Hi there.\");\n\n//# sourceURL=webpack:///./src/dashboard/dashboardClient.js?");
+eval("var Dash = __webpack_require__(/*! ./components/Dash.js */ \"./src/dashboard/components/Dash.js\");\n\n$(document).ready(function () {\n  window.history.replaceState({}, null, \"/dashboard\");\n  ReactDOM.render( /*#__PURE__*/React.createElement(Dash, {\n    filterDefaults: filterDefaults,\n    includeWix: includeWix,\n    overviewUpOnStartup: overviewUpOnStartup\n  }), document.getElementById(\"root\"));\n});\n\n//# sourceURL=webpack:///./src/dashboard/dashboardClient.js?");
 
 /***/ })
 
