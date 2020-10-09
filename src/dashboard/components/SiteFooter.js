@@ -26,7 +26,7 @@ class SiteFooter extends React.Component {
       </div>,
       <div key="copyright" style={{backgroundColor: "white"}}>
         <div className="container-fluid" style={{width: "980px", fontSize: "13px", color: "#a0a09f"}}>
-          <p className="my-3">© 2020 created by <u><a href="https://vjumamel.com" target="_blank" style={{color: "#a0a09f"}}>VJ Um Amel</a></u> and developed by <u><a href="https://github.com/Darthnerda" target="_blank" style={{color: "#a0a09f"}}>Josh Bevan</a></u></p>
+          <p className="my-3">© 2020 created by <u><a href="https://vjumamel.com" target="_blank" style={{color: "#a0a09f"}}>VJ Um Amel</a></u> and developed by <u><a href="http://joshable.com" target="_blank" style={{color: "#a0a09f"}}>Josh Bevan</a></u></p>
         </div>
       </div>
     ];
