@@ -47,6 +47,7 @@ class Database {
       secret: sessionSecrets.secret,
       resave: false,
       saveUninitialized: true,
+      proxy: env === 'production',
       cookie: {
         maxAge: 1200000,
         secure: env === 'production',
