@@ -49,7 +49,8 @@ class Database {
       saveUninitialized: true,
       cookie: {
         maxAge: 1200000,
-        secure: env === 'production'
+        secure: env === 'production',
+        sameSite: 'none'
       },
       name: 'rshiefconnect.sid',
       store: new MysqlXStore({client: scope.pool, schema: dbSecrets.database, collection: "sessions"})
