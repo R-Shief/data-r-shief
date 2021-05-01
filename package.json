@@ -25,7 +25,7 @@
     "pug": "2.0.0-beta11",
     "react": "^16.13.1",
     "react-device-detect": "^1.13.1",
-    "three": "^0.118.3"
+    "three": "^0.125.0"
   },
   "devDependencies": {
     "@babel/core": "^7.10.5",
