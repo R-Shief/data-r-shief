@@ -6,7 +6,7 @@ class HeaderBar extends React.Component {
       hovering: {
         "Home": false,
         "Dashboard": false,
-        "The Good Glitch": false,
+        "Arabic Glitch": false,
         "Legacy": false
       }
     }
@@ -24,7 +24,7 @@ class HeaderBar extends React.Component {
       },
       {
         url: "https://r-shief.org/goodglitch",
-        name: "The Good Glitch"
+        name: "Arabic Glitch"
       },
       {
         url: "https://r-shief.org/legacy",
