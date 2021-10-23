@@ -1,6 +1,6 @@
 node_modules/
 logs/*
-#*.bundle.js
+*.bundle.js
 *conf.*
 bigData
 !/**/.gitkeep
