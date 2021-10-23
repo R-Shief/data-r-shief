@@ -1,3 +1,9 @@
 node_modules
 npm-debug.log
+**/public
+!/public/data
+!/public/icons
+!/public/images
+!/public/javascripts
+!/public/stylesheets
 .git
