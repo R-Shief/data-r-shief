@@ -15,6 +15,7 @@ class UserViz extends Viz {
 
     this.state = {
       strategyFamily: "twitter",
+      graph: null,
       width: props.bounds.width,
       height: props.bounds.height
     };
@@ -25,6 +26,7 @@ class UserViz extends Viz {
 
     this.props.onLoadChange({id: "userviz", isLoading: false});
 
+    this.wrapperRef = React.createRef();
     this.graphDivRef = React.createRef();
     this.graphInfoRef = React.createRef();
 
@@ -98,9 +100,10 @@ class UserViz extends Viz {
   }
 
   componentDidMount() {
-    console.log(this.graphDivRef.current);
-    const Graph = ForceGraph3D()
+    const Graph = ForceGraph3D({controlType: "orbit"})
       (this.graphDivRef.current);
+
+    this.setState({graph: Graph});
 
     let curDataSetIdx;
     const dataSets = this.getGraphDataSets();
@@ -116,18 +119,28 @@ class UserViz extends Viz {
       console.log(document.getElementById('graph-data-description'));
       document.getElementById('graph-data-description').innerHTML = dataSet.description ? `Viewing ${dataSet.description}` : '';
     })(); // IIFE init
+
+    window.addEventListener('resize', () => {
+      console.log(this.state.graph.width);
+      this.state.graph.width(this.wrapperRef.current.offsetWidth);
+      this.state.graph.height(this.wrapperRef.current.offsetHeight);
+      this.setState({
+        width: this.wrapperRef.current.offsetWidth,
+        height: this.wrapperRef.current.offsetHeight
+      })
+    })
   }
 
 
   render() {
     return (
-      <React.Fragment>
+      <div ref={this.wrapperRef} id="userviz" className="d-flex flex-column" style={{height: "100%"}}>
         <div id="3d-graph" ref={this.graphDivRef} style={{maxHeight: "500px"}}></div>
         <div id="graph-data">
           <span ref={this.graphInfoRef} id="graph-data-description"></span>
           <button class="toggle-data-btn" onClick="toggleData()">Show me something else</button>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }
