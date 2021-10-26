@@ -106,7 +106,6 @@ class Dash extends React.Component {
           </button>
         </div>
         {this.props.includeWix && <HeaderBar key="headerBar" />}
-        <FilterBar key="filterBar" filterDefaults={this.props.filterDefaults} onFilterChange={this.handleFilterChange} onFilterSubmit={this.handleFilterSubmit} />
         <VizViewer key="vizViewer" vizClasses={this.state.vizClasses} getUrl={this.getURLWithFilters} />
         <div className="container-fluid mt-1 mb-3">
           <InfoBar sampleCount={this.state.sampleCount} sampleMethod={this.state.sampleMethod} totalCount={this.state.totalCount} getUrl={this.getURLWithFilters} overviewUpOnStartup={this.props.overviewUpOnStartup} />
@@ -118,6 +117,8 @@ class Dash extends React.Component {
     ];
   }
 }
+
+// <FilterBar key="filterBar" filterDefaults={this.props.filterDefaults} onFilterChange={this.handleFilterChange} onFilterSubmit={this.handleFilterSubmit} />
 
 // <div>{this.props.isPortrait && <OrientationNotice />}</div>,
 
