@@ -12,6 +12,7 @@ let Streamgraph = require('./viz/Streamgraph.js');
 let Rankings = require('./viz/rankings.js');
 let MapViz = require('./viz/MapViz.js');
 let UserViz = require('./viz/UserViz.js');
+let TweetTime = require('./viz/TweetTime.js');
 
 let rdd = require("react-device-detect");
 
@@ -22,7 +23,7 @@ class Dash extends React.Component {
     this.state = {
       filters: props.filterDefaults,
       dataPage: 0,
-      vizClasses: [Streamgraph, UserViz], //, Rankings, MapViz
+      vizClasses: [Streamgraph, UserViz, TweetTime], //, Rankings, MapViz
       sampleCount: 0,
       sampleMethod: 'randomly',
       totalCount: 87707630,
