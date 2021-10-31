@@ -23,7 +23,7 @@ class Dash extends React.Component {
     this.state = {
       filters: props.filterDefaults,
       dataPage: 0,
-      vizClasses: [Streamgraph, UserViz, TweetTime], //, Rankings, MapViz
+      vizClasses: [TweetTime, UserViz, Streamgraph], //, Rankings, MapViz
       sampleCount: 0,
       sampleMethod: 'randomly',
       totalCount: 87707630,
