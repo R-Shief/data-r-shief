@@ -22,7 +22,7 @@
     "mysql": "^2.18.1",
     "oboe": "^2.1.5",
     "php-serialize": "^4.0.2",
-    "pug": "2.0.0-beta11",
+    "pug": "^3.0.1",
     "react": "^16.13.1",
     "react-device-detect": "^1.13.1",
     "three": "^0.137.0"
